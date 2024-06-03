@@ -7,6 +7,16 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "patronAccount": "Patron Account",
+        "book": "Book",
+        "category": "Category",
+        "author": "Author",
+        "waitlistItem": "Waitlist Item",
+        "bookCopy": "Book Copy",
+        "publisher": "Publisher",
+        "checkout": "Checkout",
+        "hold": "Hold",
+        "notification": "Notification",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

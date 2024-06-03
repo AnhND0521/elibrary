@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="notification">
+      <h2 data-cy="notificationDetailsHeading"><span jhiTranslate="eLibraryApp.notification.detail.title">Notification</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ notification.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.notification.sentAt">Sent At</span></dt>
+        <dd>
+          <span>{{ notification.sentAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.notification.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'eLibraryApp.NotificationType.' + notification.type }}">{{ notification.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.notification.patron">Patron</span></dt>
+        <dd>
+          <div *ngIf="notification.patron">
+            <a [routerLink]="['/patron-account', notification.patron.cardNumber, 'view']">{{ notification.patron.cardNumber }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.notification.copy">Copy</span></dt>
+        <dd>
+          <div *ngIf="notification.copy">
+            <a [routerLink]="['/book-copy', notification.copy.id, 'view']">{{ notification.copy.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/notification', notification.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

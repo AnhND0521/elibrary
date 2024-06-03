@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="hold">
+      <h2 data-cy="holdDetailsHeading"><span jhiTranslate="eLibraryApp.hold.detail.title">Hold</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ hold.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.hold.startTime">Start Time</span></dt>
+        <dd>
+          <span>{{ hold.startTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.hold.endTime">End Time</span></dt>
+        <dd>
+          <span>{{ hold.endTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.hold.dueEndTime">Due End Time</span></dt>
+        <dd>
+          <span>{{ hold.dueEndTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.hold.copy">Copy</span></dt>
+        <dd>
+          <div *ngIf="hold.copy">
+            <a [routerLink]="['/book-copy', hold.copy.id, 'view']">{{ hold.copy.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.hold.patron">Patron</span></dt>
+        <dd>
+          <div *ngIf="hold.patron">
+            <a [routerLink]="['/patron-account', hold.patron.cardNumber, 'view']">{{ hold.patron.cardNumber }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/hold', hold.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

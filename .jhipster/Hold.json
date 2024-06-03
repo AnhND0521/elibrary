@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20240603095144",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "hold",
+  "fields": [
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dueEndTime",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Hold",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "bookCopy",
+      "otherEntityRelationshipName": "hold",
+      "relationshipName": "copy",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "cardNumber",
+      "otherEntityName": "patronAccount",
+      "relationshipName": "patron",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

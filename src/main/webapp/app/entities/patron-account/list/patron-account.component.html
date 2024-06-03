@@ -1,0 +1,136 @@
+<div>
+  <h2 id="page-heading" data-cy="PatronAccountHeading">
+    <span jhiTranslate="eLibraryApp.patronAccount.home.title">Patron Accounts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="eLibraryApp.patronAccount.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-patron-account"
+        [routerLink]="['/patron-account/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="eLibraryApp.patronAccount.home.createLabel"> Thêm mới một Patron Account </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="patronAccounts?.length === 0">
+    <span jhiTranslate="eLibraryApp.patronAccount.home.notFound">No Patron Accounts found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="patronAccounts && patronAccounts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="cardNumber">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.cardNumber">Card Number</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="firstName">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.firstName">First Name</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="surname">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.surname">Surname</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="email">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.email">Email</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="status">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.status">Status</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="user.login">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.patronAccount.user">User</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let patronAccount of patronAccounts; trackBy: trackCardNumber" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/patron-account', patronAccount.cardNumber, 'view']">{{ patronAccount.cardNumber }}</a>
+          </td>
+          <td>{{ patronAccount.firstName }}</td>
+          <td>{{ patronAccount.surname }}</td>
+          <td>{{ patronAccount.email }}</td>
+          <td jhiTranslate="{{ 'eLibraryApp.PatronStatus.' + patronAccount.status }}">{{ patronAccount.status }}</td>
+          <td>
+            {{ patronAccount.user?.login }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/patron-account', patronAccount.cardNumber, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Xem</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/patron-account', patronAccount.cardNumber, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Sửa</span>
+              </button>
+
+              <button type="submit" (click)="delete(patronAccount)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Xóa</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="patronAccounts && patronAccounts.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

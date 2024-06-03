@@ -1,0 +1,46 @@
+{
+  "applications": "*",
+  "changelogDate": "20240603095143",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "checkout",
+  "fields": [
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dueEndTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "isReturned",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Checkout",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "bookCopy",
+      "otherEntityRelationshipName": "checkout",
+      "relationshipName": "copy",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "cardNumber",
+      "otherEntityName": "patronAccount",
+      "relationshipName": "patron",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

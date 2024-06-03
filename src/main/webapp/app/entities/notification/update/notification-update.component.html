@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-notification-heading"
+        data-cy="NotificationCreateUpdateHeading"
+        jhiTranslate="eLibraryApp.notification.home.createOrEditLabel"
+      >
+        Thêm mới hoặc cập nhật Notification
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.notification.sentAt" for="field_sentAt">Sent At</label>
+          <div class="d-flex">
+            <input
+              id="field_sentAt"
+              data-cy="sentAt"
+              type="datetime-local"
+              class="form-control"
+              name="sentAt"
+              formControlName="sentAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.notification.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'eLibraryApp.NotificationType.null' | translate }}</option>
+            <option *ngFor="let notificationType of notificationTypeValues" [value]="notificationType">
+              {{ 'eLibraryApp.NotificationType.' + notificationType | translate }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.notification.patron" for="field_patron">Patron</label>
+          <select
+            class="form-control"
+            id="field_patron"
+            data-cy="patron"
+            name="patron"
+            formControlName="patron"
+            [compareWith]="comparePatronAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="patronAccountOption" *ngFor="let patronAccountOption of patronAccountsSharedCollection">
+              {{ patronAccountOption.cardNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.notification.copy" for="field_copy">Copy</label>
+          <select class="form-control" id="field_copy" data-cy="copy" name="copy" formControlName="copy" [compareWith]="compareBookCopy">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="bookCopyOption" *ngFor="let bookCopyOption of bookCopiesSharedCollection">{{ bookCopyOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Hủy</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Lưu</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

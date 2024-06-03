@@ -1,0 +1,9 @@
+{
+  "eLibraryApp": {
+    "PatronStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "BLOCKED": "BLOCKED"
+    }
+  }
+}

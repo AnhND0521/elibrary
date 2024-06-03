@@ -1,0 +1,149 @@
+<div>
+  <h2 id="page-heading" data-cy="CheckoutHeading">
+    <span jhiTranslate="eLibraryApp.checkout.home.title">Checkouts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="eLibraryApp.checkout.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-checkout"
+        [routerLink]="['/checkout/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="eLibraryApp.checkout.home.createLabel"> Thêm mới một Checkout </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="checkouts?.length === 0">
+    <span jhiTranslate="eLibraryApp.checkout.home.notFound">No Checkouts found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="checkouts && checkouts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="startTime">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.startTime">Start Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="endTime">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.endTime">End Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dueEndTime">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.dueEndTime">Due End Time</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isReturned">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="copy.id">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.copy">Copy</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="patron.cardNumber">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.patron">Patron</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let checkout of checkouts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/checkout', checkout.id, 'view']">{{ checkout.id }}</a>
+          </td>
+          <td>{{ checkout.startTime | formatMediumDatetime }}</td>
+          <td>{{ checkout.endTime | formatMediumDatetime }}</td>
+          <td>{{ checkout.dueEndTime | formatMediumDatetime }}</td>
+          <td>{{ checkout.isReturned }}</td>
+          <td>
+            <div *ngIf="checkout.copy">
+              <a [routerLink]="['/book-copy', checkout.copy.id, 'view']">{{ checkout.copy.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="checkout.patron">
+              <a [routerLink]="['/patron-account', checkout.patron.cardNumber, 'view']">{{ checkout.patron.cardNumber }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/checkout', checkout.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Xem</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/checkout', checkout.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Sửa</span>
+              </button>
+
+              <button type="submit" (click)="delete(checkout)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Xóa</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="checkouts && checkouts.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

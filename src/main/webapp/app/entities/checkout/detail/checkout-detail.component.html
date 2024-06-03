@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="checkout">
+      <h2 data-cy="checkoutDetailsHeading"><span jhiTranslate="eLibraryApp.checkout.detail.title">Checkout</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ checkout.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.startTime">Start Time</span></dt>
+        <dd>
+          <span>{{ checkout.startTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.endTime">End Time</span></dt>
+        <dd>
+          <span>{{ checkout.endTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.dueEndTime">Due End Time</span></dt>
+        <dd>
+          <span>{{ checkout.dueEndTime | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span></dt>
+        <dd>
+          <span>{{ checkout.isReturned }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.copy">Copy</span></dt>
+        <dd>
+          <div *ngIf="checkout.copy">
+            <a [routerLink]="['/book-copy', checkout.copy.id, 'view']">{{ checkout.copy.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.checkout.patron">Patron</span></dt>
+        <dd>
+          <div *ngIf="checkout.patron">
+            <a [routerLink]="['/patron-account', checkout.patron.cardNumber, 'view']">{{ checkout.patron.cardNumber }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/checkout', checkout.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

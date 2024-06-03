@@ -1,0 +1,26 @@
+{
+  "eLibraryApp": {
+    "waitlistItem": {
+      "home": {
+        "title": "Waitlist Items",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Waitlist Item",
+        "createOrEditLabel": "Create or edit a Waitlist Item",
+        "notFound": "No Waitlist Items found"
+      },
+      "created": "A new Waitlist Item is created with identifier {{ param }}",
+      "updated": "A Waitlist Item is updated with identifier {{ param }}",
+      "deleted": "A Waitlist Item is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Waitlist Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Waitlist Item"
+      },
+      "id": "ID",
+      "timestamp": "Timestamp",
+      "book": "Book",
+      "patron": "Patron"
+    }
+  }
+}

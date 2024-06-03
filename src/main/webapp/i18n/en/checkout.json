@@ -1,0 +1,29 @@
+{
+  "eLibraryApp": {
+    "checkout": {
+      "home": {
+        "title": "Checkouts",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Checkout",
+        "createOrEditLabel": "Create or edit a Checkout",
+        "notFound": "No Checkouts found"
+      },
+      "created": "A new Checkout is created with identifier {{ param }}",
+      "updated": "A Checkout is updated with identifier {{ param }}",
+      "deleted": "A Checkout is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Checkout {{ id }}?"
+      },
+      "detail": {
+        "title": "Checkout"
+      },
+      "id": "ID",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "dueEndTime": "Due End Time",
+      "isReturned": "Is Returned",
+      "copy": "Copy",
+      "patron": "Patron"
+    }
+  }
+}

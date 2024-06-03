@@ -1,0 +1,110 @@
+entity PatronAccount {
+	@Id cardNumber String required unique maxlength(10)
+    firstName String required maxlength(255)
+    surname String required maxlength(255)
+    email String required maxlength(255)
+    status PatronStatus
+}
+
+relationship OneToOne {
+    PatronAccount{user(login)} to User
+}
+
+entity Book {
+	title String required maxlength(255)
+}
+
+entity Category {
+	name String required maxlength(255)
+}
+
+entity Author {
+	name String required maxlength(255)
+}
+
+entity WaitlistItem {
+	timestamp Instant
+}
+
+relationship ManyToOne {
+	Book{category(name)} to Category{book(title)}
+}
+
+relationship ManyToMany {
+	Book{author(name)} to Author{book(title)}
+}
+
+relationship ManyToOne {
+	WaitlistItem{book(title)} to Book{waitlist}
+}
+
+relationship ManyToOne {
+	WaitlistItem{patron(cardNumber)} to PatronAccount
+}
+
+enum PatronStatus {
+	ACTIVE,
+    BLOCKED
+}
+
+entity BookCopy {
+	yearPublished Integer
+}
+
+entity Publisher {
+	name String required maxlength(255)
+}
+
+relationship ManyToOne {
+	BookCopy{book(title)} to Book{copy(id)}
+}
+
+relationship ManyToOne {
+	BookCopy{publisher(name)} to Publisher
+}
+
+entity Checkout {
+	startTime Instant
+    endTime Instant
+    dueEndTime Instant
+    isReturned Boolean
+}
+
+entity Hold {
+	startTime Instant
+    endTime Instant
+    dueEndTime Instant
+}
+
+relationship ManyToOne {
+	Checkout{copy(id)} to BookCopy{checkout(id)}
+    Checkout{patron(cardNumber)} to PatronAccount
+}
+
+relationship ManyToOne {
+	Hold{copy(id)} to BookCopy{hold(id)}
+    Hold{patron(cardNumber)} to PatronAccount
+}
+
+entity Notification {
+	sentAt Instant
+    type NotificationType
+}
+
+enum NotificationType {
+	REMIND_RETURN,
+    NOTIFY_BOOK_AVAILABLE
+}
+
+relationship ManyToOne {
+	Notification{patron(cardNumber)} to PatronAccount
+    Notification{copy(id)} to BookCopy
+}
+
+use serviceImpl, mapstruct, pagination for *
+use elasticsearch for Book
+use filter for Book
+
+
+
+

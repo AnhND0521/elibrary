@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="patronAccount">
+      <h2 data-cy="patronAccountDetailsHeading"><span jhiTranslate="eLibraryApp.patronAccount.detail.title">Patron Account</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.cardNumber">Card Number</span></dt>
+        <dd>
+          <span>{{ patronAccount.cardNumber }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.firstName">First Name</span></dt>
+        <dd>
+          <span>{{ patronAccount.firstName }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.surname">Surname</span></dt>
+        <dd>
+          <span>{{ patronAccount.surname }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.email">Email</span></dt>
+        <dd>
+          <span>{{ patronAccount.email }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'eLibraryApp.PatronStatus.' + patronAccount.status }}">{{ patronAccount.status }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.patronAccount.user">User</span></dt>
+        <dd>
+          <span>{{ patronAccount.user?.login }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/patron-account', patronAccount.cardNumber, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

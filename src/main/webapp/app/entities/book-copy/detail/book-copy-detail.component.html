@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="bookCopy">
+      <h2 data-cy="bookCopyDetailsHeading"><span jhiTranslate="eLibraryApp.bookCopy.detail.title">Book Copy</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ bookCopy.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.bookCopy.yearPublished">Year Published</span></dt>
+        <dd>
+          <span>{{ bookCopy.yearPublished }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.bookCopy.book">Book</span></dt>
+        <dd>
+          <div *ngIf="bookCopy.book">
+            <a [routerLink]="['/book', bookCopy.book.id, 'view']">{{ bookCopy.book.title }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.bookCopy.publisher">Publisher</span></dt>
+        <dd>
+          <div *ngIf="bookCopy.publisher">
+            <a [routerLink]="['/publisher', bookCopy.publisher.id, 'view']">{{ bookCopy.publisher.name }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/book-copy', bookCopy.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

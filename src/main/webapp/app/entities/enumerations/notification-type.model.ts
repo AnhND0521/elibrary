@@ -1,0 +1,5 @@
+export enum NotificationType {
+  REMIND_RETURN = 'REMIND_RETURN',
+
+  NOTIFY_BOOK_AVAILABLE = 'NOTIFY_BOOK_AVAILABLE',
+}

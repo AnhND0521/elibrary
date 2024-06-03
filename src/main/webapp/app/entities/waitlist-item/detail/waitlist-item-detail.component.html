@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="waitlistItem">
+      <h2 data-cy="waitlistItemDetailsHeading"><span jhiTranslate="eLibraryApp.waitlistItem.detail.title">Waitlist Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ waitlistItem.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.waitlistItem.timestamp">Timestamp</span></dt>
+        <dd>
+          <span>{{ waitlistItem.timestamp | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.waitlistItem.book">Book</span></dt>
+        <dd>
+          <div *ngIf="waitlistItem.book">
+            <a [routerLink]="['/book', waitlistItem.book.id, 'view']">{{ waitlistItem.book.title }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.waitlistItem.patron">Patron</span></dt>
+        <dd>
+          <div *ngIf="waitlistItem.patron">
+            <a [routerLink]="['/patron-account', waitlistItem.patron.cardNumber, 'view']">{{ waitlistItem.patron.cardNumber }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Quay lại</span>
+      </button>
+
+      <button type="button" [routerLink]="['/waitlist-item', waitlistItem.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Sửa</span>
+      </button>
+    </div>
+  </div>
+</div>

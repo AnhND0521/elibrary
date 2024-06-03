@@ -1,0 +1,26 @@
+{
+  "eLibraryApp": {
+    "waitlistItem": {
+      "home": {
+        "title": "Waitlist Items",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Waitlist Item",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Waitlist Item",
+        "notFound": "No Waitlist Items found"
+      },
+      "created": "Một Waitlist Item mới được tạo với định danh {{ param }}",
+      "updated": "Một Waitlist Item cập nhật với định danh {{ param }}",
+      "deleted": "Một Waitlist Item đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Waitlist Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Waitlist Item"
+      },
+      "id": "ID",
+      "timestamp": "Timestamp",
+      "book": "Book",
+      "patron": "Patron"
+    }
+  }
+}

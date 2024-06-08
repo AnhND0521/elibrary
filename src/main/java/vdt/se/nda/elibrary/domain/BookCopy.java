@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /**
  * A BookCopy.
@@ -21,6 +22,10 @@ public class BookCopy implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
     private Long id;
+
+    @Size(max = 255)
+    @Column(name = "title", length = 255)
+    private String title;
 
     @Column(name = "year_published")
     private Integer yearPublished;
@@ -53,6 +58,19 @@ public class BookCopy implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public BookCopy title(String title) {
+        this.setTitle(title);
+        return this;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getYearPublished() {
@@ -180,6 +198,7 @@ public class BookCopy implements Serializable {
     public String toString() {
         return "BookCopy{" +
             "id=" + getId() +
+            ", title='" + getTitle() + "'" +
             ", yearPublished=" + getYearPublished() +
             "}";
     }

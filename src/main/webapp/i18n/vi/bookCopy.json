@@ -18,6 +18,7 @@
         "title": "Book Copy"
       },
       "id": "ID",
+      "title": "Title",
       "yearPublished": "Year Published",
       "book": "Book",
       "publisher": "Publisher",

@@ -49,6 +49,7 @@ enum PatronStatus {
 }
 
 entity BookCopy {
+    title String maxlength(255)
 	yearPublished Integer
 }
 

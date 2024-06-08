@@ -38,6 +38,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.bookCopy.title">Title</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="yearPublished">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.bookCopy.yearPublished">Year Published</span>
@@ -64,6 +70,7 @@
           <td>
             <a [routerLink]="['/book-copy', bookCopy.id, 'view']">{{ bookCopy.id }}</a>
           </td>
+          <td>{{ bookCopy.title }}</td>
           <td>{{ bookCopy.yearPublished }}</td>
           <td>
             <div *ngIf="bookCopy.book">

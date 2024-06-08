@@ -20,6 +20,7 @@ describe('BookCopy Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
+            title: expect.any(Object),
             yearPublished: expect.any(Object),
             book: expect.any(Object),
             publisher: expect.any(Object),
@@ -33,6 +34,7 @@ describe('BookCopy Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
+            title: expect.any(Object),
             yearPublished: expect.any(Object),
             book: expect.any(Object),
             publisher: expect.any(Object),

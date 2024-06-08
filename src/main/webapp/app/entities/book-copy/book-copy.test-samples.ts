@@ -5,13 +5,15 @@ export const sampleWithRequiredData: IBookCopy = {
 };
 
 export const sampleWithPartialData: IBookCopy = {
-  id: 73799,
-  yearPublished: 67596,
+  id: 67596,
+  title: 'state Rubber',
+  yearPublished: 16740,
 };
 
 export const sampleWithFullData: IBookCopy = {
-  id: 66507,
-  yearPublished: 77979,
+  id: 89604,
+  title: 'Cliffs',
+  yearPublished: 79336,
 };
 
 export const sampleWithNewData: NewBookCopy = {

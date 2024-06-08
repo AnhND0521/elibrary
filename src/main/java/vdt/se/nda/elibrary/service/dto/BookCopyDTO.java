@@ -2,6 +2,7 @@ package vdt.se.nda.elibrary.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link vdt.se.nda.elibrary.domain.BookCopy} entity.
@@ -10,6 +11,9 @@ import java.util.Objects;
 public class BookCopyDTO implements Serializable {
 
     private Long id;
+
+    @Size(max = 255)
+    private String title;
 
     private Integer yearPublished;
 
@@ -23,6 +27,14 @@ public class BookCopyDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getYearPublished() {
@@ -75,6 +87,7 @@ public class BookCopyDTO implements Serializable {
     public String toString() {
         return "BookCopyDTO{" +
             "id=" + getId() +
+            ", title='" + getTitle() + "'" +
             ", yearPublished=" + getYearPublished() +
             ", book=" + getBook() +
             ", publisher=" + getPublisher() +

@@ -18,6 +18,7 @@ type BookCopyFormDefaults = Pick<NewBookCopy, 'id'>;
 
 type BookCopyFormGroupContent = {
   id: FormControl<IBookCopy['id'] | NewBookCopy['id']>;
+  title: FormControl<IBookCopy['title']>;
   yearPublished: FormControl<IBookCopy['yearPublished']>;
   book: FormControl<IBookCopy['book']>;
   publisher: FormControl<IBookCopy['publisher']>;
@@ -40,6 +41,9 @@ export class BookCopyFormService {
           validators: [Validators.required],
         }
       ),
+      title: new FormControl(bookCopyRawValue.title, {
+        validators: [Validators.maxLength(255)],
+      }),
       yearPublished: new FormControl(bookCopyRawValue.yearPublished),
       book: new FormControl(bookCopyRawValue.book),
       publisher: new FormControl(bookCopyRawValue.publisher),

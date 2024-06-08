@@ -6,6 +6,12 @@
   "entityTableName": "book_copy",
   "fields": [
     {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
       "fieldName": "yearPublished",
       "fieldType": "Integer"
     }

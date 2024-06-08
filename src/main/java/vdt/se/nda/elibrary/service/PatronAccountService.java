@@ -3,6 +3,7 @@ package vdt.se.nda.elibrary.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vdt.se.nda.elibrary.domain.User;
 import vdt.se.nda.elibrary.service.dto.PatronAccountDTO;
 
 /**
@@ -63,4 +64,12 @@ public interface PatronAccountService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
+    /**
+     * Create a patronAccount from a user entity
+     *
+     * @param user the user for which to create patronAccount
+     * @return the patronAccount created
+     */
+    PatronAccountDTO createFromUser(User user);
 }

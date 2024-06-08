@@ -28,6 +28,10 @@ public class Book implements Serializable {
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 
+    @Size(max = 255)
+    @Column(name = "image_url", length = 255)
+    private String imageUrl;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "books" }, allowSetters = true)
     private Category category;
@@ -71,6 +75,19 @@ public class Book implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public Book imageUrl(String imageUrl) {
+        this.setImageUrl(imageUrl);
+        return this;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Category getCategory() {
@@ -198,6 +215,7 @@ public class Book implements Serializable {
         return "Book{" +
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             "}";
     }
 }

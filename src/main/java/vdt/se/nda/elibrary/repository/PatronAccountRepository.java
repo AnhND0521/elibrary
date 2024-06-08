@@ -37,4 +37,6 @@ public interface PatronAccountRepository extends JpaRepository<PatronAccount, St
 
     @Query("select patronAccount from PatronAccount patronAccount left join fetch patronAccount.user where patronAccount.id =:id")
     Optional<PatronAccount> findOneWithToOneRelationships(@Param("id") String id);
+
+    boolean existsByCardNumber(String cardNumber);
 }

@@ -6,17 +6,18 @@ export const sampleWithRequiredData: IBook = {
 };
 
 export const sampleWithPartialData: IBook = {
-  id: 26912,
-  title: 'Shoes Rhode',
+  id: 60289,
+  title: 'synthesize',
 };
 
 export const sampleWithFullData: IBook = {
-  id: 72386,
-  title: 'Wooden',
+  id: 77314,
+  title: 'bandwidth',
+  imageUrl: 'GB',
 };
 
 export const sampleWithNewData: NewBook = {
-  title: 'AI',
+  title: 'multi-byte HTTP',
   id: null,
 };
 

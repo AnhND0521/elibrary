@@ -12,6 +12,7 @@ relationship OneToOne {
 
 entity Book {
 	title String required maxlength(255)
+	imageUrl String maxlength(255)
 }
 
 entity Category {

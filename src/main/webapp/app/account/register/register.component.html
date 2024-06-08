@@ -75,6 +75,93 @@
         </div>
 
         <div class="mb-3">
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <label class="form-label" for="firstName" jhiTranslate="global.form.firstName.label">Tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                name="firstName"
+                placeholder="{{ 'global.form.firstName.placeholder' | translate }}"
+                formControlName="firstName"
+                data-cy="firstName"
+                #firstName
+              />
+              <div
+                *ngIf="
+                  registerForm.get('firstName')!.invalid && (registerForm.get('firstName')!.dirty || registerForm.get('firstName')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('firstName')?.errors?.required"
+                  jhiTranslate="register.messages.validate.firstName.required"
+                >
+                  Tên của bạn không được để trống.
+                </small>
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('firstName')?.errors?.minlength"
+                  jhiTranslate="register.messages.validate.firstName.minlength"
+                >
+                  Tên của bạn phải có ít nhất 1 ký tự.
+                </small>
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('firstName')?.errors?.maxlength"
+                  jhiTranslate="register.messages.validate.firstName.maxlength"
+                >
+                  Tên của bạn không được vượt quá 254 ký tự.
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <label class="form-label" for="surname" jhiTranslate="global.form.surname.label">Họ</label>
+              <input
+                type="text"
+                class="form-control"
+                id="surname"
+                name="surname"
+                placeholder="{{ 'global.form.surname.placeholder' | translate }}"
+                formControlName="surname"
+                data-cy="surname"
+                #surname
+              />
+              <div
+                *ngIf="registerForm.get('surname')!.invalid && (registerForm.get('surname')!.dirty || registerForm.get('surname')!.touched)"
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('surname')?.errors?.required"
+                  jhiTranslate="register.messages.validate.surname.required"
+                >
+                  Họ của bạn không được để trống.
+                </small>
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('surname')?.errors?.minlength"
+                  jhiTranslate="register.messages.validate.surname.minlength"
+                >
+                  Họ của bạn phải có ít nhất 1 ký tự.
+                </small>
+
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('surname')?.errors?.maxlength"
+                  jhiTranslate="register.messages.validate.surname.maxlength"
+                >
+                  Họ của bạn không được vượt quá 254 ký tự.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="email" jhiTranslate="global.form.email.label">Email</label>
           <input
             type="email"
@@ -116,7 +203,7 @@
               *ngIf="registerForm.get('email')?.errors?.maxlength"
               jhiTranslate="global.messages.validate.email.maxlength"
             >
-              Email không được vượt quá 50 ký tự.
+              Email không được vượt quá 254 ký tự.
             </small>
           </div>
         </div>

@@ -21,6 +21,7 @@ describe('Book Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             title: expect.any(Object),
+            imageUrl: expect.any(Object),
             category: expect.any(Object),
             authors: expect.any(Object),
           })
@@ -34,6 +35,7 @@ describe('Book Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             title: expect.any(Object),
+            imageUrl: expect.any(Object),
             category: expect.any(Object),
             authors: expect.any(Object),
           })

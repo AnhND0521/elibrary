@@ -32,6 +32,21 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.book.imageUrl" for="field_imageUrl">Image Url</label>
+          <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" data-cy="imageUrl" formControlName="imageUrl" />
+          <div *ngIf="editForm.get('imageUrl')!.invalid && (editForm.get('imageUrl')!.dirty || editForm.get('imageUrl')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('imageUrl')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 255 }"
+            >
+              Trường này không được vượt quá 255 ký tự.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
           <label class="form-label" jhiTranslate="eLibraryApp.book.category" for="field_category">Category</label>
           <select
             class="form-control"

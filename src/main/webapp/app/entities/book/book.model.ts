@@ -4,6 +4,7 @@ import { IAuthor } from 'app/entities/author/author.model';
 export interface IBook {
   id: number;
   title?: string | null;
+  imageUrl?: string | null;
   category?: Pick<ICategory, 'id' | 'name'> | null;
   authors?: Pick<IAuthor, 'id' | 'name'>[] | null;
 }

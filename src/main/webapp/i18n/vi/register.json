@@ -11,6 +11,16 @@
           "minlength": "Tên tài khoản phải có ít nhất 1 ký tự.",
           "maxlength": "Tên tài khoản không được vượt quá 50 ký tự.",
           "pattern": "Your username is invalid."
+        },
+        "firstName": {
+          "required": "Tên của bạn không được để trống.",
+          "minlength": "Tên của bạn phải có ít nhất 1 ký tự.",
+          "maxlength": "Tên của bạn không được vượt quá 254 ký tự."
+        },
+        "surname": {
+          "required": "Họ của bạn không được để trống.",
+          "minlength": "Họ của bạn phải có ít nhất 1 ký tự.",
+          "maxlength": "Họ của bạn không được vượt quá 254 ký tự."
         }
       },
       "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng kiểm tra hộp thư để xác nhận tài khoản.",

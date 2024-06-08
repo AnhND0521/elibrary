@@ -44,6 +44,9 @@ class BookResourceIT {
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_IMAGE_URL = "AAAAAAAAAA";
+    private static final String UPDATED_IMAGE_URL = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/books";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -77,7 +80,7 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createEntity(EntityManager em) {
-        Book book = new Book().title(DEFAULT_TITLE);
+        Book book = new Book().title(DEFAULT_TITLE).imageUrl(DEFAULT_IMAGE_URL);
         return book;
     }
 
@@ -88,7 +91,7 @@ class BookResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Book createUpdatedEntity(EntityManager em) {
-        Book book = new Book().title(UPDATED_TITLE);
+        Book book = new Book().title(UPDATED_TITLE).imageUrl(UPDATED_IMAGE_URL);
         return book;
     }
 
@@ -112,6 +115,7 @@ class BookResourceIT {
         assertThat(bookList).hasSize(databaseSizeBeforeCreate + 1);
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testBook.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
     }
 
     @Test
@@ -163,7 +167,8 @@ class BookResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(book.getId().intValue())))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGE_URL)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -195,7 +200,8 @@ class BookResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(book.getId().intValue()))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE));
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
+            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGE_URL));
     }
 
     @Test
@@ -217,7 +223,7 @@ class BookResourceIT {
         Book updatedBook = bookRepository.findById(book.getId()).get();
         // Disconnect from session so that the updates on updatedBook are not directly saved in db
         em.detach(updatedBook);
-        updatedBook.title(UPDATED_TITLE);
+        updatedBook.title(UPDATED_TITLE).imageUrl(UPDATED_IMAGE_URL);
         BookDTO bookDTO = bookMapper.toDto(updatedBook);
 
         restBookMockMvc
@@ -233,6 +239,7 @@ class BookResourceIT {
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testBook.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test
@@ -325,6 +332,7 @@ class BookResourceIT {
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testBook.getImageUrl()).isEqualTo(DEFAULT_IMAGE_URL);
     }
 
     @Test
@@ -339,7 +347,7 @@ class BookResourceIT {
         Book partialUpdatedBook = new Book();
         partialUpdatedBook.setId(book.getId());
 
-        partialUpdatedBook.title(UPDATED_TITLE);
+        partialUpdatedBook.title(UPDATED_TITLE).imageUrl(UPDATED_IMAGE_URL);
 
         restBookMockMvc
             .perform(
@@ -354,6 +362,7 @@ class BookResourceIT {
         assertThat(bookList).hasSize(databaseSizeBeforeUpdate);
         Book testBook = bookList.get(bookList.size() - 1);
         assertThat(testBook.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testBook.getImageUrl()).isEqualTo(UPDATED_IMAGE_URL);
     }
 
     @Test

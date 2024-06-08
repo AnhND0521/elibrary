@@ -18,6 +18,9 @@ public class BookDTO implements Serializable {
     @Size(max = 255)
     private String title;
 
+    @Size(max = 255)
+    private String imageUrl;
+
     private CategoryDTO category;
 
     private Set<AuthorDTO> authors = new HashSet<>();
@@ -36,6 +39,14 @@ public class BookDTO implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public CategoryDTO getCategory() {
@@ -81,6 +92,7 @@ public class BookDTO implements Serializable {
         return "BookDTO{" +
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
             ", category=" + getCategory() +
             ", authors=" + getAuthors() +
             "}";

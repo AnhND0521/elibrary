@@ -19,6 +19,7 @@
       },
       "id": "ID",
       "title": "Title",
+      "imageUrl": "Image Url",
       "category": "Category",
       "author": "Author",
       "waitlist": "Waitlist",

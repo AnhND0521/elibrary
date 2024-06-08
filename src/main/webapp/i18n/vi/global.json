@@ -45,6 +45,10 @@
     "form": {
       "username.label": "Tên tài khoản",
       "username.placeholder": "Nhập tên tài khoản của bạn",
+      "firstName.label": "Tên",
+      "firstName.placeholder": "Nhập tên của bạn",
+      "surname.label": "Họ",
+      "surname.placeholder": "Nhập họ của bạn",
       "newpassword.label": "Mật khẩu mới",
       "newpassword.placeholder": "Nhập mật khẩu mới",
       "confirmpassword.label": "Xác nhận mật khẩu mới",

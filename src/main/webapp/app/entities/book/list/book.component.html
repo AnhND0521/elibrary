@@ -44,6 +44,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="imageUrl">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.book.imageUrl">Image Url</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="category.name">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.book.category">Category</span>
@@ -59,6 +65,7 @@
             <a [routerLink]="['/book', book.id, 'view']">{{ book.id }}</a>
           </td>
           <td>{{ book.title }}</td>
+          <td>{{ book.imageUrl }}</td>
           <td>
             <div *ngIf="book.category">
               <a [routerLink]="['/category', book.category.id, 'view']">{{ book.category.name }}</a>

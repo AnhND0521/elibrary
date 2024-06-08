@@ -22,7 +22,9 @@ import vdt.se.nda.elibrary.repository.UserRepository;
 import vdt.se.nda.elibrary.security.AuthoritiesConstants;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.dto.AdminUserDTO;
+import vdt.se.nda.elibrary.service.dto.PatronAccountDTO;
 import vdt.se.nda.elibrary.service.dto.UserDTO;
+import vdt.se.nda.elibrary.service.mapper.UserMapper;
 
 /**
  * Service class for managing users.
@@ -41,16 +43,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final PatronAccountService patronAccountService;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        PatronAccountService patronAccountService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.patronAccountService = patronAccountService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -63,6 +69,10 @@ public class UserService {
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
+
+                // create patron account
+                patronAccountService.createFromUser(user);
+
                 return user;
             });
     }

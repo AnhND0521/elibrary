@@ -1,6 +1,7 @@
 package vdt.se.nda.elibrary.service.impl;
 
 import java.util.Optional;
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.PatronAccount;
+import vdt.se.nda.elibrary.domain.User;
+import vdt.se.nda.elibrary.domain.enumeration.PatronStatus;
 import vdt.se.nda.elibrary.repository.PatronAccountRepository;
 import vdt.se.nda.elibrary.service.PatronAccountService;
 import vdt.se.nda.elibrary.service.dto.PatronAccountDTO;
@@ -25,6 +28,7 @@ public class PatronAccountServiceImpl implements PatronAccountService {
     private final PatronAccountRepository patronAccountRepository;
 
     private final PatronAccountMapper patronAccountMapper;
+    private PatronAccount patronAccount;
 
     public PatronAccountServiceImpl(PatronAccountRepository patronAccountRepository, PatronAccountMapper patronAccountMapper) {
         this.patronAccountRepository = patronAccountRepository;
@@ -85,5 +89,35 @@ public class PatronAccountServiceImpl implements PatronAccountService {
     public void delete(String id) {
         log.debug("Request to delete PatronAccount : {}", id);
         patronAccountRepository.deleteById(id);
+    }
+
+    @Override
+    public PatronAccountDTO createFromUser(User user) {
+        PatronAccount patronAccount = new PatronAccount();
+        patronAccount.setUser(user);
+        patronAccount.setCardNumber(generateCardNumber());
+        patronAccount.setEmail(user.getEmail());
+        patronAccount.setFirstName(user.getFirstName());
+        patronAccount.setSurname(user.getLastName());
+        patronAccount.setStatus(user.isActivated() ? PatronStatus.ACTIVE : PatronStatus.BLOCKED);
+        patronAccountRepository.saveAndFlush(patronAccount);
+        return patronAccountMapper.toDto(patronAccount);
+    }
+
+    private String generateCardNumber() {
+        int length = 8;
+        StringBuilder builder = new StringBuilder();
+        String digits = "0123456789";
+        Random random = new Random();
+        while (length-- > 0) {
+            int index = random.nextInt(digits.length());
+            builder.append(digits.charAt(index));
+        }
+        if (patronAccountRepository.existsByCardNumber(builder.toString())) {
+            return generateCardNumber();
+        }
+        String cardNumber = builder.toString();
+        log.info("Generated card number: {}", cardNumber);
+        return cardNumber;
     }
 }

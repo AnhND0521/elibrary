@@ -19,6 +19,7 @@ type BookFormDefaults = Pick<NewBook, 'id' | 'authors'>;
 type BookFormGroupContent = {
   id: FormControl<IBook['id'] | NewBook['id']>;
   title: FormControl<IBook['title']>;
+  imageUrl: FormControl<IBook['imageUrl']>;
   category: FormControl<IBook['category']>;
   authors: FormControl<IBook['authors']>;
 };
@@ -42,6 +43,9 @@ export class BookFormService {
       ),
       title: new FormControl(bookRawValue.title, {
         validators: [Validators.required, Validators.maxLength(255)],
+      }),
+      imageUrl: new FormControl(bookRawValue.imageUrl, {
+        validators: [Validators.maxLength(255)],
       }),
       category: new FormControl(bookRawValue.category),
       authors: new FormControl(bookRawValue.authors ?? []),

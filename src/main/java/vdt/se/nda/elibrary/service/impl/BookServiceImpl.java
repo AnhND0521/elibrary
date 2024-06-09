@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.repository.BookRepository;
+import vdt.se.nda.elibrary.repository.CategoryRepository;
 import vdt.se.nda.elibrary.service.BookService;
 import vdt.se.nda.elibrary.service.dto.BookDTO;
 import vdt.se.nda.elibrary.service.mapper.BookMapper;
@@ -24,10 +25,13 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
+    private final CategoryRepository categoryRepository;
+
     private final BookMapper bookMapper;
 
-    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper) {
+    public BookServiceImpl(BookRepository bookRepository, CategoryRepository categoryRepository, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
+        this.categoryRepository = categoryRepository;
         this.bookMapper = bookMapper;
     }
 
@@ -84,5 +88,18 @@ public class BookServiceImpl implements BookService {
     public void delete(Long id) {
         log.debug("Request to delete Book : {}", id);
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<BookDTO> findByCategory(Long categoryId, String categoryName, Pageable pageable) {
+        if (categoryId != null) {
+            Page<Book> books = bookRepository.findByCategoryId(categoryId, pageable);
+            return books.map(bookMapper::toDto);
+        }
+        if (categoryName != null) {
+            Page<Book> books = bookRepository.findByCategoryName(categoryName, pageable);
+            return books.map(bookMapper::toDto);
+        }
+        return null;
     }
 }

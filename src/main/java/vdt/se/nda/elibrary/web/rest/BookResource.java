@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -71,7 +70,7 @@ public class BookResource {
     /**
      * {@code PUT  /books/:id} : Updates an existing book.
      *
-     * @param id the id of the bookDTO to save.
+     * @param id      the id of the bookDTO to save.
      * @param bookDTO the bookDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bookDTO,
      * or with status {@code 400 (Bad Request)} if the bookDTO is not valid,
@@ -105,7 +104,7 @@ public class BookResource {
     /**
      * {@code PATCH  /books/:id} : Partial updates given fields of an existing book, field will ignore if it is null
      *
-     * @param id the id of the bookDTO to save.
+     * @param id      the id of the bookDTO to save.
      * @param bookDTO the bookDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bookDTO,
      * or with status {@code 400 (Bad Request)} if the bookDTO is not valid,
@@ -141,7 +140,7 @@ public class BookResource {
     /**
      * {@code GET  /books} : get all the books.
      *
-     * @param pageable the pagination information.
+     * @param pageable  the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
@@ -188,5 +187,20 @@ public class BookResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/books/find-by-category")
+    public ResponseEntity<List<BookDTO>> getBooksByCategory(
+        @RequestParam(name = "id", required = false) Long categoryId,
+        @RequestParam(name = "name", required = false) String categoryName,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        if (categoryId == null && categoryName == null) {
+            throw new BadRequestAlertException("Should specify category id or category name", "category", "idnamenull");
+        }
+
+        Page<BookDTO> page = bookService.findByCategory(categoryId, categoryName, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

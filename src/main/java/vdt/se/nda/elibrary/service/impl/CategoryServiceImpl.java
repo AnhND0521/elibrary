@@ -1,6 +1,9 @@
 package vdt.se.nda.elibrary.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -80,5 +83,14 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         log.debug("Request to delete Category : {}", id);
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CategoryDTO> findTop() {
+        return Stream
+            .of("Literature", "Romance", "Fantasy", "Thriller", "Science Fiction", "Horror", "Humor", "Short Stories")
+            .map(name -> categoryRepository.findByName(name).get())
+            .map(categoryMapper::toDto)
+            .collect(Collectors.toList());
     }
 }

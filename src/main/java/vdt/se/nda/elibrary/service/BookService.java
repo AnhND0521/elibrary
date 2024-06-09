@@ -63,4 +63,6 @@ public interface BookService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Page<BookDTO> findByCategory(Long categoryId, String categoryName, Pageable pageable);
 }

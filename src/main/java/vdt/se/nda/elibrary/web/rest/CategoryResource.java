@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,6 +22,7 @@ import tech.jhipster.web.util.ResponseUtil;
 import vdt.se.nda.elibrary.repository.CategoryRepository;
 import vdt.se.nda.elibrary.service.CategoryService;
 import vdt.se.nda.elibrary.service.dto.CategoryDTO;
+import vdt.se.nda.elibrary.service.mapper.CategoryMapper;
 import vdt.se.nda.elibrary.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -71,7 +71,7 @@ public class CategoryResource {
     /**
      * {@code PUT  /categories/:id} : Updates an existing category.
      *
-     * @param id the id of the categoryDTO to save.
+     * @param id          the id of the categoryDTO to save.
      * @param categoryDTO the categoryDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated categoryDTO,
      * or with status {@code 400 (Bad Request)} if the categoryDTO is not valid,
@@ -105,7 +105,7 @@ public class CategoryResource {
     /**
      * {@code PATCH  /categories/:id} : Partial updates given fields of an existing category, field will ignore if it is null
      *
-     * @param id the id of the categoryDTO to save.
+     * @param id          the id of the categoryDTO to save.
      * @param categoryDTO the categoryDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated categoryDTO,
      * or with status {@code 400 (Bad Request)} if the categoryDTO is not valid,
@@ -179,5 +179,10 @@ public class CategoryResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/categories/top")
+    public ResponseEntity<List<CategoryDTO>> getTopCategories() {
+        return ResponseEntity.ok(categoryService.findTop());
     }
 }

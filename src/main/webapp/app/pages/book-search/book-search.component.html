@@ -1,0 +1,40 @@
+<div class="container">
+  <h2 class="mb-3">Tìm kiếm sách</h2>
+  <div class="input-group mb-3 w-50">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Tìm kiếm"
+      aria-describedby="button-addon2"
+      [(ngModel)]="keyword"
+      (keyup.enter)="search()"
+    />
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="search()">
+      <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
+    </button>
+  </div>
+  <div class="d-flex justify-content-start mb-5">
+    <a href="#" class="me-4">Thể loại</a>
+    <a href="#">Tác giả</a>
+  </div>
+
+  <h4 *ngIf="keywordFixed" class="mb-4">Kết quả tìm kiếm: {{ keywordFixed }}</h4>
+  <div *ngIf="bookList.length > 0" class="row align-items-stretch">
+    <div *ngFor="let book of bookList" class="col-lg-2 col-md-3 col-sm-6 mb-4">
+      <jhi-book-display [book]="book"></jhi-book-display>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <div *ngIf="bookList.length === 0" class="alert alert-warning">Không tìm thấy sách nào.</div>
+</div>

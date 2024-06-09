@@ -44,4 +44,16 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
     Page<Book> findByCategoryId(Long categoryId, Pageable pageable);
 
     Page<Book> findByCategoryName(String categoryName, Pageable pageable);
+
+    @Query(
+        "select distinct book from Book book " +
+        "left join book.category category " +
+        "left join book.authors author " +
+        "left join book.copies copy " +
+        "where lower(book.title) like lower(concat('%', ?1, '%')) " +
+        "or lower(category.name) like lower(concat('%', ?1, '%')) " +
+        "or lower(author.name) like lower(concat('%', ?1, '%')) " +
+        "or lower(copy.title) like lower(concat('%', ?1, '%'))"
+    )
+    Page<Book> findByKeyword(String keyword, Pageable pageable);
 }

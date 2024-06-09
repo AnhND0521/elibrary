@@ -26,6 +26,8 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 import { BookCatalogComponent } from './pages/book-catalog/book-catalog.component';
+import { BookDisplayComponent } from './components/book-display/book-display.component';
+import { BookSearchComponent } from './pages/book-search/book-search.component';
 
 @NgModule({
   imports: [
@@ -54,6 +56,8 @@ import { BookCatalogComponent } from './pages/book-catalog/book-catalog.componen
     ActiveMenuDirective,
     FooterComponent,
     BookCatalogComponent,
+    BookDisplayComponent,
+    BookSearchComponent,
   ],
   bootstrap: [MainComponent],
 })

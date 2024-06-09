@@ -22,9 +22,10 @@ import vdt.se.nda.elibrary.repository.UserRepository;
 import vdt.se.nda.elibrary.security.AuthoritiesConstants;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.dto.AdminUserDTO;
-import vdt.se.nda.elibrary.service.dto.PatronAccountDTO;
 import vdt.se.nda.elibrary.service.dto.UserDTO;
-import vdt.se.nda.elibrary.service.mapper.UserMapper;
+import vdt.se.nda.elibrary.service.exception.EmailAlreadyUsedException;
+import vdt.se.nda.elibrary.service.exception.InvalidPasswordException;
+import vdt.se.nda.elibrary.service.exception.UsernameAlreadyUsedException;
 
 /**
  * Service class for managing users.

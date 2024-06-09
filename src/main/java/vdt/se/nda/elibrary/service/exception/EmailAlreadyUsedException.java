@@ -1,4 +1,4 @@
-package vdt.se.nda.elibrary.service;
+package vdt.se.nda.elibrary.service.exception;
 
 public class EmailAlreadyUsedException extends RuntimeException {
 

@@ -12,18 +12,24 @@
   </div>
 
   <div *ngFor="let catalogItem of catalog" class="mb-5">
-    <h4 class="mb-3 fw-semibold">{{ catalogItem.categoryName }}</h4>
+    <div class="d-flex justify-content-start align-items-center mb-3">
+      <h4 class="fw-semibold mb-0 me-4">{{ catalogItem.categoryName }}</h4>
+      <a href="#">Xem tất cả</a>
+    </div>
     <ngb-carousel class="carousel carousel-dark py-2" [showNavigationIndicators]="false">
       <ng-template *ngFor="let slide of catalogItem.content" ngbSlide>
         <div class="book-list d-flex justify-content-center">
-          <div *ngFor="let book of slide" class="card text-center align-items-center mx-2 pt-2">
+          <!-- <div *ngFor="let book of slide" class="card text-center align-items-center mx-2 pt-2">
             <img src="{{ book.imageUrl }}" class="book-cover-img card-img-top" />
             <div class="card-body d-flex flex-column align-items-center">
-              <h5 class="card-title">{{ book.title }}</h5>
-              <p class="card-text mb-3">{{ book.authors }}</p>
+              <h5 class="card-title" ngbTooltip="{{ book.title }} - {{ book.authors }}">
+                {{ book.title.length > 30 ? book.title.slice(0, 30) + '...' : book.title }}
+              </h5>
+              <p class="card-text mb-3">{{ book.authors.length > 30 ? book.authors.slice(0, 30) + '...' : book.authors }}</p>
               <a href="#" class="btn btn-primary mt-auto text-white">Chi tiết</a>
             </div>
-          </div>
+          </div> -->
+          <jhi-book-display *ngFor="let book of slide" [book]="book"></jhi-book-display>
         </div>
       </ng-template>
     </ngb-carousel>

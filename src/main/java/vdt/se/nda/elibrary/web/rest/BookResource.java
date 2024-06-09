@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -189,6 +190,14 @@ public class BookResource {
             .build();
     }
 
+    /**
+     * {@code GET  /books/find-by-category} : get books of some category.
+     *
+     * @param categoryId the id of the category (ignore if find by name).
+     * @param categoryName the name of the category (ignore if find by id).
+     * @param pageable the pagination information
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
+     */
     @GetMapping("/books/find-by-category")
     public ResponseEntity<List<BookDTO>> getBooksByCategory(
         @RequestParam(name = "id", required = false) Long categoryId,
@@ -200,6 +209,18 @@ public class BookResource {
         }
 
         Page<BookDTO> page = bookService.findByCategory(categoryId, categoryName, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/books/search")
+    public ResponseEntity<List<BookDTO>> searchForBooks(
+        @RequestParam(name = "q") String keyword,
+        @RequestParam(name = "categories", required = false) Long[] categoryIds,
+        @RequestParam(name = "authors", required = false) Long[] authorIds,
+        @ParameterObject Pageable pageable
+    ) {
+        Page<BookDTO> page = bookService.search(keyword, categoryIds, authorIds, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

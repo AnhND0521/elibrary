@@ -64,5 +64,24 @@ public interface BookService {
      */
     void delete(Long id);
 
+    /**
+     * Find books that belong to some category. Can find either by category id or category name.
+     *
+     * @param categoryId the id of the category.
+     * @param categoryName the name of the category.
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
     Page<BookDTO> findByCategory(Long categoryId, String categoryName, Pageable pageable);
+
+    /**
+     * Search for books with title, authors or category matching keyword.
+     *
+     * @param keyword the keyword used to search for books.
+     * @param categoryIds the ids of the categories that searched books should belong to.
+     * @param authorIds the ids of the authors that searched books should be written by.
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<BookDTO> search(String keyword, Long[] categoryIds, Long[] authorIds, Pageable pageable);
 }

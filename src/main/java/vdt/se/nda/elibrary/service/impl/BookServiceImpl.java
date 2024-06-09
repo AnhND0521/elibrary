@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,5 +102,10 @@ public class BookServiceImpl implements BookService {
             return books.map(bookMapper::toDto);
         }
         return null;
+    }
+
+    @Override
+    public Page<BookDTO> search(String keyword, Long[] categoryIds, Long[] authorIds, Pageable pageable) {
+        return bookRepository.findByKeyword(keyword, pageable).map(bookMapper::toDto);
     }
 }

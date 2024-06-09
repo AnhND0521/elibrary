@@ -2,6 +2,7 @@ package vdt.se.nda.elibrary.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import vdt.se.nda.elibrary.web.rest.vm.LoginVM;
  */
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class UserJWTController {
 
     private final TokenProvider tokenProvider;
@@ -40,6 +42,7 @@ public class UserJWTController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
+        log.info("Created token: {}", jwt);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);

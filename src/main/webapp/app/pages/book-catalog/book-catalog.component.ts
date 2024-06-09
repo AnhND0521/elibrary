@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IBookCatalogItemOnDisplay, IBookOnDisplay } from './book-catalog.model';
+import { IBookCatalogItemOnDisplay } from './book-catalog.model';
 import { BookCatalogService } from './book-catalog.service';
 import { IBook } from 'app/entities/book/book.model';
+import { IBookOnDisplay, convertBookToBookOnDisplay } from 'app/components/book-display/book-display.model';
 
 @Component({
   selector: 'jhi-book-catalog',
@@ -40,21 +41,11 @@ export class BookCatalogComponent implements OnInit {
             const content: IBookOnDisplay[][] = [];
             const booksPerSlide = 5;
             for (let i = 0; i < books.length; i += booksPerSlide) {
-              content.push(books.slice(i, i + booksPerSlide).map(book => this.convertBookToDisplay(book)));
+              content.push(books.slice(i, i + booksPerSlide).map(book => convertBookToBookOnDisplay(book)));
             }
             catalogItem.content = content;
           });
       }
     });
-  }
-
-  convertBookToDisplay(book: IBook): IBookOnDisplay {
-    const authors = book.authors!.map(a => a.name).join(', ');
-    return {
-      id: book.id,
-      title: book.title!.length > 30 ? book.title!.slice(0, 30) + '...' : book.title!,
-      authors: authors.length > 30 ? authors.slice(0, 30) + '...' : authors,
-      imageUrl: book.imageUrl,
-    };
   }
 }

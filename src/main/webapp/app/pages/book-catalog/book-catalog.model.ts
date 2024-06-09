@@ -1,14 +1,7 @@
-import { IBook } from 'app/entities/book/book.model';
+import { IBookOnDisplay } from 'app/components/book-display/book-display.model';
 
 export interface IBookCatalogItemOnDisplay {
   categoryId?: number;
   categoryName: string;
   content?: IBookOnDisplay[][];
-}
-
-export interface IBookOnDisplay {
-  id: number;
-  title: string;
-  authors: string;
-  imageUrl?: string | null;
 }

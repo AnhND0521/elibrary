@@ -193,26 +193,39 @@ public class BookResource {
     /**
      * {@code GET  /books/find-by-category} : get books of some category.
      *
-     * @param categoryId the id of the category (ignore if find by name).
-     * @param categoryName the name of the category (ignore if find by id).
-     * @param pageable the pagination information
+     * @param categoryId the id of the category.
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
     @GetMapping("/books/find-by-category")
     public ResponseEntity<List<BookDTO>> getBooksByCategory(
-        @RequestParam(name = "id", required = false) Long categoryId,
-        @RequestParam(name = "name", required = false) String categoryName,
+        @RequestParam(name = "id") Long categoryId,
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
-        if (categoryId == null && categoryName == null) {
-            throw new BadRequestAlertException("Should specify category id or category name", "category", "idnamenull");
-        }
-
-        Page<BookDTO> page = bookService.findByCategory(categoryId, categoryName, pageable);
+        Page<BookDTO> page = bookService.findByCategory(categoryId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/books/find-by-author")
+    public ResponseEntity<List<BookDTO>> getBooksByAuthor(
+        @RequestParam(name = "id") Long authorId,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        Page<BookDTO> page = bookService.findByAuthor(authorId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /books/search} : search for books by keyword and filter by categories and authors.
+     *
+     * @param keyword the keyword to search for books.
+     * @param categoryIds the ids of categories to filter books.
+     * @param authorIds the ids of authors to filter books.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
+     */
     @GetMapping("/books/search")
     public ResponseEntity<List<BookDTO>> searchForBooks(
         @RequestParam(name = "q", required = false, defaultValue = "") String keyword,

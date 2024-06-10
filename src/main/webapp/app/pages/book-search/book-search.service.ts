@@ -11,11 +11,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BookSearchService {
+  protected bookResourceUrl = this.applicationConfigService.getEndpointFor('api/books');
+  protected categoryResourceUrl = this.applicationConfigService.getEndpointFor('api/categories');
+  protected authorResourceUrl = this.applicationConfigService.getEndpointFor('api/authors');
+
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   search(params: any): Observable<HttpResponse<IBook[]>> {
     const options = createRequestOption(params);
-    return this.http.get<IBook[]>(this.applicationConfigService.getEndpointFor('api/books/search'), {
+    return this.http.get<IBook[]>(`${this.bookResourceUrl}/search`, {
       params: options,
       observe: 'response',
     });
@@ -23,7 +27,7 @@ export class BookSearchService {
 
   getCategories(params: any = {}): Observable<HttpResponse<ICategory[]>> {
     const options = createRequestOption(params);
-    return this.http.get<ICategory[]>(this.applicationConfigService.getEndpointFor('api/categories'), {
+    return this.http.get<ICategory[]>(this.categoryResourceUrl, {
       params: options,
       observe: 'response',
     });
@@ -31,6 +35,30 @@ export class BookSearchService {
 
   getAuthors(params: any = {}): Observable<HttpResponse<IAuthor[]>> {
     const options = createRequestOption(params);
-    return this.http.get<IAuthor[]>(this.applicationConfigService.getEndpointFor('api/authors'), { params: options, observe: 'response' });
+    return this.http.get<IAuthor[]>(this.authorResourceUrl, { params: options, observe: 'response' });
+  }
+
+  getByCategory(params: any): Observable<HttpResponse<IBook[]>> {
+    const options = createRequestOption(params);
+    return this.http.get<IBook[]>(`${this.bookResourceUrl}/find-by-category`, {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  getByAuthor(params: any): Observable<HttpResponse<IBook[]>> {
+    const options = createRequestOption(params);
+    return this.http.get<IBook[]>(`${this.bookResourceUrl}/find-by-author`, {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  getCategory(id: number): Observable<HttpResponse<ICategory>> {
+    return this.http.get<ICategory>(`${this.categoryResourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  getAuthor(id: number): Observable<HttpResponse<IAuthor>> {
+    return this.http.get<IAuthor>(`${this.authorResourceUrl}/${id}`, { observe: 'response' });
   }
 }

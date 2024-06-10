@@ -43,7 +43,7 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
 
     Page<Book> findByCategoryId(Long categoryId, Pageable pageable);
 
-    Page<Book> findByCategoryName(String categoryName, Pageable pageable);
+    Page<Book> findByAuthorsId(Long authorId, Pageable pageable);
 
     @Query(
         "select distinct book from Book book " +

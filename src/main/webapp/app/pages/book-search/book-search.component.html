@@ -64,7 +64,9 @@
     </div>
   </div>
 
-  <h4 *ngIf="queryKeyword" class="mb-4">Kết quả tìm kiếm: {{ queryKeyword }}</h4>
+  <h4 *ngIf="mode === 0" class="mb-4">Kết quả tìm kiếm: {{ queryKeyword }}</h4>
+  <h4 *ngIf="mode === 1" class="mb-4">Thể loại: {{ categoryName }}</h4>
+  <h4 *ngIf="mode === 2" class="mb-4">Tác giả: {{ authorName }}</h4>
   <div *ngIf="bookList.length > 0" class="row align-items-stretch">
     <div *ngFor="let book of bookList" class="col-lg-2 col-md-3 col-sm-6 mb-4">
       <jhi-book-display [book]="book"></jhi-book-display>

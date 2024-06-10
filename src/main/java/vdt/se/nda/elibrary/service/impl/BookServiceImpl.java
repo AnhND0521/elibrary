@@ -89,16 +89,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookDTO> findByCategory(Long categoryId, String categoryName, Pageable pageable) {
-        if (categoryId != null) {
-            Page<Book> books = bookRepository.findByCategoryId(categoryId, pageable);
-            return books.map(bookMapper::toDto);
-        }
-        if (categoryName != null) {
-            Page<Book> books = bookRepository.findByCategoryName(categoryName, pageable);
-            return books.map(bookMapper::toDto);
-        }
-        return null;
+    public Page<BookDTO> findByCategory(Long categoryId, Pageable pageable) {
+        Page<Book> books = bookRepository.findByCategoryId(categoryId, pageable);
+        return books.map(bookMapper::toDto);
+    }
+
+    @Override
+    public Page<BookDTO> findByAuthor(Long authorId, Pageable pageable) {
+        Page<Book> books = bookRepository.findByAuthorsId(authorId, pageable);
+        return books.map(bookMapper::toDto);
     }
 
     @Override

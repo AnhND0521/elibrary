@@ -30,9 +30,15 @@ export class BookSearchComponent implements OnInit {
   selectedCategories: ICategoryWithMark[] = [];
   selectedAuthors: IAuthorWithMark[] = [];
 
-  itemsPerPage = 30;
-  totalItems = 0;
-  page = 1;
+  itemsPerPage: number = 30;
+  totalItems: number = 0;
+  page: number = 1;
+
+  mode: number = 0; // 0: search, 1: list by category, 2: list by author
+  categoryId: number = 0;
+  categoryName: string = '';
+  authorId: number = 0;
+  authorName: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router, private bookSearchService: BookSearchService) {}
 
@@ -44,6 +50,29 @@ export class BookSearchComponent implements OnInit {
 
   fetchSearchResults() {
     this.route.queryParams.subscribe(params => {
+      // is category details page
+      if (params['category']) {
+        this.mode = 1;
+        this.categoryId = +params['category'];
+        this.bookSearchService
+          .getByCategory({ id: this.categoryId, page: this.page - 1, size: this.itemsPerPage })
+          .subscribe(response => this.extractBookList(response));
+        this.bookSearchService.getCategory(this.categoryId).subscribe(response => (this.categoryName = response.body!.name!));
+        return;
+      }
+
+      // is author details page
+      if (params['author']) {
+        this.mode = 2;
+        this.authorId = +params['author'];
+        this.bookSearchService
+          .getByAuthor({ id: this.authorId, page: this.page - 1, size: this.itemsPerPage })
+          .subscribe(response => this.extractBookList(response));
+        this.bookSearchService.getAuthor(this.authorId).subscribe(response => (this.authorName = response.body!.name!));
+        return;
+      }
+
+      // is normal search page
       if (params['q']) {
         this.queryKeyword = params['q'];
         this.keyword = this.queryKeyword;
@@ -68,20 +97,23 @@ export class BookSearchComponent implements OnInit {
         this.selectedAuthors = [];
       }
 
-      const searchParams: any = {
-        q: this.keyword,
-        page: this.page - 1,
-        size: this.itemsPerPage,
-      };
-      if (this.queryCategoryIds.length > 0) {
-        searchParams.categories = this.queryCategoryIds.join(',');
-      }
-      if (this.queryAuthorIds.length > 0) {
-        searchParams.authors = this.queryAuthorIds.join(',');
-      }
-
-      this.bookSearchService.search(searchParams).subscribe(response => this.extractBookList(response));
+      this.bookSearchService.search(this.buildSearchParams()).subscribe(response => this.extractBookList(response));
     });
+  }
+
+  buildSearchParams() {
+    const searchParams: any = {
+      q: this.keyword,
+      page: this.page - 1,
+      size: this.itemsPerPage,
+    };
+    if (this.queryCategoryIds.length > 0) {
+      searchParams.categories = this.queryCategoryIds.join(',');
+    }
+    if (this.queryAuthorIds.length > 0) {
+      searchParams.authors = this.queryAuthorIds.join(',');
+    }
+    return searchParams;
   }
 
   fetchCategoryList() {
@@ -154,8 +186,21 @@ export class BookSearchComponent implements OnInit {
 
   navigateToPage(page: number) {
     this.page = page;
-    this.bookSearchService
-      .search({ q: this.keyword, page: this.page - 1, size: this.itemsPerPage })
-      .subscribe(response => this.extractBookList(response));
+
+    if (this.mode === 0) {
+      this.bookSearchService.search(this.buildSearchParams()).subscribe(response => this.extractBookList(response));
+    }
+
+    if (this.mode === 1) {
+      this.bookSearchService
+        .getByCategory({ id: this.categoryId, page: this.page - 1, size: this.itemsPerPage })
+        .subscribe(response => this.extractBookList(response));
+    }
+
+    if (this.mode === 2) {
+      this.bookSearchService
+        .getByAuthor({ id: this.authorId, page: this.page - 1, size: this.itemsPerPage })
+        .subscribe(response => this.extractBookList(response));
+    }
   }
 }

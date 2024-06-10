@@ -12,14 +12,14 @@
       (keyup)="filter()"
     />
   </div>
-  <ul>
-    <div *ngIf="filteredList.length > 0" class="row">
+  <ul *ngIf="filteredList.length > 0">
+    <div class="row">
       <div *ngFor="let category of filteredList" class="col-lg-3 col-md-4 col-sm-12 mb-2">
         <li>
           <a routerLink="/search" [queryParams]="{ category: category.id }">{{ category.name }}</a>
         </li>
       </div>
     </div>
-    <div *ngIf="filteredList.length === 0" class="alert alert-warning">Không tìm thấy thể loại nào.</div>
   </ul>
+  <div *ngIf="filteredList.length === 0" class="alert alert-warning">Không tìm thấy thể loại nào.</div>
 </div>

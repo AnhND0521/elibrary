@@ -29,6 +29,7 @@ import { BookCatalogComponent } from './pages/book-catalog/book-catalog.componen
 import { BookDisplayComponent } from './components/book-display/book-display.component';
 import { BookSearchComponent } from './pages/book-search/book-search.component';
 import { CategoryCatalogComponent } from './pages/category-catalog/category-catalog.component';
+import { AuthorCatalogComponent } from './pages/author-catalog/author-catalog.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { CategoryCatalogComponent } from './pages/category-catalog/category-cata
     BookDisplayComponent,
     BookSearchComponent,
     CategoryCatalogComponent,
+    AuthorCatalogComponent,
   ],
   bootstrap: [MainComponent],
 })

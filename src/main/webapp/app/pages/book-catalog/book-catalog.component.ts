@@ -3,6 +3,7 @@ import { IBookCatalogItemOnDisplay } from './book-catalog.model';
 import { BookCatalogService } from './book-catalog.service';
 import { IBook } from 'app/entities/book/book.model';
 import { IBookOnDisplay, convertBookToBookOnDisplay } from 'app/components/book-display/book-display.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-book-catalog',
@@ -11,8 +12,9 @@ import { IBookOnDisplay, convertBookToBookOnDisplay } from 'app/components/book-
 })
 export class BookCatalogComponent implements OnInit {
   catalog: IBookCatalogItemOnDisplay[] = [];
+  searchKeyword: string = '';
 
-  constructor(protected bookCatalogService: BookCatalogService) {}
+  constructor(protected router: Router, protected bookCatalogService: BookCatalogService) {}
 
   ngOnInit(): void {
     this.load();
@@ -47,5 +49,9 @@ export class BookCatalogComponent implements OnInit {
           });
       }
     });
+  }
+
+  search() {
+    this.router.navigateByUrl('/search?q=' + this.searchKeyword);
   }
 }

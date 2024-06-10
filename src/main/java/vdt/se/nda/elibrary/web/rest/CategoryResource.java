@@ -181,6 +181,11 @@ public class CategoryResource {
             .build();
     }
 
+    /**
+     * {@code GET  /categories/top} : get the top categories to display on catalog.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     */
     @GetMapping("/categories/top")
     public ResponseEntity<List<CategoryDTO>> getTopCategories() {
         return ResponseEntity.ok(categoryService.findTop());

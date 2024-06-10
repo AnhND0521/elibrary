@@ -11,7 +11,7 @@ import vdt.se.nda.elibrary.domain.Book;
 
 /**
  * Spring Data JPA repository for the Book entity.
- *
+ * <p>
  * When extending this class, extend BookRepositoryWithBagRelationships too.
  * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
  */
@@ -56,4 +56,23 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
         "or lower(copy.title) like lower(concat('%', ?1, '%'))"
     )
     Page<Book> findByKeyword(String keyword, Pageable pageable);
+
+    @Query(
+        "select distinct book from Book book " +
+        "left join book.category category " +
+        "left join book.authors author " +
+        "left join book.copies copy " +
+        "where (COALESCE(:categoryIds) is null or category.id in :categoryIds) " +
+        "and (COALESCE(:authorIds) is null or author.id in :authorIds) " +
+        "and (lower(book.title) like lower(concat('%', :keyword, '%')) " +
+        "or lower(category.name) like lower(concat('%', :keyword, '%')) " +
+        "or lower(author.name) like lower(concat('%', :keyword, '%')) " +
+        "or lower(copy.title) like lower(concat('%', :keyword, '%'))) "
+    )
+    Page<Book> findByKeywordAndCategoryIdInAndAuthorsIdIn(
+        @Param("keyword") String keyword,
+        @Param("categoryIds") List<Long> categoryIds,
+        @Param("authorIds") List<Long> authorIds,
+        Pageable pageable
+    );
 }

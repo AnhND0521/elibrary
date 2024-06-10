@@ -1,10 +1,10 @@
 package vdt.se.nda.elibrary.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +26,10 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
-    private final CategoryRepository categoryRepository;
-
     private final BookMapper bookMapper;
 
-    public BookServiceImpl(BookRepository bookRepository, CategoryRepository categoryRepository, BookMapper bookMapper) {
+    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
-        this.categoryRepository = categoryRepository;
         this.bookMapper = bookMapper;
     }
 
@@ -105,7 +102,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookDTO> search(String keyword, Long[] categoryIds, Long[] authorIds, Pageable pageable) {
-        return bookRepository.findByKeyword(keyword, pageable).map(bookMapper::toDto);
+    public Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, Pageable pageable) {
+        if ((categoryIds == null || categoryIds.isEmpty()) && (authorIds == null || authorIds.isEmpty())) {
+            return bookRepository.findByKeyword(keyword, pageable).map(bookMapper::toDto);
+        }
+
+        return bookRepository.findByKeywordAndCategoryIdInAndAuthorsIdIn(keyword, categoryIds, authorIds, pageable).map(bookMapper::toDto);
     }
 }

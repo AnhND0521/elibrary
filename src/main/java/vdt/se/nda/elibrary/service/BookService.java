@@ -1,5 +1,6 @@
 package vdt.se.nda.elibrary.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,5 +84,5 @@ public interface BookService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<BookDTO> search(String keyword, Long[] categoryIds, Long[] authorIds, Pageable pageable);
+    Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, Pageable pageable);
 }

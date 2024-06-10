@@ -57,5 +57,10 @@ public interface CategoryService {
      */
     void delete(Long id);
 
+    /**
+     * Get the top categories to display on catalog.
+     *
+     * @return the list of entities.
+     */
     List<CategoryDTO> findTop();
 }

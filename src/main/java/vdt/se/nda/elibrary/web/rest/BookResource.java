@@ -215,9 +215,9 @@ public class BookResource {
 
     @GetMapping("/books/search")
     public ResponseEntity<List<BookDTO>> searchForBooks(
-        @RequestParam(name = "q") String keyword,
-        @RequestParam(name = "categories", required = false) Long[] categoryIds,
-        @RequestParam(name = "authors", required = false) Long[] authorIds,
+        @RequestParam(name = "q", required = false, defaultValue = "") String keyword,
+        @RequestParam(name = "categories", required = false, defaultValue = "") List<Long> categoryIds,
+        @RequestParam(name = "authors", required = false, defaultValue = "") List<Long> authorIds,
         @ParameterObject Pageable pageable
     ) {
         Page<BookDTO> page = bookService.search(keyword, categoryIds, authorIds, pageable);

@@ -1,8 +1,15 @@
 <div class="container">
   <h2 class="mb-3">Danh mục sách</h2>
   <div class="input-group mb-3 w-50">
-    <input type="text" class="form-control" placeholder="Tìm kiếm" aria-describedby="button-addon2" />
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Tìm kiếm"
+      aria-describedby="button-addon2"
+      [(ngModel)]="searchKeyword"
+      (keyup.enter)="search()"
+    />
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="search()">
       <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
     </button>
   </div>

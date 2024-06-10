@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BookCatalogComponent } from './book-catalog/book-catalog.component';
 import { BookSearchComponent } from './book-search/book-search.component';
+import { CategoryCatalogComponent } from './category-catalog/category-catalog.component';
 
 export const pageRoute: Routes = [
   {
@@ -10,5 +11,9 @@ export const pageRoute: Routes = [
   {
     path: 'search',
     component: BookSearchComponent,
+  },
+  {
+    path: 'categories',
+    component: CategoryCatalogComponent,
   },
 ];

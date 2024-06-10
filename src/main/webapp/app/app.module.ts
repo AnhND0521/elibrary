@@ -28,6 +28,7 @@ import { ErrorComponent } from './layouts/error/error.component';
 import { BookCatalogComponent } from './pages/book-catalog/book-catalog.component';
 import { BookDisplayComponent } from './components/book-display/book-display.component';
 import { BookSearchComponent } from './pages/book-search/book-search.component';
+import { CategoryCatalogComponent } from './pages/category-catalog/category-catalog.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { BookSearchComponent } from './pages/book-search/book-search.component';
     BookCatalogComponent,
     BookDisplayComponent,
     BookSearchComponent,
+    CategoryCatalogComponent,
   ],
   bootstrap: [MainComponent],
 })

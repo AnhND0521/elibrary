@@ -50,6 +50,8 @@ export class BookSearchComponent implements OnInit {
 
   fetchSearchResults() {
     this.route.queryParams.subscribe(params => {
+      this.mode = 0;
+
       // is category details page
       if (params['category']) {
         this.mode = 1;

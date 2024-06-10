@@ -1,0 +1,25 @@
+<div class="container">
+  <h2 class="mb-4">Danh mục thể loại</h2>
+  <div id="search-input-group" class="input-group input-group-md w-50 mb-4">
+    <span class="input-group-text" id="inputGroup-sizing-md"><fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon></span>
+    <input
+      type="text"
+      class="form-control"
+      aria-label="Sizing example input"
+      aria-describedby="inputGroup-sizing-md"
+      placeholder="Tìm thể loại"
+      [(ngModel)]="filterValue"
+      (keyup)="filter()"
+    />
+  </div>
+  <ul>
+    <div *ngIf="filteredList.length > 0" class="row">
+      <div *ngFor="let category of filteredList" class="col-lg-3 col-md-4 col-sm-12 mb-2">
+        <li>
+          <a routerLink="/search" [queryParams]="{ category: category.id }">{{ category.name }}</a>
+        </li>
+      </div>
+    </div>
+    <div *ngIf="filteredList.length === 0" class="alert alert-warning">Không tìm thấy thể loại nào.</div>
+  </ul>
+</div>

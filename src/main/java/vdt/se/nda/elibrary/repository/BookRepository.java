@@ -54,10 +54,12 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
         "left join book.category category " +
         "left join book.authors author " +
         "left join book.copies copy " +
+        "left join copy.publisher publisher " +
         "where lower(book.title) like lower(concat('%', ?1, '%')) " +
         "or lower(category.name) like lower(concat('%', ?1, '%')) " +
         "or lower(author.name) like lower(concat('%', ?1, '%')) " +
-        "or lower(copy.title) like lower(concat('%', ?1, '%'))"
+        "or lower(copy.title) like lower(concat('%', ?1, '%')) " +
+        "or lower(publisher.name) like lower(concat('%', ?1, '%')) "
     )
     Page<Book> findByKeyword(String keyword, Pageable pageable);
 
@@ -66,17 +68,21 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
         "left join book.category category " +
         "left join book.authors author " +
         "left join book.copies copy " +
-        "where (COALESCE(:categoryIds) is null or category.id in :categoryIds) " +
-        "and (COALESCE(:authorIds) is null or author.id in :authorIds) " +
+        "left join copy.publisher publisher " +
+        "where (coalesce(:categoryIds) is null or category.id in :categoryIds) " +
+        "and (coalesce(:authorIds) is null or author.id in :authorIds) " +
+        "and (coalesce(:publisherIds) is null or publisher.id in :publisherIds) " +
         "and (lower(book.title) like lower(concat('%', :keyword, '%')) " +
         "or lower(category.name) like lower(concat('%', :keyword, '%')) " +
         "or lower(author.name) like lower(concat('%', :keyword, '%')) " +
-        "or lower(copy.title) like lower(concat('%', :keyword, '%'))) "
+        "or lower(copy.title) like lower(concat('%', :keyword, '%')) " +
+        "or lower(publisher.name) like lower(concat('%', :keyword, '%'))) "
     )
     Page<Book> findByKeywordAndCategoryIdInAndAuthorsIdIn(
         @Param("keyword") String keyword,
         @Param("categoryIds") List<Long> categoryIds,
         @Param("authorIds") List<Long> authorIds,
+        @Param("publisherIds") List<Long> publisherIds,
         Pageable pageable
     );
 }

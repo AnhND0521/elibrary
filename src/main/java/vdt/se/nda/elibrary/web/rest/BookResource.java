@@ -242,11 +242,12 @@ public class BookResource {
     }
 
     /**
-     * {@code GET  /books/search} : search for books by keyword and filter by categories and authors.
+     * {@code GET  /books/search} : search for books by keyword and filter by categories or authors or publishers.
      *
      * @param keyword the keyword to search for books.
      * @param categoryIds the ids of categories to filter books.
      * @param authorIds the ids of authors to filter books.
+     * @param publisherIds the ids of publishers to filter books.
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
      */
@@ -255,9 +256,10 @@ public class BookResource {
         @RequestParam(name = "q", required = false, defaultValue = "") String keyword,
         @RequestParam(name = "categories", required = false, defaultValue = "") List<Long> categoryIds,
         @RequestParam(name = "authors", required = false, defaultValue = "") List<Long> authorIds,
+        @RequestParam(name = "publishers", required = false, defaultValue = "") List<Long> publisherIds,
         @ParameterObject Pageable pageable
     ) {
-        Page<BookDTO> page = bookService.search(keyword, categoryIds, authorIds, pageable);
+        Page<BookDTO> page = bookService.search(keyword, categoryIds, authorIds, publisherIds, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

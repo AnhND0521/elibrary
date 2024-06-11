@@ -15,58 +15,33 @@
   </div>
 
   <div>
-    <div class="d-inline-flex justify-content-start align-items-center mb-3 me-4">
-      <span class="fs-6 fw-semibold me-3">Thể loại</span>
-      <div *ngFor="let category of selectedCategories" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
-        <span class="me-2">{{ category.name }}</span>
-        <button class="cursor-pointer border border-0" (click)="removeCategory(category)">
+    <div *ngFor="let filter of filters; index as i" class="d-inline-flex justify-content-start align-items-center mb-3 me-4">
+      <span class="fs-6 fw-semibold me-3">{{ labels[filter.name] }}</span>
+      <div *ngFor="let value of filter.selectedValues" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
+        <span class="me-2">{{ value.name }}</span>
+        <button class="cursor-pointer border border-0" (click)="removeFilterValue(value, i)">
           <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
         </button>
       </div>
-      <div id="category-input-group" class="input-group input-group-sm">
+      <div id="filter-value-input-group" class="input-group input-group-sm">
         <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
         <input
-          list="category-list"
+          [attr.list]="filter.name + '-list'"
           type="text"
           class="form-control"
           aria-label="Sizing example input"
           aria-describedby="inputGroup-sizing-sm"
-          placeholder="Thêm thể loại"
-          (change)="addCategory($event)"
+          placeholder="{{ 'Thêm ' + labels[filter.name].toLowerCase() }}"
+          (change)="addFilterValue($event, i)"
         />
-        <datalist id="category-list">
-          <option *ngFor="let category of filterUnselected(categoryList)" value="{{ category.name }} - {{ category.id }}"></option>
-        </datalist>
-      </div>
-    </div>
-
-    <div class="d-inline-flex justify-content-start align-items-center mb-5">
-      <span class="fs-6 fw-semibold me-3">Tác giả</span>
-      <div *ngFor="let author of selectedAuthors" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
-        <span class="me-2">{{ author.name }}</span>
-        <button class="cursor-pointer border border-0" (click)="removeAuthor(author)">
-          <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
-        </button>
-      </div>
-      <div id="author-input-group" class="input-group input-group-sm">
-        <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
-        <input
-          list="author-list"
-          type="text"
-          class="form-control"
-          aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-sm"
-          placeholder="Thêm tác giả"
-          (change)="addAuthor($event)"
-        />
-        <datalist id="author-list">
-          <option *ngFor="let author of filterUnselected(authorList)" value="{{ author.name }} - {{ author.id }}"></option>
+        <datalist [id]="filter.name + '-list'">
+          <option *ngFor="let value of filterUnselected(filter.list)" value="{{ value.name }} - {{ value.id }}"></option>
         </datalist>
       </div>
     </div>
   </div>
 
-  <h4 class="mb-4">{{ title }}</h4>
+  <h4 class="my-4">{{ title }}</h4>
   <div *ngIf="bookList.length > 0" class="row align-items-stretch">
     <div *ngFor="let book of bookList" class="col-lg-2 col-md-3 col-sm-6 mb-4">
       <jhi-book-display [book]="book"></jhi-book-display>

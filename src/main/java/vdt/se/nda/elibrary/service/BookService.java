@@ -98,8 +98,9 @@ public interface BookService {
      * @param keyword the keyword used to search for books.
      * @param categoryIds the ids of the categories that searched books should belong to.
      * @param authorIds the ids of the authors that searched books should be written by.
+     * @param publisherIds the ids of the publishers that searched books have at least one copy published by.
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, Pageable pageable);
+    Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, List<Long> publisherIds, Pageable pageable);
 }

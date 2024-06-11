@@ -106,11 +106,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, Pageable pageable) {
-        if ((categoryIds == null || categoryIds.isEmpty()) && (authorIds == null || authorIds.isEmpty())) {
+    public Page<BookDTO> search(String keyword, List<Long> categoryIds, List<Long> authorIds, List<Long> publisherIds, Pageable pageable) {
+        if (
+            (categoryIds == null || categoryIds.isEmpty()) &&
+            (authorIds == null || authorIds.isEmpty()) &&
+            (publisherIds == null || publisherIds.isEmpty())
+        ) {
             return bookRepository.findByKeyword(keyword, pageable).map(bookMapper::toDto);
         }
 
-        return bookRepository.findByKeywordAndCategoryIdInAndAuthorsIdIn(keyword, categoryIds, authorIds, pageable).map(bookMapper::toDto);
+        return bookRepository
+            .findByKeywordAndCategoryIdInAndAuthorsIdIn(keyword, categoryIds, authorIds, publisherIds, pageable)
+            .map(bookMapper::toDto);
     }
 }

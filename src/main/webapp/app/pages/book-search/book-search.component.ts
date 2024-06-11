@@ -7,10 +7,12 @@ import { TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ICategory } from 'app/entities/category/category.model';
 import { IAuthor } from 'app/entities/author/author.model';
 import { ASC } from 'app/config/navigation.constants';
-import { AUTHOR, CATEGORY, PUBLISHER } from './book-search.constants';
+import { ALL, AUTHOR, CATEGORY, PUBLISHER, getPluralForm } from './book-search.constants';
 
 type ICategoryWithMark = ICategory & { selected?: boolean };
 type IAuthorWithMark = IAuthor & { selected?: boolean };
+
+type Filter = { name: string; list: any[]; queryIds: number[]; selectedValues: any[] };
 
 @Component({
   selector: 'jhi-book-search',
@@ -19,37 +21,36 @@ type IAuthorWithMark = IAuthor & { selected?: boolean };
 })
 export class BookSearchComponent implements OnInit {
   queryKeyword: string = '';
-  queryCategoryIds: number[] = [];
-  queryAuthorIds: number[] = [];
 
   title: string = '';
   keyword: string = '';
   bookList: IBook[] = [];
-  categoryList: ICategoryWithMark[] = [];
-  authorList: IAuthorWithMark[] = [];
-
-  selectedCategories: ICategoryWithMark[] = [];
-  selectedAuthors: IAuthorWithMark[] = [];
 
   itemsPerPage: number = 30;
   totalItems: number = 0;
   page: number = 1;
 
-  allowedSubjectTypes: string[] = [CATEGORY, AUTHOR, PUBLISHER];
+  labels: any = {};
+
+  filters: Filter[] = ALL.map(name => {
+    return { name: name, list: [], queryIds: [], selectedValues: [] };
+  });
+
+  allowedSubjectTypes: string[] = ALL;
   subjectType: string = '';
   subjectId: number = 0;
   subjectName: string = '';
-  titlePrefixes: any = {};
 
   constructor(private route: ActivatedRoute, private router: Router, private bookSearchService: BookSearchService) {
-    this.titlePrefixes[CATEGORY] = 'Thể loại: ';
-    this.titlePrefixes[AUTHOR] = 'Tác giả: ';
-    this.titlePrefixes[PUBLISHER] = 'Nhà xuất bản: ';
+    this.labels[CATEGORY] = 'Thể loại';
+    this.labels[AUTHOR] = 'Tác giả';
+    this.labels[PUBLISHER] = 'Nhà xuất bản';
   }
 
   ngOnInit(): void {
-    this.fetchCategoryList();
-    this.fetchAuthorList();
+    this.filters.forEach((filter, i) => {
+      this.fetchFilterValues(i);
+    });
     this.fetchSearchResults();
   }
 
@@ -59,7 +60,7 @@ export class BookSearchComponent implements OnInit {
       this.title = 'Kết quả tìm kiếm: ' + this.keyword;
 
       // check if this page is book list of any subjects
-      for (let subjectType of this.allowedSubjectTypes) {
+      this.allowedSubjectTypes.forEach(subjectType => {
         if (params[subjectType]) {
           this.subjectType = subjectType;
           this.subjectId = +params[subjectType];
@@ -68,11 +69,11 @@ export class BookSearchComponent implements OnInit {
             .subscribe(response => this.extractBookList(response));
           this.bookSearchService.getSubject(subjectType, this.subjectId).subscribe(response => {
             this.subjectName = response.body!.name!;
-            this.title = this.titlePrefixes[subjectType] + this.subjectName;
+            this.title = this.labels[subjectType] + ': ' + this.subjectName;
           });
-          return;
         }
-      }
+      });
+      if (this.subjectType) return;
 
       // is normal search page
       if (params['q']) {
@@ -83,21 +84,16 @@ export class BookSearchComponent implements OnInit {
         this.keyword = '';
       }
 
-      if (params['categories']) {
-        this.queryCategoryIds = params['categories'].split(',').map((e: string) => +e);
-        if (this.categoryList.length > 0) this.selectedCategories = this.categoryList.filter(c => this.queryCategoryIds.includes(c.id));
-      } else {
-        this.queryCategoryIds = [];
-        this.selectedCategories = [];
-      }
-
-      if (params['authors']) {
-        this.queryAuthorIds = params['authors'].split(',').map((e: string) => +e);
-        if (this.authorList.length > 0) this.selectedAuthors = this.authorList.filter(a => this.queryAuthorIds.includes(a.id));
-      } else {
-        this.queryAuthorIds = [];
-        this.selectedAuthors = [];
-      }
+      this.filters.forEach((filter, i) => {
+        const pluralName = getPluralForm(filter.name);
+        if (params[pluralName]) {
+          this.filters[i].queryIds = params[pluralName].split(',').map((v: string) => +v);
+          if (filter.list.length > 0) this.filters[i].selectedValues = filter.list.filter(c => filter.queryIds.includes(c.id));
+        } else {
+          this.filters[i].queryIds = [];
+          this.filters[i].selectedValues = [];
+        }
+      });
 
       this.bookSearchService.search(this.buildSearchParams()).subscribe(response => this.extractBookList(response));
     });
@@ -109,26 +105,21 @@ export class BookSearchComponent implements OnInit {
       page: this.page - 1,
       size: this.itemsPerPage,
     };
-    if (this.queryCategoryIds.length > 0) {
-      searchParams.categories = this.queryCategoryIds.join(',');
-    }
-    if (this.queryAuthorIds.length > 0) {
-      searchParams.authors = this.queryAuthorIds.join(',');
-    }
+
+    this.filters.forEach(filter => {
+      if (filter.queryIds.length > 0) {
+        searchParams[getPluralForm(filter.name)] = filter.queryIds.join(',');
+      }
+    });
+
     return searchParams;
   }
 
-  fetchCategoryList() {
-    this.bookSearchService.getCategories({ page: 0, size: 100, sort: ['name,' + ASC] }).subscribe(response => {
-      this.categoryList = response.body!;
-      if (this.queryCategoryIds.length > 0) this.selectedCategories = this.categoryList.filter(c => this.queryCategoryIds.includes(c.id));
-    });
-  }
-
-  fetchAuthorList() {
-    this.bookSearchService.getAuthors({ page: 0, size: 10000, sort: ['name,' + ASC] }).subscribe(response => {
-      this.authorList = response.body!;
-      if (this.queryAuthorIds.length > 0) this.selectedAuthors = this.authorList.filter(c => this.queryAuthorIds.includes(c.id));
+  fetchFilterValues(i: number) {
+    this.bookSearchService.getSubjectList(this.filters[i].name, { page: 0, size: 100000, sort: ['name,' + ASC] }).subscribe(response => {
+      this.filters[i].list = response.body!;
+      if (this.filters[i].queryIds.length > 0)
+        this.filters[i].selectedValues = this.filters[i].list.filter(v => this.filters[i].queryIds.includes(v.id));
     });
   }
 
@@ -141,48 +132,33 @@ export class BookSearchComponent implements OnInit {
     return list.filter(e => !e.selected);
   }
 
-  addCategory(event: any) {
+  addFilterValue(event: any, filterIndex: number) {
     console.log(event.target.value);
     const id = +event.target.value.split(' - ')[1];
-    const index = this.categoryList.findIndex(c => c.id === id);
-    this.categoryList[index].selected = true;
-    this.selectedCategories.push(this.categoryList[index]);
+    const index = this.filters[filterIndex].list.findIndex(c => c.id === id);
+    this.filters[filterIndex].list[index].selected = true;
+    this.filters[filterIndex].selectedValues.push(this.filters[filterIndex].list[index]);
     event.target.value = '';
   }
 
-  removeCategory(category: ICategoryWithMark) {
-    console.log(category);
-    const index1 = this.selectedCategories.findIndex(c => c.id === category.id);
-    this.selectedCategories.splice(index1, 1);
+  removeFilterValue(value: any, filterIndex: number) {
+    console.log(value);
+    const index1 = this.filters[filterIndex].selectedValues.findIndex(v => v.id === value.id);
+    this.filters[filterIndex].selectedValues.splice(index1, 1);
 
-    const index2 = this.categoryList.findIndex(c => c.id === category.id);
-    this.categoryList[index2].selected = false;
-  }
-
-  addAuthor(event: any) {
-    console.log(event.target.value);
-    const id = +event.target.value.split(' - ')[1];
-    const index = this.authorList.findIndex(a => a.id === id);
-    this.authorList[index].selected = true;
-    this.selectedAuthors.push(this.authorList[index]);
-    event.target.value = '';
-  }
-
-  removeAuthor(author: IAuthorWithMark) {
-    console.log(author);
-    const index1 = this.selectedAuthors.findIndex(a => a.id === author.id);
-    this.selectedAuthors.splice(index1, 1);
-
-    const index2 = this.authorList.findIndex(a => a.id === author.id);
-    this.authorList[index2].selected = false;
+    const index2 = this.filters[filterIndex].list.findIndex(v => v.id === value.id);
+    this.filters[filterIndex].list[index2].selected = false;
   }
 
   search(): void {
     const keywordParam = 'q=' + this.keyword.trim();
-    const categoriesParam =
-      this.selectedCategories.length === 0 ? '' : '&categories=' + this.selectedCategories.map(c => '' + c.id).join(',');
-    const authorsParam = this.selectedAuthors.length === 0 ? '' : '&authors=' + this.selectedAuthors.map(a => '' + a.id).join(',');
-    const url = '/search?' + keywordParam + categoriesParam + authorsParam;
+    let url = '/search?' + keywordParam;
+
+    this.filters.forEach(filter => {
+      url +=
+        filter.selectedValues.length === 0 ? '' : `&${getPluralForm(filter.name)}=` + filter.selectedValues.map(v => '' + v.id).join(',');
+    });
+
     this.router.navigateByUrl(url);
   }
 

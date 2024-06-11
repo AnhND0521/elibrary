@@ -207,12 +207,36 @@ public class BookResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    /**
+     * {@code GET  /books/find-by-author} : get books written by some author.
+     *
+     * @param authorId the id of the author.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
+     */
     @GetMapping("/books/find-by-author")
     public ResponseEntity<List<BookDTO>> getBooksByAuthor(
         @RequestParam(name = "id") Long authorId,
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         Page<BookDTO> page = bookService.findByAuthor(authorId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /books/find-by-publisher} : get books that have any copy published by some publisher.
+     *
+     * @param publisherId the id of the publisher.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of books in body.
+     */
+    @GetMapping("/books/find-by-publisher")
+    public ResponseEntity<List<BookDTO>> getBooksByPublisher(
+        @RequestParam(name = "id") Long publisherId,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        Page<BookDTO> page = bookService.findByPublisher(publisherId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

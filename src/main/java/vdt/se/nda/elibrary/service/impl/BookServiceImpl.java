@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.repository.BookRepository;
-import vdt.se.nda.elibrary.repository.CategoryRepository;
 import vdt.se.nda.elibrary.service.BookService;
 import vdt.se.nda.elibrary.service.dto.BookDTO;
 import vdt.se.nda.elibrary.service.mapper.BookMapper;
@@ -97,6 +96,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookDTO> findByAuthor(Long authorId, Pageable pageable) {
         Page<Book> books = bookRepository.findByAuthorsId(authorId, pageable);
+        return books.map(bookMapper::toDto);
+    }
+
+    @Override
+    public Page<BookDTO> findByPublisher(Long publisherId, Pageable pageable) {
+        Page<Book> books = bookRepository.findDistinctByCopiesPublisherId(publisherId, pageable);
         return books.map(bookMapper::toDto);
     }
 

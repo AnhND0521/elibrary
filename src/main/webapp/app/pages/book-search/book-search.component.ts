@@ -7,6 +7,7 @@ import { TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ICategory } from 'app/entities/category/category.model';
 import { IAuthor } from 'app/entities/author/author.model';
 import { ASC } from 'app/config/navigation.constants';
+import { AUTHOR, CATEGORY, PUBLISHER } from './book-search.constants';
 
 type ICategoryWithMark = ICategory & { selected?: boolean };
 type IAuthorWithMark = IAuthor & { selected?: boolean };
@@ -21,6 +22,7 @@ export class BookSearchComponent implements OnInit {
   queryCategoryIds: number[] = [];
   queryAuthorIds: number[] = [];
 
+  title: string = '';
   keyword: string = '';
   bookList: IBook[] = [];
   categoryList: ICategoryWithMark[] = [];
@@ -33,13 +35,17 @@ export class BookSearchComponent implements OnInit {
   totalItems: number = 0;
   page: number = 1;
 
-  mode: number = 0; // 0: search, 1: list by category, 2: list by author
-  categoryId: number = 0;
-  categoryName: string = '';
-  authorId: number = 0;
-  authorName: string = '';
+  allowedSubjectTypes: string[] = [CATEGORY, AUTHOR, PUBLISHER];
+  subjectType: string = '';
+  subjectId: number = 0;
+  subjectName: string = '';
+  titlePrefixes: any = {};
 
-  constructor(private route: ActivatedRoute, private router: Router, private bookSearchService: BookSearchService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private bookSearchService: BookSearchService) {
+    this.titlePrefixes[CATEGORY] = 'Thể loại: ';
+    this.titlePrefixes[AUTHOR] = 'Tác giả: ';
+    this.titlePrefixes[PUBLISHER] = 'Nhà xuất bản: ';
+  }
 
   ngOnInit(): void {
     this.fetchCategoryList();
@@ -49,28 +55,23 @@ export class BookSearchComponent implements OnInit {
 
   fetchSearchResults() {
     this.route.queryParams.subscribe(params => {
-      this.mode = 0;
+      this.subjectType = '';
+      this.title = 'Kết quả tìm kiếm: ' + this.keyword;
 
-      // is category details page
-      if (params['category']) {
-        this.mode = 1;
-        this.categoryId = +params['category'];
-        this.bookSearchService
-          .getByCategory({ id: this.categoryId, page: this.page - 1, size: this.itemsPerPage })
-          .subscribe(response => this.extractBookList(response));
-        this.bookSearchService.getCategory(this.categoryId).subscribe(response => (this.categoryName = response.body!.name!));
-        return;
-      }
-
-      // is author details page
-      if (params['author']) {
-        this.mode = 2;
-        this.authorId = +params['author'];
-        this.bookSearchService
-          .getByAuthor({ id: this.authorId, page: this.page - 1, size: this.itemsPerPage })
-          .subscribe(response => this.extractBookList(response));
-        this.bookSearchService.getAuthor(this.authorId).subscribe(response => (this.authorName = response.body!.name!));
-        return;
+      // check if this page is book list of any subjects
+      for (let subjectType of this.allowedSubjectTypes) {
+        if (params[subjectType]) {
+          this.subjectType = subjectType;
+          this.subjectId = +params[subjectType];
+          this.bookSearchService
+            .getBySubject(subjectType, { id: this.subjectId, page: this.page - 1, size: this.itemsPerPage })
+            .subscribe(response => this.extractBookList(response));
+          this.bookSearchService.getSubject(subjectType, this.subjectId).subscribe(response => {
+            this.subjectName = response.body!.name!;
+            this.title = this.titlePrefixes[subjectType] + this.subjectName;
+          });
+          return;
+        }
       }
 
       // is normal search page
@@ -188,19 +189,11 @@ export class BookSearchComponent implements OnInit {
   navigateToPage(page: number) {
     this.page = page;
 
-    if (this.mode === 0) {
+    if (!this.subjectType) {
       this.bookSearchService.search(this.buildSearchParams()).subscribe(response => this.extractBookList(response));
-    }
-
-    if (this.mode === 1) {
+    } else {
       this.bookSearchService
-        .getByCategory({ id: this.categoryId, page: this.page - 1, size: this.itemsPerPage })
-        .subscribe(response => this.extractBookList(response));
-    }
-
-    if (this.mode === 2) {
-      this.bookSearchService
-        .getByAuthor({ id: this.authorId, page: this.page - 1, size: this.itemsPerPage })
+        .getBySubject(this.subjectType, { id: this.subjectId, page: this.page - 1, size: this.itemsPerPage })
         .subscribe(response => this.extractBookList(response));
     }
   }

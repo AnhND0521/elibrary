@@ -77,11 +77,20 @@ public interface BookService {
     /**
      * Find books that are written by some author.
      *
-     * @param author the id of the author.
+     * @param authorId the id of the author.
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     Page<BookDTO> findByAuthor(Long authorId, Pageable pageable);
+
+    /**
+     * Find books that have any copy published by some publisher.
+     *
+     * @param publisherId the id of the publisher.
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<BookDTO> findByPublisher(Long publisherId, Pageable pageable);
 
     /**
      * Search for books with title, authors or category matching keyword.

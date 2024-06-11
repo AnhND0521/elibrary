@@ -70,7 +70,9 @@
           <tr *ngFor="let copy of copiesOnPage">
             <td class="fw-semibold">{{ copy.title }}</td>
             <td class="fw-normal">{{ copy.yearPublished }}</td>
-            <td class="fw-normal">{{ copy.publisher!.name }}</td>
+            <td>
+              <a routerLink="/search" [queryParams]="{ publisher: copy.publisher!.id }">{{ copy.publisher!.name }}</a>
+            </td>
             <td class="fw-normal">{{ copy.language ?? 'N/A' }}</td>
             <td class="fw-normal">{{ copy.status }}</td>
             <td>

@@ -14,53 +14,55 @@
     </button>
   </div>
 
-  <div class="d-flex justify-content-start align-items-center mb-3">
-    <span class="fs-6 fw-semibold me-3">Thể loại</span>
-    <div *ngFor="let category of selectedCategories" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
-      <span class="me-2">{{ category.name }}</span>
-      <button class="cursor-pointer border border-0" (click)="removeCategory(category)">
-        <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
-      </button>
+  <div>
+    <div class="d-inline-flex justify-content-start align-items-center mb-3 me-4">
+      <span class="fs-6 fw-semibold me-3">Thể loại</span>
+      <div *ngFor="let category of selectedCategories" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
+        <span class="me-2">{{ category.name }}</span>
+        <button class="cursor-pointer border border-0" (click)="removeCategory(category)">
+          <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+        </button>
+      </div>
+      <div id="category-input-group" class="input-group input-group-sm">
+        <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
+        <input
+          list="category-list"
+          type="text"
+          class="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder="Thêm thể loại"
+          (change)="addCategory($event)"
+        />
+        <datalist id="category-list">
+          <option *ngFor="let category of filterUnselected(categoryList)" value="{{ category.name }} - {{ category.id }}"></option>
+        </datalist>
+      </div>
     </div>
-    <div id="category-input-group" class="input-group input-group-sm">
-      <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
-      <input
-        list="category-list"
-        type="text"
-        class="form-control"
-        aria-label="Sizing example input"
-        aria-describedby="inputGroup-sizing-sm"
-        placeholder="Thêm thể loại"
-        (change)="addCategory($event)"
-      />
-      <datalist id="category-list">
-        <option *ngFor="let category of filterUnselected(categoryList)" value="{{ category.name }} - {{ category.id }}"></option>
-      </datalist>
-    </div>
-  </div>
 
-  <div class="d-flex justify-content-start align-items-center mb-5">
-    <span class="fs-6 fw-semibold me-3">Tác giả</span>
-    <div *ngFor="let author of selectedAuthors" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
-      <span class="me-2">{{ author.name }}</span>
-      <button class="cursor-pointer border border-0" (click)="removeAuthor(author)">
-        <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
-      </button>
-    </div>
-    <div id="author-input-group" class="input-group input-group-sm">
-      <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
-      <input
-        list="author-list"
-        type="text"
-        class="form-control"
-        aria-label="Sizing example input"
-        aria-describedby="inputGroup-sizing-sm"
-        placeholder="Thêm tác giả"
-        (change)="addAuthor($event)"
-      />
-      <datalist id="author-list">
-        <option *ngFor="let author of filterUnselected(authorList)" value="{{ author.name }} - {{ author.id }}"></option>
-      </datalist>
+    <div class="d-inline-flex justify-content-start align-items-center mb-5">
+      <span class="fs-6 fw-semibold me-3">Tác giả</span>
+      <div *ngFor="let author of selectedAuthors" class="d-flex justify-content-between border border-secondary p-1 h-25 me-3 rounded">
+        <span class="me-2">{{ author.name }}</span>
+        <button class="cursor-pointer border border-0" (click)="removeAuthor(author)">
+          <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+        </button>
+      </div>
+      <div id="author-input-group" class="input-group input-group-sm">
+        <span class="input-group-text" id="inputGroup-sizing-sm">+</span>
+        <input
+          list="author-list"
+          type="text"
+          class="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder="Thêm tác giả"
+          (change)="addAuthor($event)"
+        />
+        <datalist id="author-list">
+          <option *ngFor="let author of filterUnselected(authorList)" value="{{ author.name }} - {{ author.id }}"></option>
+        </datalist>
+      </div>
     </div>
   </div>
 

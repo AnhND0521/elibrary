@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IBookCatalogItemOnDisplay } from './book-catalog.model';
+import { IBookCatalogItem } from './book-catalog.model';
 import { BookCatalogService } from './book-catalog.service';
 import { IBook } from 'app/entities/book/book.model';
-import { IBookOnDisplay, convertBookToBookOnDisplay } from 'app/components/book-display/book-display.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./book-catalog.component.scss'],
 })
 export class BookCatalogComponent implements OnInit {
-  catalog: IBookCatalogItemOnDisplay[] = [];
+  catalog: IBookCatalogItem[] = [];
   searchKeyword: string = '';
 
   constructor(protected router: Router, protected bookCatalogService: BookCatalogService) {}
@@ -40,10 +39,10 @@ export class BookCatalogComponent implements OnInit {
             const books: IBook[] = response.body!;
 
             // slice whole book list to separate slides to be displayed on carousel
-            const content: IBookOnDisplay[][] = [];
+            const content: IBook[][] = [];
             const booksPerSlide = 5;
             for (let i = 0; i < books.length; i += booksPerSlide) {
-              content.push(books.slice(i, i + booksPerSlide).map(book => convertBookToBookOnDisplay(book)));
+              content.push(books.slice(i, i + booksPerSlide));
             }
             catalogItem.content = content;
           });
@@ -52,6 +51,6 @@ export class BookCatalogComponent implements OnInit {
   }
 
   search() {
-    this.router.navigateByUrl('/search?q=' + this.searchKeyword);
+    this.router.navigateByUrl('/search?q=' + this.searchKeyword.trim());
   }
 }

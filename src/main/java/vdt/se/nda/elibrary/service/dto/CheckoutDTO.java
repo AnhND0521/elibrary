@@ -16,8 +16,6 @@ public class CheckoutDTO implements Serializable {
 
     private Instant endTime;
 
-    private Instant dueEndTime;
-
     private Boolean isReturned;
 
     private BookCopyDTO copy;
@@ -46,14 +44,6 @@ public class CheckoutDTO implements Serializable {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
-    }
-
-    public Instant getDueEndTime() {
-        return dueEndTime;
-    }
-
-    public void setDueEndTime(Instant dueEndTime) {
-        this.dueEndTime = dueEndTime;
     }
 
     public Boolean getIsReturned() {
@@ -108,7 +98,6 @@ public class CheckoutDTO implements Serializable {
             "id=" + getId() +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", dueEndTime='" + getDueEndTime() + "'" +
             ", isReturned='" + getIsReturned() + "'" +
             ", copy=" + getCopy() +
             ", patron=" + getPatron() +

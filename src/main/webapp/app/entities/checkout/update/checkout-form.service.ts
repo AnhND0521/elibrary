@@ -19,23 +19,21 @@ type CheckoutFormGroupInput = ICheckout | PartialWithRequiredKeyOf<NewCheckout>;
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends ICheckout | NewCheckout> = Omit<T, 'startTime' | 'endTime' | 'dueEndTime'> & {
+type FormValueOf<T extends ICheckout | NewCheckout> = Omit<T, 'startTime' | 'endTime'> & {
   startTime?: string | null;
   endTime?: string | null;
-  dueEndTime?: string | null;
 };
 
 type CheckoutFormRawValue = FormValueOf<ICheckout>;
 
 type NewCheckoutFormRawValue = FormValueOf<NewCheckout>;
 
-type CheckoutFormDefaults = Pick<NewCheckout, 'id' | 'startTime' | 'endTime' | 'dueEndTime' | 'isReturned'>;
+type CheckoutFormDefaults = Pick<NewCheckout, 'id' | 'startTime' | 'endTime' | 'isReturned'>;
 
 type CheckoutFormGroupContent = {
   id: FormControl<CheckoutFormRawValue['id'] | NewCheckout['id']>;
   startTime: FormControl<CheckoutFormRawValue['startTime']>;
   endTime: FormControl<CheckoutFormRawValue['endTime']>;
-  dueEndTime: FormControl<CheckoutFormRawValue['dueEndTime']>;
   isReturned: FormControl<CheckoutFormRawValue['isReturned']>;
   copy: FormControl<CheckoutFormRawValue['copy']>;
   patron: FormControl<CheckoutFormRawValue['patron']>;
@@ -60,7 +58,6 @@ export class CheckoutFormService {
       ),
       startTime: new FormControl(checkoutRawValue.startTime),
       endTime: new FormControl(checkoutRawValue.endTime),
-      dueEndTime: new FormControl(checkoutRawValue.dueEndTime),
       isReturned: new FormControl(checkoutRawValue.isReturned),
       copy: new FormControl(checkoutRawValue.copy),
       patron: new FormControl(checkoutRawValue.patron),
@@ -88,7 +85,6 @@ export class CheckoutFormService {
       id: null,
       startTime: currentTime,
       endTime: currentTime,
-      dueEndTime: currentTime,
       isReturned: false,
     };
   }
@@ -98,7 +94,6 @@ export class CheckoutFormService {
       ...rawCheckout,
       startTime: dayjs(rawCheckout.startTime, DATE_TIME_FORMAT),
       endTime: dayjs(rawCheckout.endTime, DATE_TIME_FORMAT),
-      dueEndTime: dayjs(rawCheckout.dueEndTime, DATE_TIME_FORMAT),
     };
   }
 
@@ -109,7 +104,6 @@ export class CheckoutFormService {
       ...checkout,
       startTime: checkout.startTime ? checkout.startTime.format(DATE_TIME_FORMAT) : undefined,
       endTime: checkout.endTime ? checkout.endTime.format(DATE_TIME_FORMAT) : undefined,
-      dueEndTime: checkout.dueEndTime ? checkout.dueEndTime.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

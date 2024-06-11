@@ -10,7 +10,6 @@ const requireRestSample: RestHold = {
   ...sampleWithRequiredData,
   startTime: sampleWithRequiredData.startTime?.toJSON(),
   endTime: sampleWithRequiredData.endTime?.toJSON(),
-  dueEndTime: sampleWithRequiredData.dueEndTime?.toJSON(),
 };
 
 describe('Hold Service', () => {

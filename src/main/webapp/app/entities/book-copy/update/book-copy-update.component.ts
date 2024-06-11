@@ -11,6 +11,7 @@ import { IBook } from 'app/entities/book/book.model';
 import { BookService } from 'app/entities/book/service/book.service';
 import { IPublisher } from 'app/entities/publisher/publisher.model';
 import { PublisherService } from 'app/entities/publisher/service/publisher.service';
+import { BookCopyStatus } from 'app/entities/enumerations/book-copy-status.model';
 
 @Component({
   selector: 'jhi-book-copy-update',
@@ -19,6 +20,7 @@ import { PublisherService } from 'app/entities/publisher/service/publisher.servi
 export class BookCopyUpdateComponent implements OnInit {
   isSaving = false;
   bookCopy: IBookCopy | null = null;
+  bookCopyStatusValues = Object.keys(BookCopyStatus);
 
   booksSharedCollection: IBook[] = [];
   publishersSharedCollection: IPublisher[] = [];

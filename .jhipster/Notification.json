@@ -26,12 +26,6 @@
       "otherEntityName": "patronAccount",
       "relationshipName": "patron",
       "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityField": "id",
-      "otherEntityName": "bookCopy",
-      "relationshipName": "copy",
-      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceImpl"

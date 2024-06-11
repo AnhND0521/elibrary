@@ -51,6 +51,14 @@ enum PatronStatus {
 entity BookCopy {
     title String maxlength(255)
 	yearPublished Integer
+	language String maxlength(20)
+	status BookCopyStatus
+}
+
+enum BookCopyStatus {
+    AVAILABLE,
+    ON_HOLD,
+    BORROWED
 }
 
 entity Publisher {
@@ -68,14 +76,13 @@ relationship ManyToOne {
 entity Checkout {
 	startTime Instant
     endTime Instant
-    dueEndTime Instant
     isReturned Boolean
 }
 
 entity Hold {
 	startTime Instant
     endTime Instant
-    dueEndTime Instant
+    isCheckedOut Boolean
 }
 
 relationship ManyToOne {
@@ -100,7 +107,6 @@ enum NotificationType {
 
 relationship ManyToOne {
 	Notification{patron(cardNumber)} to PatronAccount
-    Notification{copy(id)} to BookCopy
 }
 
 use serviceImpl, mapstruct, pagination for *

@@ -9,8 +9,6 @@ import { INotification } from '../notification.model';
 import { NotificationService } from '../service/notification.service';
 import { IPatronAccount } from 'app/entities/patron-account/patron-account.model';
 import { PatronAccountService } from 'app/entities/patron-account/service/patron-account.service';
-import { IBookCopy } from 'app/entities/book-copy/book-copy.model';
-import { BookCopyService } from 'app/entities/book-copy/service/book-copy.service';
 import { NotificationType } from 'app/entities/enumerations/notification-type.model';
 
 @Component({
@@ -23,7 +21,6 @@ export class NotificationUpdateComponent implements OnInit {
   notificationTypeValues = Object.keys(NotificationType);
 
   patronAccountsSharedCollection: IPatronAccount[] = [];
-  bookCopiesSharedCollection: IBookCopy[] = [];
 
   editForm: NotificationFormGroup = this.notificationFormService.createNotificationFormGroup();
 
@@ -31,14 +28,11 @@ export class NotificationUpdateComponent implements OnInit {
     protected notificationService: NotificationService,
     protected notificationFormService: NotificationFormService,
     protected patronAccountService: PatronAccountService,
-    protected bookCopyService: BookCopyService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
   comparePatronAccount = (o1: IPatronAccount | null, o2: IPatronAccount | null): boolean =>
     this.patronAccountService.comparePatronAccount(o1, o2);
-
-  compareBookCopy = (o1: IBookCopy | null, o2: IBookCopy | null): boolean => this.bookCopyService.compareBookCopy(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ notification }) => {
@@ -92,10 +86,6 @@ export class NotificationUpdateComponent implements OnInit {
       this.patronAccountsSharedCollection,
       notification.patron
     );
-    this.bookCopiesSharedCollection = this.bookCopyService.addBookCopyToCollectionIfMissing<IBookCopy>(
-      this.bookCopiesSharedCollection,
-      notification.copy
-    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -108,15 +98,5 @@ export class NotificationUpdateComponent implements OnInit {
         )
       )
       .subscribe((patronAccounts: IPatronAccount[]) => (this.patronAccountsSharedCollection = patronAccounts));
-
-    this.bookCopyService
-      .query()
-      .pipe(map((res: HttpResponse<IBookCopy[]>) => res.body ?? []))
-      .pipe(
-        map((bookCopies: IBookCopy[]) =>
-          this.bookCopyService.addBookCopyToCollectionIfMissing<IBookCopy>(bookCopies, this.notification?.copy)
-        )
-      )
-      .subscribe((bookCopies: IBookCopy[]) => (this.bookCopiesSharedCollection = bookCopies));
   }
 }

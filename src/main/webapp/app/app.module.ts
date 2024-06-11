@@ -30,6 +30,7 @@ import { BookDisplayComponent } from './components/book-display/book-display.com
 import { BookSearchComponent } from './pages/book-search/book-search.component';
 import { CategoryCatalogComponent } from './pages/category-catalog/category-catalog.component';
 import { AuthorCatalogComponent } from './pages/author-catalog/author-catalog.component';
+import { BookDetailsComponent } from './pages/book-details/book-details.component';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { AuthorCatalogComponent } from './pages/author-catalog/author-catalog.co
     BookSearchComponent,
     CategoryCatalogComponent,
     AuthorCatalogComponent,
+    BookDetailsComponent,
   ],
   bootstrap: [MainComponent],
 })

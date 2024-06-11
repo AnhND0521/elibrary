@@ -20,7 +20,7 @@
       "id": "ID",
       "startTime": "Start Time",
       "endTime": "End Time",
-      "dueEndTime": "Due End Time",
+      "isCheckedOut": "Is Checked Out",
       "copy": "Copy",
       "patron": "Patron"
     }

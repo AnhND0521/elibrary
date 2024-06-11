@@ -69,7 +69,7 @@ public class BookCopyResource {
     /**
      * {@code PUT  /book-copies/:id} : Updates an existing bookCopy.
      *
-     * @param id the id of the bookCopyDTO to save.
+     * @param id          the id of the bookCopyDTO to save.
      * @param bookCopyDTO the bookCopyDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bookCopyDTO,
      * or with status {@code 400 (Bad Request)} if the bookCopyDTO is not valid,
@@ -103,7 +103,7 @@ public class BookCopyResource {
     /**
      * {@code PATCH  /book-copies/:id} : Partial updates given fields of an existing bookCopy, field will ignore if it is null
      *
-     * @param id the id of the bookCopyDTO to save.
+     * @param id          the id of the bookCopyDTO to save.
      * @param bookCopyDTO the bookCopyDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated bookCopyDTO,
      * or with status {@code 400 (Bad Request)} if the bookCopyDTO is not valid,
@@ -139,7 +139,7 @@ public class BookCopyResource {
     /**
      * {@code GET  /book-copies} : get all the bookCopies.
      *
-     * @param pageable the pagination information.
+     * @param pageable  the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bookCopies in body.
      */
@@ -186,5 +186,16 @@ public class BookCopyResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /book-copies/find-by-book} : get the book copies of some book.
+     *
+     * @param bookId the id of the book.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bookCopies in body.
+     */
+    @GetMapping("/book-copies/find-by-book")
+    public ResponseEntity<List<BookCopyDTO>> getBookCopiesOfBook(@RequestParam(name = "id") Long bookId) {
+        return ResponseEntity.ok(bookCopyService.findByBook(bookId));
     }
 }

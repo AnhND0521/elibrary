@@ -28,12 +28,6 @@
             <a [routerLink]="['/patron-account', notification.patron.cardNumber, 'view']">{{ notification.patron.cardNumber }}</a>
           </div>
         </dd>
-        <dt><span jhiTranslate="eLibraryApp.notification.copy">Copy</span></dt>
-        <dd>
-          <div *ngIf="notification.copy">
-            <a [routerLink]="['/book-copy', notification.copy.id, 'view']">{{ notification.copy.id }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

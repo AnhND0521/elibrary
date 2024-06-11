@@ -27,9 +27,6 @@ public class Checkout implements Serializable {
     @Column(name = "end_time")
     private Instant endTime;
 
-    @Column(name = "due_end_time")
-    private Instant dueEndTime;
-
     @Column(name = "is_returned")
     private Boolean isReturned;
 
@@ -80,19 +77,6 @@ public class Checkout implements Serializable {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
-    }
-
-    public Instant getDueEndTime() {
-        return this.dueEndTime;
-    }
-
-    public Checkout dueEndTime(Instant dueEndTime) {
-        this.setDueEndTime(dueEndTime);
-        return this;
-    }
-
-    public void setDueEndTime(Instant dueEndTime) {
-        this.dueEndTime = dueEndTime;
     }
 
     public Boolean getIsReturned() {
@@ -160,7 +144,6 @@ public class Checkout implements Serializable {
             "id=" + getId() +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", dueEndTime='" + getDueEndTime() + "'" +
             ", isReturned='" + getIsReturned() + "'" +
             "}";
     }

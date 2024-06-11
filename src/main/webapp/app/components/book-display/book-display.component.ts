@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IBookOnDisplay } from 'app/components/book-display/book-display.model';
+import { IBook } from 'app/entities/book/book.model';
+
+const MAX_STRING_LENGTH = 30;
 
 @Component({
   selector: 'jhi-book-display',
@@ -7,9 +9,20 @@ import { IBookOnDisplay } from 'app/components/book-display/book-display.model';
   styleUrls: ['./book-display.component.scss'],
 })
 export class BookDisplayComponent implements OnInit {
-  @Input() book!: IBookOnDisplay;
+  @Input() book!: IBook;
+  authorsString!: string;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authorsString = this.book.authors!.map(author => author.name).join(', ');
+  }
+
+  trimmable(s: string): boolean {
+    return s.length > MAX_STRING_LENGTH;
+  }
+
+  trim(s: string): string {
+    return this.trimmable(s) ? s.slice(0, 30) + '...' : s;
+  }
 }

@@ -11,8 +11,6 @@ import { NotificationService } from '../service/notification.service';
 import { INotification } from '../notification.model';
 import { IPatronAccount } from 'app/entities/patron-account/patron-account.model';
 import { PatronAccountService } from 'app/entities/patron-account/service/patron-account.service';
-import { IBookCopy } from 'app/entities/book-copy/book-copy.model';
-import { BookCopyService } from 'app/entities/book-copy/service/book-copy.service';
 
 import { NotificationUpdateComponent } from './notification-update.component';
 
@@ -23,7 +21,6 @@ describe('Notification Management Update Component', () => {
   let notificationFormService: NotificationFormService;
   let notificationService: NotificationService;
   let patronAccountService: PatronAccountService;
-  let bookCopyService: BookCopyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,7 +44,6 @@ describe('Notification Management Update Component', () => {
     notificationFormService = TestBed.inject(NotificationFormService);
     notificationService = TestBed.inject(NotificationService);
     patronAccountService = TestBed.inject(PatronAccountService);
-    bookCopyService = TestBed.inject(BookCopyService);
 
     comp = fixture.componentInstance;
   });
@@ -75,40 +71,15 @@ describe('Notification Management Update Component', () => {
       expect(comp.patronAccountsSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call BookCopy query and add missing value', () => {
-      const notification: INotification = { id: 456 };
-      const copy: IBookCopy = { id: 6815 };
-      notification.copy = copy;
-
-      const bookCopyCollection: IBookCopy[] = [{ id: 13457 }];
-      jest.spyOn(bookCopyService, 'query').mockReturnValue(of(new HttpResponse({ body: bookCopyCollection })));
-      const additionalBookCopies = [copy];
-      const expectedCollection: IBookCopy[] = [...additionalBookCopies, ...bookCopyCollection];
-      jest.spyOn(bookCopyService, 'addBookCopyToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ notification });
-      comp.ngOnInit();
-
-      expect(bookCopyService.query).toHaveBeenCalled();
-      expect(bookCopyService.addBookCopyToCollectionIfMissing).toHaveBeenCalledWith(
-        bookCopyCollection,
-        ...additionalBookCopies.map(expect.objectContaining)
-      );
-      expect(comp.bookCopiesSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should update editForm', () => {
       const notification: INotification = { id: 456 };
       const patron: IPatronAccount = { cardNumber: 'd2cb107a-4' };
       notification.patron = patron;
-      const copy: IBookCopy = { id: 40865 };
-      notification.copy = copy;
 
       activatedRoute.data = of({ notification });
       comp.ngOnInit();
 
       expect(comp.patronAccountsSharedCollection).toContain(patron);
-      expect(comp.bookCopiesSharedCollection).toContain(copy);
       expect(comp.notification).toEqual(notification);
     });
   });
@@ -189,16 +160,6 @@ describe('Notification Management Update Component', () => {
         jest.spyOn(patronAccountService, 'comparePatronAccount');
         comp.comparePatronAccount(entity, entity2);
         expect(patronAccountService.comparePatronAccount).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
-    describe('compareBookCopy', () => {
-      it('Should forward to bookCopyService', () => {
-        const entity = { id: 123 };
-        const entity2 = { id: 456 };
-        jest.spyOn(bookCopyService, 'compareBookCopy');
-        comp.compareBookCopy(entity, entity2);
-        expect(bookCopyService.compareBookCopy).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

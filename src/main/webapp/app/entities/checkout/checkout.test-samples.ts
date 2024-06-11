@@ -7,18 +7,16 @@ export const sampleWithRequiredData: ICheckout = {
 };
 
 export const sampleWithPartialData: ICheckout = {
-  id: 82904,
-  startTime: dayjs('2024-06-03T00:11'),
-  dueEndTime: dayjs('2024-06-02T14:21'),
-  isReturned: true,
+  id: 58053,
+  startTime: dayjs('2024-06-02T13:57'),
+  isReturned: false,
 };
 
 export const sampleWithFullData: ICheckout = {
-  id: 44592,
-  startTime: dayjs('2024-06-02T12:01'),
-  endTime: dayjs('2024-06-02T18:26'),
-  dueEndTime: dayjs('2024-06-02T10:39'),
-  isReturned: false,
+  id: 81264,
+  startTime: dayjs('2024-06-02T18:04'),
+  endTime: dayjs('2024-06-02T23:09'),
+  isReturned: true,
 };
 
 export const sampleWithNewData: NewCheckout = {

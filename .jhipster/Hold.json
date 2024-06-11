@@ -14,8 +14,8 @@
       "fieldType": "Instant"
     },
     {
-      "fieldName": "dueEndTime",
-      "fieldType": "Instant"
+      "fieldName": "isCheckedOut",
+      "fieldType": "Boolean"
     }
   ],
   "fluentMethods": true,

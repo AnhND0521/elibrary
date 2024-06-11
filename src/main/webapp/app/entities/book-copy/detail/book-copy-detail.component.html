@@ -22,6 +22,14 @@
         <dd>
           <span>{{ bookCopy.yearPublished }}</span>
         </dd>
+        <dt><span jhiTranslate="eLibraryApp.bookCopy.language">Language</span></dt>
+        <dd>
+          <span>{{ bookCopy.language }}</span>
+        </dd>
+        <dt><span jhiTranslate="eLibraryApp.bookCopy.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'eLibraryApp.BookCopyStatus.' + bookCopy.status }}">{{ bookCopy.status }}</span>
+        </dd>
         <dt><span jhiTranslate="eLibraryApp.bookCopy.book">Book</span></dt>
         <dd>
           <div *ngIf="bookCopy.book">

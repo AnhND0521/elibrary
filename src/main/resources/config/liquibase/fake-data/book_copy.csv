@@ -1,11 +1,11 @@
-id;title;year_published
-1;ubiquitous;77810
-2;Configuration Soft Account;35217
-3;Shilling open-source;26232
-4;Colombia iterate Hill;10712
-5;systems Cross-group Tuna;84104
-6;Clothing;73821
-7;Summit Solutions digital;3948
-8;TCP;728
-9;Inlet;66369
-10;synergistic SMS;77359
+id;title;year_published;language;status
+1;ubiquitous;77810;Configuration Soft A;ON_HOLD
+2;Shilling open-source;26232;Colombia iterate Hil;AVAILABLE
+3;systems Cross-group Tuna;84104;Clothing;BORROWED
+4;Summit Solutions digital;3948;TCP;AVAILABLE
+5;Inlet;66369;synergistic SMS;BORROWED
+6;paradigms Consultant navigating;10390;input;BORROWED
+7;navigating;93985;generating Account;AVAILABLE
+8;Communications e-commerce;77551;interface parse Vist;ON_HOLD
+9;Mississippi Account engage;56852;Lead services;AVAILABLE
+10;invoice eco-centric;91352;Texas;AVAILABLE

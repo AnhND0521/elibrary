@@ -6,7 +6,7 @@ export interface IHold {
   id: number;
   startTime?: dayjs.Dayjs | null;
   endTime?: dayjs.Dayjs | null;
-  dueEndTime?: dayjs.Dayjs | null;
+  isCheckedOut?: boolean | null;
   copy?: Pick<IBookCopy, 'id'> | null;
   patron?: Pick<IPatronAccount, 'cardNumber'> | null;
 }

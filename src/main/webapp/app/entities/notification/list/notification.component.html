@@ -56,12 +56,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="copy.id">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.notification.copy">Copy</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -75,11 +69,6 @@
           <td>
             <div *ngIf="notification.patron">
               <a [routerLink]="['/patron-account', notification.patron.cardNumber, 'view']">{{ notification.patron.cardNumber }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="notification.copy">
-              <a [routerLink]="['/book-copy', notification.copy.id, 'view']">{{ notification.copy.id }}</a>
             </div>
           </td>
           <td class="text-end">

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs/esm';
 import { IPatronAccount } from 'app/entities/patron-account/patron-account.model';
-import { IBookCopy } from 'app/entities/book-copy/book-copy.model';
 import { NotificationType } from 'app/entities/enumerations/notification-type.model';
 
 export interface INotification {
@@ -8,7 +7,6 @@ export interface INotification {
   sentAt?: dayjs.Dayjs | null;
   type?: NotificationType | null;
   patron?: Pick<IPatronAccount, 'cardNumber'> | null;
-  copy?: Pick<IBookCopy, 'id'> | null;
 }
 
 export type NewNotification = Omit<INotification, 'id'> & { id: null };

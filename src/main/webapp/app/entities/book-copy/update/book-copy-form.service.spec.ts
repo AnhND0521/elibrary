@@ -22,6 +22,8 @@ describe('BookCopy Form Service', () => {
             id: expect.any(Object),
             title: expect.any(Object),
             yearPublished: expect.any(Object),
+            language: expect.any(Object),
+            status: expect.any(Object),
             book: expect.any(Object),
             publisher: expect.any(Object),
           })
@@ -36,6 +38,8 @@ describe('BookCopy Form Service', () => {
             id: expect.any(Object),
             title: expect.any(Object),
             yearPublished: expect.any(Object),
+            language: expect.any(Object),
+            status: expect.any(Object),
             book: expect.any(Object),
             publisher: expect.any(Object),
           })

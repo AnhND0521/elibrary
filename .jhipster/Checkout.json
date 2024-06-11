@@ -14,10 +14,6 @@
       "fieldType": "Instant"
     },
     {
-      "fieldName": "dueEndTime",
-      "fieldType": "Instant"
-    },
-    {
       "fieldName": "isReturned",
       "fieldType": "Boolean"
     }

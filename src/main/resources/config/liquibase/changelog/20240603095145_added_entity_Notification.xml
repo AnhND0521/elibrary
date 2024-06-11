@@ -23,9 +23,6 @@
             <column name="patron_card_number" type="varchar(10)">
                 <constraints nullable="true" />
             </column>
-            <column name="copy_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="notification" columnName="sent_at" columnDataType="${datetimeType}"/>

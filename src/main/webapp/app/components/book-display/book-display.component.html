@@ -1,10 +1,14 @@
 <div class="card text-center align-items-center mx-2 pt-2 h-100">
-  <img src="{{ book.imageUrl ?? '' }}" class="book-cover-img card-img-top" />
+  <img src="{{ book.imageUrl ?? '' }}" [routerLink]="['/book-details', book.id]" class="book-cover-img card-img-top cursor-pointer" />
   <div class="card-body d-flex flex-column align-items-center">
-    <h5 class="card-title" ngbTooltip="{{ book.title }} - {{ book.authors }}">
-      {{ book.title.length > 30 ? book.title.slice(0, 30) + '...' : book.title }}
+    <h5
+      [routerLink]="['/book-details', book.id]"
+      class="card-title cursor-pointer hover-underline"
+      ngbTooltip="{{ trimmable(book.title!) ? book.title : '' }}"
+    >
+      {{ trim(book.title!) }}
     </h5>
-    <p class="card-text mb-3">{{ book.authors.length > 30 ? book.authors.slice(0, 30) + '...' : book.authors }}</p>
-    <a href="#" class="btn btn-primary mt-auto text-white">Chi tiết</a>
+    <p class="card-text mb-3" ngbTooltip="{{ trimmable(authorsString) ? authorsString : '' }}">{{ trim(authorsString) }}</p>
+    <a [routerLink]="['/book-details', book.id]" class="btn btn-primary mt-auto text-white">Chi tiết</a>
   </div>
 </div>

@@ -58,14 +58,6 @@
             </option>
           </select>
         </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="eLibraryApp.notification.copy" for="field_copy">Copy</label>
-          <select class="form-control" id="field_copy" data-cy="copy" name="copy" formControlName="copy" [compareWith]="compareBookCopy">
-            <option [ngValue]="null"></option>
-            <option [ngValue]="bookCopyOption" *ngFor="let bookCopyOption of bookCopiesSharedCollection">{{ bookCopyOption.id }}</option>
-          </select>
-        </div>
       </div>
 
       <div>

@@ -23,7 +23,6 @@ describe('Notification Form Service', () => {
             sentAt: expect.any(Object),
             type: expect.any(Object),
             patron: expect.any(Object),
-            copy: expect.any(Object),
           })
         );
       });
@@ -37,7 +36,6 @@ describe('Notification Form Service', () => {
             sentAt: expect.any(Object),
             type: expect.any(Object),
             patron: expect.any(Object),
-            copy: expect.any(Object),
           })
         );
       });

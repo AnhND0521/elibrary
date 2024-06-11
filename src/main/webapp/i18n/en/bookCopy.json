@@ -20,6 +20,8 @@
       "id": "ID",
       "title": "Title",
       "yearPublished": "Year Published",
+      "language": "Language",
+      "status": "Status",
       "book": "Book",
       "publisher": "Publisher",
       "checkout": "Checkout",

@@ -16,7 +16,7 @@ public class HoldDTO implements Serializable {
 
     private Instant endTime;
 
-    private Instant dueEndTime;
+    private Boolean isCheckedOut;
 
     private BookCopyDTO copy;
 
@@ -46,12 +46,12 @@ public class HoldDTO implements Serializable {
         this.endTime = endTime;
     }
 
-    public Instant getDueEndTime() {
-        return dueEndTime;
+    public Boolean getIsCheckedOut() {
+        return isCheckedOut;
     }
 
-    public void setDueEndTime(Instant dueEndTime) {
-        this.dueEndTime = dueEndTime;
+    public void setIsCheckedOut(Boolean isCheckedOut) {
+        this.isCheckedOut = isCheckedOut;
     }
 
     public BookCopyDTO getCopy() {
@@ -98,7 +98,7 @@ public class HoldDTO implements Serializable {
             "id=" + getId() +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", dueEndTime='" + getDueEndTime() + "'" +
+            ", isCheckedOut='" + getIsCheckedOut() + "'" +
             ", copy=" + getCopy() +
             ", patron=" + getPatron() +
             "}";

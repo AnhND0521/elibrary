@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookSearchService } from './book-search.service';
 import { IBook } from 'app/entities/book/book.model';
-import { IBookOnDisplay, convertBookToBookOnDisplay } from 'app/components/book-display/book-display.model';
 import { HttpResponse } from '@angular/common/http';
 import { TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ICategory } from 'app/entities/category/category.model';
@@ -23,7 +22,7 @@ export class BookSearchComponent implements OnInit {
   queryAuthorIds: number[] = [];
 
   keyword: string = '';
-  bookList: IBookOnDisplay[] = [];
+  bookList: IBook[] = [];
   categoryList: ICategoryWithMark[] = [];
   authorList: IAuthorWithMark[] = [];
 
@@ -76,7 +75,7 @@ export class BookSearchComponent implements OnInit {
 
       // is normal search page
       if (params['q']) {
-        this.queryKeyword = params['q'];
+        this.queryKeyword = params['q'].trim();
         this.keyword = this.queryKeyword;
       } else {
         this.queryKeyword = '';
@@ -119,7 +118,7 @@ export class BookSearchComponent implements OnInit {
   }
 
   fetchCategoryList() {
-    this.bookSearchService.getCategories({ page: 0, size: 100 }).subscribe(response => {
+    this.bookSearchService.getCategories({ page: 0, size: 100, sort: ['name,' + ASC] }).subscribe(response => {
       this.categoryList = response.body!;
       if (this.queryCategoryIds.length > 0) this.selectedCategories = this.categoryList.filter(c => this.queryCategoryIds.includes(c.id));
     });
@@ -133,7 +132,7 @@ export class BookSearchComponent implements OnInit {
   }
 
   extractBookList(response: HttpResponse<IBook[]>): void {
-    this.bookList = response.body!.map(book => convertBookToBookOnDisplay(book));
+    this.bookList = response.body!;
     this.totalItems = Number(response.headers.get(TOTAL_COUNT_RESPONSE_HEADER));
   }
 
@@ -178,7 +177,7 @@ export class BookSearchComponent implements OnInit {
   }
 
   search(): void {
-    const keywordParam = 'q=' + this.keyword;
+    const keywordParam = 'q=' + this.keyword.trim();
     const categoriesParam =
       this.selectedCategories.length === 0 ? '' : '&categories=' + this.selectedCategories.map(c => '' + c.id).join(',');
     const authorsParam = this.selectedAuthors.length === 0 ? '' : '&authors=' + this.selectedAuthors.map(a => '' + a.id).join(',');

@@ -34,7 +34,6 @@ type NotificationFormGroupContent = {
   sentAt: FormControl<NotificationFormRawValue['sentAt']>;
   type: FormControl<NotificationFormRawValue['type']>;
   patron: FormControl<NotificationFormRawValue['patron']>;
-  copy: FormControl<NotificationFormRawValue['copy']>;
 };
 
 export type NotificationFormGroup = FormGroup<NotificationFormGroupContent>;
@@ -57,7 +56,6 @@ export class NotificationFormService {
       sentAt: new FormControl(notificationRawValue.sentAt),
       type: new FormControl(notificationRawValue.type),
       patron: new FormControl(notificationRawValue.patron),
-      copy: new FormControl(notificationRawValue.copy),
     });
   }
 

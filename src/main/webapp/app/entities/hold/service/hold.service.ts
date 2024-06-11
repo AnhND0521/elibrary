@@ -11,10 +11,9 @@ import { IHold, NewHold } from '../hold.model';
 
 export type PartialUpdateHold = Partial<IHold> & Pick<IHold, 'id'>;
 
-type RestOf<T extends IHold | NewHold> = Omit<T, 'startTime' | 'endTime' | 'dueEndTime'> & {
+type RestOf<T extends IHold | NewHold> = Omit<T, 'startTime' | 'endTime'> & {
   startTime?: string | null;
   endTime?: string | null;
-  dueEndTime?: string | null;
 };
 
 export type RestHold = RestOf<IHold>;
@@ -101,7 +100,6 @@ export class HoldService {
       ...hold,
       startTime: hold.startTime?.toJSON() ?? null,
       endTime: hold.endTime?.toJSON() ?? null,
-      dueEndTime: hold.dueEndTime?.toJSON() ?? null,
     };
   }
 
@@ -110,7 +108,6 @@ export class HoldService {
       ...restHold,
       startTime: restHold.startTime ? dayjs(restHold.startTime) : undefined,
       endTime: restHold.endTime ? dayjs(restHold.endTime) : undefined,
-      dueEndTime: restHold.dueEndTime ? dayjs(restHold.dueEndTime) : undefined,
     };
   }
 

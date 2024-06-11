@@ -20,9 +20,6 @@
             <column name="end_time" type="${datetimeType}">
                 <constraints nullable="true" />
             </column>
-            <column name="due_end_time" type="${datetimeType}">
-                <constraints nullable="true" />
-            </column>
             <column name="is_returned" type="boolean">
                 <constraints nullable="true" />
             </column>
@@ -36,7 +33,6 @@
         </createTable>
         <dropDefaultValue tableName="checkout" columnName="start_time" columnDataType="${datetimeType}"/>
         <dropDefaultValue tableName="checkout" columnName="end_time" columnDataType="${datetimeType}"/>
-        <dropDefaultValue tableName="checkout" columnName="due_end_time" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -58,7 +54,6 @@
             <column name="id" type="numeric"/>
             <column name="start_time" type="date"/>
             <column name="end_time" type="date"/>
-            <column name="due_end_time" type="date"/>
             <column name="is_returned" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

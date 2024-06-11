@@ -13,11 +13,5 @@
                                  constraintName="fk_notification__patron_id"
                                  referencedColumnNames="card_number"
                                  referencedTableName="patron_account"/>
-
-        <addForeignKeyConstraint baseColumnNames="copy_id"
-                                 baseTableName="notification"
-                                 constraintName="fk_notification__copy_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="book_copy"/>
     </changeSet>
 </databaseChangeLog>

@@ -15,7 +15,7 @@ export const sampleWithFullData: IHold = {
   id: 44303,
   startTime: dayjs('2024-06-02T21:16'),
   endTime: dayjs('2024-06-03T04:10'),
-  dueEndTime: dayjs('2024-06-03T08:54'),
+  isCheckedOut: false,
 };
 
 export const sampleWithNewData: NewHold = {

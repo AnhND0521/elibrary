@@ -50,6 +50,18 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="language">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.bookCopy.language">Language</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="status">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.bookCopy.status">Status</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="book.title">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.bookCopy.book">Book</span>
@@ -72,6 +84,8 @@
           </td>
           <td>{{ bookCopy.title }}</td>
           <td>{{ bookCopy.yearPublished }}</td>
+          <td>{{ bookCopy.language }}</td>
+          <td jhiTranslate="{{ 'eLibraryApp.BookCopyStatus.' + bookCopy.status }}">{{ bookCopy.status }}</td>
           <td>
             <div *ngIf="bookCopy.book">
               <a [routerLink]="['/book', bookCopy.book.id, 'view']">{{ bookCopy.book.title }}</a>

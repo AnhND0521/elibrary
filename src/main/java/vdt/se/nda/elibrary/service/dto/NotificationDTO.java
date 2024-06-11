@@ -19,8 +19,6 @@ public class NotificationDTO implements Serializable {
 
     private PatronAccountDTO patron;
 
-    private BookCopyDTO copy;
-
     public Long getId() {
         return id;
     }
@@ -53,14 +51,6 @@ public class NotificationDTO implements Serializable {
         this.patron = patron;
     }
 
-    public BookCopyDTO getCopy() {
-        return copy;
-    }
-
-    public void setCopy(BookCopyDTO copy) {
-        this.copy = copy;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -90,7 +80,6 @@ public class NotificationDTO implements Serializable {
             ", sentAt='" + getSentAt() + "'" +
             ", type='" + getType() + "'" +
             ", patron=" + getPatron() +
-            ", copy=" + getCopy() +
             "}";
     }
 }

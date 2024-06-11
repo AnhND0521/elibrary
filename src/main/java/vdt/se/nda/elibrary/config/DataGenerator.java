@@ -19,6 +19,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import vdt.se.nda.elibrary.domain.*;
+import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.*;
 
 @Configuration
@@ -59,11 +60,30 @@ public class DataGenerator {
             "Science Fiction",
             "Short Stories",
             "Thriller",
-            "Young Adult"
+            "Young Adult",
+            "Biology",
+            "Chemistry",
+            "Mathematics",
+            "Physics",
+            "Programming",
+            "Management",
+            "Entrepreneurship",
+            "Business Economics",
+            "Business Success",
+            "Finance",
+            "Ancient Civilization",
+            "Archaeology",
+            "Anthropology",
+            "World War II",
+            "Social Life and Customs",
+            "Anthropology",
+            "Religion",
+            "Political Science",
+            "Psychology"
         );
 
         int number = 100;
-        for (String subject : subjects) {
+        for (String subject : subjects) taskExecutor.execute(() -> {
             log.info("Fetching category: {}", subject);
             Category category = categoryRepository.findByName(subject).orElse(null);
             if (category == null) {
@@ -87,9 +107,12 @@ public class DataGenerator {
                 JsonNode root = new ObjectMapper().readTree(response.getBody());
 
                 for (var work : root.get("works")) taskExecutor.execute(() -> {
+                    String title = work.get("title").asText();
+                    if (bookRepository.existsByTitle(title)) return;
+
                     Book book = new Book();
                     // basic info
-                    book.setTitle(work.get("title").asText());
+                    book.setTitle(title);
                     book.setImageUrl(coverBaseUrl + work.get("cover_id").asText() + "-L.jpg");
                     book.setCategory(categoryFinal);
                     book.setAuthors(new HashSet<>());
@@ -128,6 +151,7 @@ public class DataGenerator {
                         copy.setTitle(entry.get("title").asText());
 
                         // find publisher
+                        if (entry.get("publishers") == null) continue;
                         String publisherName = entry.get("publishers").get(0).asText();
                         Publisher publisher = publisherRepository.findByName(publisherName).orElse(null);
                         if (publisher == null) {
@@ -147,18 +171,36 @@ public class DataGenerator {
                         }
                         if (!potentialYears.isEmpty()) copy.setYearPublished(Integer.parseInt(potentialYears.get(0)));
 
+                        // find language
+                        if (entry.get("languages") != null) {
+                            String key = entry.get("languages").get(0).get("key").asText();
+                            String[] parts = key.split("/");
+                            String language = parts[parts.length - 1];
+                            copy.setLanguage(language);
+                        }
+
+                        copy.setStatus(BookCopyStatus.AVAILABLE);
+
                         bookCopyRepository.save(copy);
                         book.getCopies().add(copy);
                     }
 
                     bookRepository.save(book);
-                    log.info(String.format("Generated book %d/%d: %s", number - latch.getCount() + 1, number, book.getTitle()));
+                    log.info(
+                        String.format(
+                            "Category '%s': enerated book %d/%d: '%s'",
+                            categoryFinal.getName(),
+                            number - latch.getCount() + 1,
+                            number,
+                            book.getTitle()
+                        )
+                    );
                     latch.countDown();
                 });
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-        }
+        });
         log.info("Done fetching books");
     }
 }

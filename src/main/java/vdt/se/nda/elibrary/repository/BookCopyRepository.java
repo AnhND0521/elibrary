@@ -37,4 +37,6 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
 
     @Query("select bookCopy from BookCopy bookCopy left join fetch bookCopy.book left join fetch bookCopy.publisher where bookCopy.id =:id")
     Optional<BookCopy> findOneWithToOneRelationships(@Param("id") Long id);
+
+    List<BookCopy> findByBookId(Long bookId);
 }

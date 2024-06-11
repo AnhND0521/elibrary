@@ -50,12 +50,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dueEndTime">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.checkout.dueEndTime">Due End Time</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="isReturned">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span>
@@ -84,7 +78,6 @@
           </td>
           <td>{{ checkout.startTime | formatMediumDatetime }}</td>
           <td>{{ checkout.endTime | formatMediumDatetime }}</td>
-          <td>{{ checkout.dueEndTime | formatMediumDatetime }}</td>
           <td>{{ checkout.isReturned }}</td>
           <td>
             <div *ngIf="checkout.copy">

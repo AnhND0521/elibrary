@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 
 /**
  * A BookCopy.
@@ -29,6 +30,14 @@ public class BookCopy implements Serializable {
 
     @Column(name = "year_published")
     private Integer yearPublished;
+
+    @Size(max = 20)
+    @Column(name = "language", length = 20)
+    private String language;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private BookCopyStatus status;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "category", "authors", "waitlists", "copies" }, allowSetters = true)
@@ -84,6 +93,32 @@ public class BookCopy implements Serializable {
 
     public void setYearPublished(Integer yearPublished) {
         this.yearPublished = yearPublished;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public BookCopy language(String language) {
+        this.setLanguage(language);
+        return this;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public BookCopyStatus getStatus() {
+        return this.status;
+    }
+
+    public BookCopy status(BookCopyStatus status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public void setStatus(BookCopyStatus status) {
+        this.status = status;
     }
 
     public Book getBook() {
@@ -200,6 +235,8 @@ public class BookCopy implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", yearPublished=" + getYearPublished() +
+            ", language='" + getLanguage() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

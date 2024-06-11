@@ -41,6 +41,31 @@
         </div>
 
         <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.bookCopy.language" for="field_language">Language</label>
+          <input type="text" class="form-control" name="language" id="field_language" data-cy="language" formControlName="language" />
+          <div *ngIf="editForm.get('language')!.invalid && (editForm.get('language')!.dirty || editForm.get('language')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('language')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 20 }"
+            >
+              Trường này không được vượt quá 20 ký tự.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="eLibraryApp.bookCopy.status" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'eLibraryApp.BookCopyStatus.null' | translate }}</option>
+            <option *ngFor="let bookCopyStatus of bookCopyStatusValues" [value]="bookCopyStatus">
+              {{ 'eLibraryApp.BookCopyStatus.' + bookCopyStatus | translate }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
           <label class="form-label" jhiTranslate="eLibraryApp.bookCopy.book" for="field_book">Book</label>
           <select class="form-control" id="field_book" data-cy="book" name="book" formControlName="book" [compareWith]="compareBook">
             <option [ngValue]="null"></option>

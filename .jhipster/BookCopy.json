@@ -14,6 +14,17 @@
     {
       "fieldName": "yearPublished",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "language",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "BookCopyStatus",
+      "fieldValues": "AVAILABLE,ON_HOLD,BORROWED"
     }
   ],
   "fluentMethods": true,

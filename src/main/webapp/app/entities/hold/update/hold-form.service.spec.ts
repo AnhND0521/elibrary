@@ -22,7 +22,7 @@ describe('Hold Form Service', () => {
             id: expect.any(Object),
             startTime: expect.any(Object),
             endTime: expect.any(Object),
-            dueEndTime: expect.any(Object),
+            isCheckedOut: expect.any(Object),
             copy: expect.any(Object),
             patron: expect.any(Object),
           })
@@ -37,7 +37,7 @@ describe('Hold Form Service', () => {
             id: expect.any(Object),
             startTime: expect.any(Object),
             endTime: expect.any(Object),
-            dueEndTime: expect.any(Object),
+            isCheckedOut: expect.any(Object),
             copy: expect.any(Object),
             patron: expect.any(Object),
           })

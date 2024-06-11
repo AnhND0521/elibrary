@@ -27,8 +27,8 @@ public class Hold implements Serializable {
     @Column(name = "end_time")
     private Instant endTime;
 
-    @Column(name = "due_end_time")
-    private Instant dueEndTime;
+    @Column(name = "is_checked_out")
+    private Boolean isCheckedOut;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "book", "publisher", "checkouts", "holds" }, allowSetters = true)
@@ -79,17 +79,17 @@ public class Hold implements Serializable {
         this.endTime = endTime;
     }
 
-    public Instant getDueEndTime() {
-        return this.dueEndTime;
+    public Boolean getIsCheckedOut() {
+        return this.isCheckedOut;
     }
 
-    public Hold dueEndTime(Instant dueEndTime) {
-        this.setDueEndTime(dueEndTime);
+    public Hold isCheckedOut(Boolean isCheckedOut) {
+        this.setIsCheckedOut(isCheckedOut);
         return this;
     }
 
-    public void setDueEndTime(Instant dueEndTime) {
-        this.dueEndTime = dueEndTime;
+    public void setIsCheckedOut(Boolean isCheckedOut) {
+        this.isCheckedOut = isCheckedOut;
     }
 
     public BookCopy getCopy() {
@@ -144,7 +144,7 @@ public class Hold implements Serializable {
             "id=" + getId() +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", dueEndTime='" + getDueEndTime() + "'" +
+            ", isCheckedOut='" + getIsCheckedOut() + "'" +
             "}";
     }
 }

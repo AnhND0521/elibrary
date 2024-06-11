@@ -33,10 +33,6 @@ public class Notification implements Serializable {
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
     private PatronAccount patron;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "book", "publisher", "checkouts", "holds" }, allowSetters = true)
-    private BookCopy copy;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -88,19 +84,6 @@ public class Notification implements Serializable {
 
     public Notification patron(PatronAccount patronAccount) {
         this.setPatron(patronAccount);
-        return this;
-    }
-
-    public BookCopy getCopy() {
-        return this.copy;
-    }
-
-    public void setCopy(BookCopy bookCopy) {
-        this.copy = bookCopy;
-    }
-
-    public Notification copy(BookCopy bookCopy) {
-        this.setCopy(bookCopy);
         return this;
     }
 

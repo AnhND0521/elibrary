@@ -39,9 +39,6 @@ class CheckoutResourceIT {
     private static final Instant DEFAULT_END_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Instant DEFAULT_DUE_END_TIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DUE_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
     private static final Boolean DEFAULT_IS_RETURNED = false;
     private static final Boolean UPDATED_IS_RETURNED = true;
 
@@ -72,11 +69,7 @@ class CheckoutResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Checkout createEntity(EntityManager em) {
-        Checkout checkout = new Checkout()
-            .startTime(DEFAULT_START_TIME)
-            .endTime(DEFAULT_END_TIME)
-            .dueEndTime(DEFAULT_DUE_END_TIME)
-            .isReturned(DEFAULT_IS_RETURNED);
+        Checkout checkout = new Checkout().startTime(DEFAULT_START_TIME).endTime(DEFAULT_END_TIME).isReturned(DEFAULT_IS_RETURNED);
         return checkout;
     }
 
@@ -87,11 +80,7 @@ class CheckoutResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Checkout createUpdatedEntity(EntityManager em) {
-        Checkout checkout = new Checkout()
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME)
-            .dueEndTime(UPDATED_DUE_END_TIME)
-            .isReturned(UPDATED_IS_RETURNED);
+        Checkout checkout = new Checkout().startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isReturned(UPDATED_IS_RETURNED);
         return checkout;
     }
 
@@ -116,7 +105,6 @@ class CheckoutResourceIT {
         Checkout testCheckout = checkoutList.get(checkoutList.size() - 1);
         assertThat(testCheckout.getStartTime()).isEqualTo(DEFAULT_START_TIME);
         assertThat(testCheckout.getEndTime()).isEqualTo(DEFAULT_END_TIME);
-        assertThat(testCheckout.getDueEndTime()).isEqualTo(DEFAULT_DUE_END_TIME);
         assertThat(testCheckout.getIsReturned()).isEqualTo(DEFAULT_IS_RETURNED);
     }
 
@@ -153,7 +141,6 @@ class CheckoutResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(checkout.getId().intValue())))
             .andExpect(jsonPath("$.[*].startTime").value(hasItem(DEFAULT_START_TIME.toString())))
             .andExpect(jsonPath("$.[*].endTime").value(hasItem(DEFAULT_END_TIME.toString())))
-            .andExpect(jsonPath("$.[*].dueEndTime").value(hasItem(DEFAULT_DUE_END_TIME.toString())))
             .andExpect(jsonPath("$.[*].isReturned").value(hasItem(DEFAULT_IS_RETURNED.booleanValue())));
     }
 
@@ -171,7 +158,6 @@ class CheckoutResourceIT {
             .andExpect(jsonPath("$.id").value(checkout.getId().intValue()))
             .andExpect(jsonPath("$.startTime").value(DEFAULT_START_TIME.toString()))
             .andExpect(jsonPath("$.endTime").value(DEFAULT_END_TIME.toString()))
-            .andExpect(jsonPath("$.dueEndTime").value(DEFAULT_DUE_END_TIME.toString()))
             .andExpect(jsonPath("$.isReturned").value(DEFAULT_IS_RETURNED.booleanValue()));
     }
 
@@ -194,11 +180,7 @@ class CheckoutResourceIT {
         Checkout updatedCheckout = checkoutRepository.findById(checkout.getId()).get();
         // Disconnect from session so that the updates on updatedCheckout are not directly saved in db
         em.detach(updatedCheckout);
-        updatedCheckout
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME)
-            .dueEndTime(UPDATED_DUE_END_TIME)
-            .isReturned(UPDATED_IS_RETURNED);
+        updatedCheckout.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isReturned(UPDATED_IS_RETURNED);
         CheckoutDTO checkoutDTO = checkoutMapper.toDto(updatedCheckout);
 
         restCheckoutMockMvc
@@ -215,7 +197,6 @@ class CheckoutResourceIT {
         Checkout testCheckout = checkoutList.get(checkoutList.size() - 1);
         assertThat(testCheckout.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testCheckout.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testCheckout.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
         assertThat(testCheckout.getIsReturned()).isEqualTo(UPDATED_IS_RETURNED);
     }
 
@@ -296,11 +277,7 @@ class CheckoutResourceIT {
         Checkout partialUpdatedCheckout = new Checkout();
         partialUpdatedCheckout.setId(checkout.getId());
 
-        partialUpdatedCheckout
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME)
-            .dueEndTime(UPDATED_DUE_END_TIME)
-            .isReturned(UPDATED_IS_RETURNED);
+        partialUpdatedCheckout.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isReturned(UPDATED_IS_RETURNED);
 
         restCheckoutMockMvc
             .perform(
@@ -316,7 +293,6 @@ class CheckoutResourceIT {
         Checkout testCheckout = checkoutList.get(checkoutList.size() - 1);
         assertThat(testCheckout.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testCheckout.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testCheckout.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
         assertThat(testCheckout.getIsReturned()).isEqualTo(UPDATED_IS_RETURNED);
     }
 
@@ -332,11 +308,7 @@ class CheckoutResourceIT {
         Checkout partialUpdatedCheckout = new Checkout();
         partialUpdatedCheckout.setId(checkout.getId());
 
-        partialUpdatedCheckout
-            .startTime(UPDATED_START_TIME)
-            .endTime(UPDATED_END_TIME)
-            .dueEndTime(UPDATED_DUE_END_TIME)
-            .isReturned(UPDATED_IS_RETURNED);
+        partialUpdatedCheckout.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isReturned(UPDATED_IS_RETURNED);
 
         restCheckoutMockMvc
             .perform(
@@ -352,7 +324,6 @@ class CheckoutResourceIT {
         Checkout testCheckout = checkoutList.get(checkoutList.size() - 1);
         assertThat(testCheckout.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testCheckout.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testCheckout.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
         assertThat(testCheckout.getIsReturned()).isEqualTo(UPDATED_IS_RETURNED);
     }
 

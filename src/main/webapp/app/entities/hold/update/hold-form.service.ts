@@ -19,23 +19,22 @@ type HoldFormGroupInput = IHold | PartialWithRequiredKeyOf<NewHold>;
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends IHold | NewHold> = Omit<T, 'startTime' | 'endTime' | 'dueEndTime'> & {
+type FormValueOf<T extends IHold | NewHold> = Omit<T, 'startTime' | 'endTime'> & {
   startTime?: string | null;
   endTime?: string | null;
-  dueEndTime?: string | null;
 };
 
 type HoldFormRawValue = FormValueOf<IHold>;
 
 type NewHoldFormRawValue = FormValueOf<NewHold>;
 
-type HoldFormDefaults = Pick<NewHold, 'id' | 'startTime' | 'endTime' | 'dueEndTime'>;
+type HoldFormDefaults = Pick<NewHold, 'id' | 'startTime' | 'endTime' | 'isCheckedOut'>;
 
 type HoldFormGroupContent = {
   id: FormControl<HoldFormRawValue['id'] | NewHold['id']>;
   startTime: FormControl<HoldFormRawValue['startTime']>;
   endTime: FormControl<HoldFormRawValue['endTime']>;
-  dueEndTime: FormControl<HoldFormRawValue['dueEndTime']>;
+  isCheckedOut: FormControl<HoldFormRawValue['isCheckedOut']>;
   copy: FormControl<HoldFormRawValue['copy']>;
   patron: FormControl<HoldFormRawValue['patron']>;
 };
@@ -59,7 +58,7 @@ export class HoldFormService {
       ),
       startTime: new FormControl(holdRawValue.startTime),
       endTime: new FormControl(holdRawValue.endTime),
-      dueEndTime: new FormControl(holdRawValue.dueEndTime),
+      isCheckedOut: new FormControl(holdRawValue.isCheckedOut),
       copy: new FormControl(holdRawValue.copy),
       patron: new FormControl(holdRawValue.patron),
     });
@@ -86,7 +85,7 @@ export class HoldFormService {
       id: null,
       startTime: currentTime,
       endTime: currentTime,
-      dueEndTime: currentTime,
+      isCheckedOut: false,
     };
   }
 
@@ -95,7 +94,6 @@ export class HoldFormService {
       ...rawHold,
       startTime: dayjs(rawHold.startTime, DATE_TIME_FORMAT),
       endTime: dayjs(rawHold.endTime, DATE_TIME_FORMAT),
-      dueEndTime: dayjs(rawHold.dueEndTime, DATE_TIME_FORMAT),
     };
   }
 
@@ -106,7 +104,6 @@ export class HoldFormService {
       ...hold,
       startTime: hold.startTime ? hold.startTime.format(DATE_TIME_FORMAT) : undefined,
       endTime: hold.endTime ? hold.endTime.format(DATE_TIME_FORMAT) : undefined,
-      dueEndTime: hold.dueEndTime ? hold.dueEndTime.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

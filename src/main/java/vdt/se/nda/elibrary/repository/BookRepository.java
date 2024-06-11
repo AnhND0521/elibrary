@@ -41,6 +41,8 @@ public interface BookRepository extends BookRepositoryWithBagRelationships, JpaR
     @Query("select book from Book book left join fetch book.category where book.id =:id")
     Optional<Book> findOneWithToOneRelationships(@Param("id") Long id);
 
+    boolean existsByTitle(String title);
+
     Page<Book> findByCategoryId(Long categoryId, Pageable pageable);
 
     Page<Book> findByAuthorsId(Long authorId, Pageable pageable);

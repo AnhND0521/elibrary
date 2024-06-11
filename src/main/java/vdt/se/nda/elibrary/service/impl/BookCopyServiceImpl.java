@@ -1,6 +1,8 @@
 package vdt.se.nda.elibrary.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -84,5 +86,11 @@ public class BookCopyServiceImpl implements BookCopyService {
     public void delete(Long id) {
         log.debug("Request to delete BookCopy : {}", id);
         bookCopyRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookCopyDTO> findByBook(Long bookId) {
+        log.debug("Request to get BookCopies of Book : {}", bookId);
+        return bookCopyRepository.findByBookId(bookId).stream().map(bookCopyMapper::toDto).collect(Collectors.toList());
     }
 }

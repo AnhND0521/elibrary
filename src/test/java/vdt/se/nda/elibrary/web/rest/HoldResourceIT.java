@@ -39,8 +39,8 @@ class HoldResourceIT {
     private static final Instant DEFAULT_END_TIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Instant DEFAULT_DUE_END_TIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DUE_END_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Boolean DEFAULT_IS_CHECKED_OUT = false;
+    private static final Boolean UPDATED_IS_CHECKED_OUT = true;
 
     private static final String ENTITY_API_URL = "/api/holds";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -69,7 +69,7 @@ class HoldResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Hold createEntity(EntityManager em) {
-        Hold hold = new Hold().startTime(DEFAULT_START_TIME).endTime(DEFAULT_END_TIME).dueEndTime(DEFAULT_DUE_END_TIME);
+        Hold hold = new Hold().startTime(DEFAULT_START_TIME).endTime(DEFAULT_END_TIME).isCheckedOut(DEFAULT_IS_CHECKED_OUT);
         return hold;
     }
 
@@ -80,7 +80,7 @@ class HoldResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Hold createUpdatedEntity(EntityManager em) {
-        Hold hold = new Hold().startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).dueEndTime(UPDATED_DUE_END_TIME);
+        Hold hold = new Hold().startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isCheckedOut(UPDATED_IS_CHECKED_OUT);
         return hold;
     }
 
@@ -105,7 +105,7 @@ class HoldResourceIT {
         Hold testHold = holdList.get(holdList.size() - 1);
         assertThat(testHold.getStartTime()).isEqualTo(DEFAULT_START_TIME);
         assertThat(testHold.getEndTime()).isEqualTo(DEFAULT_END_TIME);
-        assertThat(testHold.getDueEndTime()).isEqualTo(DEFAULT_DUE_END_TIME);
+        assertThat(testHold.getIsCheckedOut()).isEqualTo(DEFAULT_IS_CHECKED_OUT);
     }
 
     @Test
@@ -141,7 +141,7 @@ class HoldResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(hold.getId().intValue())))
             .andExpect(jsonPath("$.[*].startTime").value(hasItem(DEFAULT_START_TIME.toString())))
             .andExpect(jsonPath("$.[*].endTime").value(hasItem(DEFAULT_END_TIME.toString())))
-            .andExpect(jsonPath("$.[*].dueEndTime").value(hasItem(DEFAULT_DUE_END_TIME.toString())));
+            .andExpect(jsonPath("$.[*].isCheckedOut").value(hasItem(DEFAULT_IS_CHECKED_OUT.booleanValue())));
     }
 
     @Test
@@ -158,7 +158,7 @@ class HoldResourceIT {
             .andExpect(jsonPath("$.id").value(hold.getId().intValue()))
             .andExpect(jsonPath("$.startTime").value(DEFAULT_START_TIME.toString()))
             .andExpect(jsonPath("$.endTime").value(DEFAULT_END_TIME.toString()))
-            .andExpect(jsonPath("$.dueEndTime").value(DEFAULT_DUE_END_TIME.toString()));
+            .andExpect(jsonPath("$.isCheckedOut").value(DEFAULT_IS_CHECKED_OUT.booleanValue()));
     }
 
     @Test
@@ -180,7 +180,7 @@ class HoldResourceIT {
         Hold updatedHold = holdRepository.findById(hold.getId()).get();
         // Disconnect from session so that the updates on updatedHold are not directly saved in db
         em.detach(updatedHold);
-        updatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).dueEndTime(UPDATED_DUE_END_TIME);
+        updatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isCheckedOut(UPDATED_IS_CHECKED_OUT);
         HoldDTO holdDTO = holdMapper.toDto(updatedHold);
 
         restHoldMockMvc
@@ -197,7 +197,7 @@ class HoldResourceIT {
         Hold testHold = holdList.get(holdList.size() - 1);
         assertThat(testHold.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testHold.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testHold.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
+        assertThat(testHold.getIsCheckedOut()).isEqualTo(UPDATED_IS_CHECKED_OUT);
     }
 
     @Test
@@ -277,7 +277,7 @@ class HoldResourceIT {
         Hold partialUpdatedHold = new Hold();
         partialUpdatedHold.setId(hold.getId());
 
-        partialUpdatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).dueEndTime(UPDATED_DUE_END_TIME);
+        partialUpdatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isCheckedOut(UPDATED_IS_CHECKED_OUT);
 
         restHoldMockMvc
             .perform(
@@ -293,7 +293,7 @@ class HoldResourceIT {
         Hold testHold = holdList.get(holdList.size() - 1);
         assertThat(testHold.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testHold.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testHold.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
+        assertThat(testHold.getIsCheckedOut()).isEqualTo(UPDATED_IS_CHECKED_OUT);
     }
 
     @Test
@@ -308,7 +308,7 @@ class HoldResourceIT {
         Hold partialUpdatedHold = new Hold();
         partialUpdatedHold.setId(hold.getId());
 
-        partialUpdatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).dueEndTime(UPDATED_DUE_END_TIME);
+        partialUpdatedHold.startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME).isCheckedOut(UPDATED_IS_CHECKED_OUT);
 
         restHoldMockMvc
             .perform(
@@ -324,7 +324,7 @@ class HoldResourceIT {
         Hold testHold = holdList.get(holdList.size() - 1);
         assertThat(testHold.getStartTime()).isEqualTo(UPDATED_START_TIME);
         assertThat(testHold.getEndTime()).isEqualTo(UPDATED_END_TIME);
-        assertThat(testHold.getDueEndTime()).isEqualTo(UPDATED_DUE_END_TIME);
+        assertThat(testHold.getIsCheckedOut()).isEqualTo(UPDATED_IS_CHECKED_OUT);
     }
 
     @Test

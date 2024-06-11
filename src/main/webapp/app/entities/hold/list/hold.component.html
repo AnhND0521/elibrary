@@ -50,9 +50,9 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dueEndTime">
+          <th scope="col" jhiSortBy="isCheckedOut">
             <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.hold.dueEndTime">Due End Time</span>
+              <span jhiTranslate="eLibraryApp.hold.isCheckedOut">Is Checked Out</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -78,7 +78,7 @@
           </td>
           <td>{{ hold.startTime | formatMediumDatetime }}</td>
           <td>{{ hold.endTime | formatMediumDatetime }}</td>
-          <td>{{ hold.dueEndTime | formatMediumDatetime }}</td>
+          <td>{{ hold.isCheckedOut }}</td>
           <td>
             <div *ngIf="hold.copy">
               <a [routerLink]="['/book-copy', hold.copy.id, 'view']">{{ hold.copy.id }}</a>

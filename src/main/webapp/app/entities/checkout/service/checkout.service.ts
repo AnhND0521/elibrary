@@ -11,10 +11,9 @@ import { ICheckout, NewCheckout } from '../checkout.model';
 
 export type PartialUpdateCheckout = Partial<ICheckout> & Pick<ICheckout, 'id'>;
 
-type RestOf<T extends ICheckout | NewCheckout> = Omit<T, 'startTime' | 'endTime' | 'dueEndTime'> & {
+type RestOf<T extends ICheckout | NewCheckout> = Omit<T, 'startTime' | 'endTime'> & {
   startTime?: string | null;
   endTime?: string | null;
-  dueEndTime?: string | null;
 };
 
 export type RestCheckout = RestOf<ICheckout>;
@@ -103,7 +102,6 @@ export class CheckoutService {
       ...checkout,
       startTime: checkout.startTime?.toJSON() ?? null,
       endTime: checkout.endTime?.toJSON() ?? null,
-      dueEndTime: checkout.dueEndTime?.toJSON() ?? null,
     };
   }
 
@@ -112,7 +110,6 @@ export class CheckoutService {
       ...restCheckout,
       startTime: restCheckout.startTime ? dayjs(restCheckout.startTime) : undefined,
       endTime: restCheckout.endTime ? dayjs(restCheckout.endTime) : undefined,
-      dueEndTime: restCheckout.dueEndTime ? dayjs(restCheckout.dueEndTime) : undefined,
     };
   }
 

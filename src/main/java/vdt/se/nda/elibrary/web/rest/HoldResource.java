@@ -69,7 +69,7 @@ public class HoldResource {
     /**
      * {@code PUT  /holds/:id} : Updates an existing hold.
      *
-     * @param id the id of the holdDTO to save.
+     * @param id      the id of the holdDTO to save.
      * @param holdDTO the holdDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated holdDTO,
      * or with status {@code 400 (Bad Request)} if the holdDTO is not valid,
@@ -101,7 +101,7 @@ public class HoldResource {
     /**
      * {@code PATCH  /holds/:id} : Partial updates given fields of an existing hold, field will ignore if it is null
      *
-     * @param id the id of the holdDTO to save.
+     * @param id      the id of the holdDTO to save.
      * @param holdDTO the holdDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated holdDTO,
      * or with status {@code 400 (Bad Request)} if the holdDTO is not valid,
@@ -137,13 +137,20 @@ public class HoldResource {
     /**
      * {@code GET  /holds} : get all the holds.
      *
+     * @param keyword  the keyword to find holds if any.
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of holds in body.
      */
     @GetMapping("/holds")
-    public ResponseEntity<List<HoldDTO>> getAllHolds(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<HoldDTO>> getAllHolds(
+        @RequestParam(name = "q", required = false, defaultValue = "") String keyword,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
         log.debug("REST request to get a page of Holds");
-        Page<HoldDTO> page = holdService.findAll(pageable);
+        Page<HoldDTO> page = null;
+        if (keyword == null || keyword.isEmpty()) page = holdService.findAll(pageable); else page =
+            holdService.findByKeyword(keyword, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

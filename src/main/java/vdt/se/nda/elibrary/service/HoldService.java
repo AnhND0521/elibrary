@@ -42,6 +42,15 @@ public interface HoldService {
     Page<HoldDTO> findAll(Pageable pageable);
 
     /**
+     * Get holds by keyword matching hold id, patron id or book copy id.
+     *
+     * @param keyword the keyword.
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<HoldDTO> findByKeyword(String keyword, Pageable pageable);
+
+    /**
      * Get the "id" hold.
      *
      * @param id the id of the entity.

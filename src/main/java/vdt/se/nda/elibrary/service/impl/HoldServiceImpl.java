@@ -1,5 +1,6 @@
 package vdt.se.nda.elibrary.service.impl;
 
+import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -41,12 +42,7 @@ public class HoldServiceImpl implements HoldService {
         Hold hold = holdMapper.toEntity(holdDTO);
         hold = holdRepository.save(hold);
 
-        if (!hold.getIsCheckedOut()) {
-            hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
-            bookCopyRepository.save(hold.getCopy());
-
-            jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
-        }
+        updateCopyStatus(hold);
 
         return holdMapper.toDto(hold);
     }
@@ -57,15 +53,18 @@ public class HoldServiceImpl implements HoldService {
         Hold hold = holdMapper.toEntity(holdDTO);
         hold = holdRepository.save(hold);
 
-        if (!hold.getIsCheckedOut()) {
+        updateCopyStatus(hold);
+
+        return holdMapper.toDto(hold);
+    }
+
+    private void updateCopyStatus(Hold hold) {
+        if (!hold.getIsCheckedOut() && hold.getEndTime().isAfter(Instant.now())) {
             hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
             bookCopyRepository.save(hold.getCopy());
 
             jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
-            log.debug("Scheduled handle hold expiration job for hold {}", hold.getId());
         }
-
-        return holdMapper.toDto(hold);
     }
 
     @Override
@@ -88,6 +87,12 @@ public class HoldServiceImpl implements HoldService {
     public Page<HoldDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Holds");
         return holdRepository.findAll(pageable).map(holdMapper::toDto);
+    }
+
+    @Override
+    public Page<HoldDTO> findByKeyword(String keyword, Pageable pageable) {
+        log.debug("Request to find Holds by keyword: {}", keyword);
+        return holdRepository.findByKeyword(keyword.trim(), pageable).map(holdMapper::toDto);
     }
 
     @Override

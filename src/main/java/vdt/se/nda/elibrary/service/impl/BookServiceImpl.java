@@ -112,11 +112,11 @@ public class BookServiceImpl implements BookService {
             (authorIds == null || authorIds.isEmpty()) &&
             (publisherIds == null || publisherIds.isEmpty())
         ) {
-            return bookRepository.findByKeyword(keyword, pageable).map(bookMapper::toDto);
+            return bookRepository.findByKeyword(keyword.trim(), pageable).map(bookMapper::toDto);
         }
 
         return bookRepository
-            .findByKeywordAndCategoryIdInAndAuthorsIdIn(keyword, categoryIds, authorIds, publisherIds, pageable)
+            .findByKeywordAndCategoryIdInAndAuthorsIdIn(keyword.trim(), categoryIds, authorIds, publisherIds, pageable)
             .map(bookMapper::toDto);
     }
 }

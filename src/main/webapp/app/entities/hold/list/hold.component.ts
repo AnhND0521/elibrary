@@ -7,9 +7,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IHold } from '../hold.model';
 
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
+import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA, QUERY } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, HoldService } from '../service/hold.service';
 import { HoldDeleteDialogComponent } from '../delete/hold-delete-dialog.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-hold',
@@ -26,12 +27,18 @@ export class HoldComponent implements OnInit {
   totalItems = 0;
   page = 1;
 
+  queryKeyword = '';
+
   constructor(
     protected holdService: HoldService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected modalService: NgbModal
   ) {}
+
+  isAfterCurrent(time: dayjs.Dayjs) {
+    return time.isAfter(dayjs());
+  }
 
   trackId = (_index: number, item: IHold): number => this.holdService.getHoldIdentifier(item);
 
@@ -79,6 +86,8 @@ export class HoldComponent implements OnInit {
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const q = params.get(QUERY);
+    this.queryKeyword = q ?? '';
     const page = params.get(PAGE_HEADER);
     this.page = +(page ?? 1);
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
@@ -104,6 +113,7 @@ export class HoldComponent implements OnInit {
     this.isLoading = true;
     const pageToLoad: number = page ?? 1;
     const queryObject = {
+      q: this.queryKeyword.trim(),
       page: pageToLoad - 1,
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
@@ -113,6 +123,7 @@ export class HoldComponent implements OnInit {
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
+      q: this.queryKeyword.trim(),
       page,
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),

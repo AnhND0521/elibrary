@@ -56,10 +56,10 @@ export class CheckoutUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const checkout = this.checkoutFormService.getCheckout(this.editForm);
-    if (checkout.id !== null) {
+    if (checkout.id !== null && checkout.id !== 0) {
       this.subscribeToSaveResponse(this.checkoutService.update(checkout));
     } else {
-      this.subscribeToSaveResponse(this.checkoutService.create(checkout));
+      this.subscribeToSaveResponse(this.checkoutService.create({ ...checkout, id: null }));
     }
   }
 

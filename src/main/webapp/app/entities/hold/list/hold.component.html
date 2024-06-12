@@ -2,8 +2,23 @@
   <h2 id="page-heading" data-cy="HoldHeading">
     <span jhiTranslate="eLibraryApp.hold.home.title">Holds</span>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+    <!-- <div class="d-flex justify-content-end"> -->
+    <div class="row gap-2 mt-3 me-0">
+      <div class="col grow-1 input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tìm kiếm"
+          aria-describedby="button-addon2"
+          [(ngModel)]="queryKeyword"
+          (keyup.enter)="navigateToWithComponentValues()"
+        />
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+          <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
+        </button>
+      </div>
+
+      <button class="col-auto btn btn-info" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="eLibraryApp.hold.home.refreshListLabel">Refresh list</span>
       </button>
@@ -11,7 +26,7 @@
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-hold"
+        class="col-auto btn btn-primary jh-create-entity create-hold"
         [routerLink]="['/hold/new']"
       >
         <fa-icon icon="plus"></fa-icon>
@@ -38,6 +53,18 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="copy.id">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.hold.copy">Copy</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="patron.cardNumber">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.hold.patron">Patron</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="startTime">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.hold.startTime">Start Time</span>
@@ -52,19 +79,8 @@
           </th>
           <th scope="col" jhiSortBy="isCheckedOut">
             <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.hold.isCheckedOut">Is Checked Out</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="copy.id">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.hold.copy">Copy</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="patron.cardNumber">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.hold.patron">Patron</span>
+              <!-- <span jhiTranslate="eLibraryApp.hold.isCheckedOut">Is Checked Out</span> -->
+              <span>Status</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -76,9 +92,6 @@
           <td>
             <a [routerLink]="['/hold', hold.id, 'view']">{{ hold.id }}</a>
           </td>
-          <td>{{ hold.startTime | formatMediumDatetime }}</td>
-          <td>{{ hold.endTime | formatMediumDatetime }}</td>
-          <td>{{ hold.isCheckedOut }}</td>
           <td>
             <div *ngIf="hold.copy">
               <a [routerLink]="['/book-copy', hold.copy.id, 'view']">{{ hold.copy.id }}</a>
@@ -88,6 +101,19 @@
             <div *ngIf="hold.patron">
               <a [routerLink]="['/patron-account', hold.patron.cardNumber, 'view']">{{ hold.patron.cardNumber }}</a>
             </div>
+          </td>
+          <td>{{ hold.startTime | formatMediumDatetime }}</td>
+          <td>{{ hold.endTime | formatMediumDatetime }}</td>
+          <td>
+            <div *ngIf="!hold.isCheckedOut && isAfterCurrent(hold.endTime!)">
+              <span class="me-2">Còn hạn</span>
+              <button [routerLink]="['/checkout', 'new', 'from-hold', hold.id]" *ngIf="!hold.isCheckedOut" class="btn btn-secondary btn-sm">
+                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                <span class="d-none d-md-inline">Kiểm xuất</span>
+              </button>
+            </div>
+            <span *ngIf="!hold.isCheckedOut && !isAfterCurrent(hold.endTime!)" class="me-2">Hết hạn</span>
+            <span *ngIf="hold.isCheckedOut" class="me-2">Đã kiểm xuất</span>
           </td>
           <td class="text-end">
             <div class="btn-group">

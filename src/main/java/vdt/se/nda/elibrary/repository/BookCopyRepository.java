@@ -39,4 +39,7 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     Optional<BookCopy> findOneWithToOneRelationships(@Param("id") Long id);
 
     List<BookCopy> findByBookId(Long bookId);
+
+    @Query("select copy from BookCopy copy order by rand()")
+    List<BookCopy> findRandom(Pageable pageable);
 }

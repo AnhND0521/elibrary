@@ -32,7 +32,7 @@ export class BookSearchComponent implements OnInit {
 
   labels: any = {};
 
-  filters: Filter[] = ALL.map(name => {
+  filters: Filter[] = [CATEGORY, AUTHOR].map(name => {
     return { name: name, list: [], queryIds: [], selectedValues: [] };
   });
 

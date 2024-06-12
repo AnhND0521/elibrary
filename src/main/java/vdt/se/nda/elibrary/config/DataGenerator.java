@@ -3,24 +3,31 @@ package vdt.se.nda.elibrary.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import vdt.se.nda.elibrary.domain.*;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.*;
+import vdt.se.nda.elibrary.service.UserService;
+import vdt.se.nda.elibrary.service.dto.AdminUserDTO;
 
 @Configuration
 @Slf4j
@@ -28,17 +35,27 @@ import vdt.se.nda.elibrary.repository.*;
 public class DataGenerator {
 
     private RestTemplate restTemplate = new RestTemplate();
+    private Random random = new Random();
     private final TaskExecutor taskExecutor;
+    private final PasswordEncoder passwordEncoder;
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final AuthorRepository authorRepository;
     private final BookCopyRepository bookCopyRepository;
     private final PublisherRepository publisherRepository;
+    private final PatronAccountRepository patronAccountRepository;
+    private final HoldRepository holdRepository;
+    private final CheckoutRepository checkoutRepository;
+    private final WaitlistItemRepository waitlistItemRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Bean
     public CommandLineRunner getCommandLineRunner() {
         return args -> {
             if (bookRepository.count() == 0) fetchBooks();
+            if (patronAccountRepository.count() == 0) generateUsersAndPatronAccounts();
+            if (holdRepository.count() == 0) generateHoldsAndCheckouts();
         };
     }
 
@@ -187,20 +204,129 @@ public class DataGenerator {
 
                     bookRepository.save(book);
                     log.info(
-                        String.format(
-                            "Category '%s': enerated book %d/%d: '%s'",
-                            categoryFinal.getName(),
-                            number - latch.getCount() + 1,
-                            number,
-                            book.getTitle()
-                        )
+                        "Category '{}': Generated book #{}: '{}'",
+                        categoryFinal.getName(),
+                        number - latch.getCount() + 1,
+                        book.getTitle()
                     );
                     latch.countDown();
                 });
-            } catch (JsonProcessingException e) {
+                latch.await();
+            } catch (JsonProcessingException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
-        log.info("Done fetching books");
+    }
+
+    private void generateUsersAndPatronAccounts() {
+        log.info("Generating users");
+        try {
+            int number = 100;
+            ResponseEntity<String> response = restTemplate.getForEntity("https://randomuser.me/api/?results=" + number, String.class);
+            JsonNode root = new ObjectMapper().readTree(response.getBody());
+
+            CountDownLatch latch = new CountDownLatch(100);
+            for (var result : root.get("results")) {
+                taskExecutor.execute(() -> {
+                    AdminUserDTO userDTO = new AdminUserDTO();
+                    userDTO.setLogin(result.get("login").get("username").asText());
+                    userDTO.setFirstName(result.get("name").get("first").asText());
+                    userDTO.setLastName(result.get("name").get("last").asText());
+                    userDTO.setEmail(result.get("email").asText());
+                    userDTO.setImageUrl(result.get("picture").get("large").asText());
+                    userDTO.setLangKey("vi");
+                    String password = passwordEncoder.encode(userDTO.getLogin());
+
+                    User user = userService.registerUser(userDTO, password);
+                    userService.activateRegistration(user.getActivationKey());
+                    log.info(
+                        "Generated user {}/{}: '{}'",
+                        number - latch.getCount() + 1,
+                        number,
+                        user.getFirstName() + " " + user.getLastName()
+                    );
+                    latch.countDown();
+                });
+            }
+            latch.await();
+        } catch (JsonProcessingException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void generateHoldsAndCheckouts() {
+        log.info("Generating holds and checkouts");
+        int number = 10000;
+        int maxDaysOnHold = 3;
+        List<PatronAccount> accounts = patronAccountRepository.findAll();
+        List<BookCopy> copies = bookCopyRepository.findRandom(PageRequest.of(0, number));
+
+        CountDownLatch latch = new CountDownLatch(number);
+        copies.forEach(copy ->
+            taskExecutor.execute(() -> {
+                Hold hold = new Hold();
+                hold.setPatron(accounts.get(random.nextInt(accounts.size())));
+                hold.setCopy(copy);
+                copy.setStatus(BookCopyStatus.ON_HOLD);
+                bookCopyRepository.save(copy);
+
+                hold.setIsCheckedOut(random.nextInt(2) == 1);
+
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime startDateTime = randomTime(now.minusMonths(1), now.minusDays(maxDaysOnHold));
+
+                hold.setStartTime(startDateTime.toInstant(ZoneOffset.UTC));
+
+                if (hold.getIsCheckedOut()) {
+                    hold.setEndTime(randomTime(startDateTime, startDateTime.plusDays(maxDaysOnHold)).toInstant(ZoneOffset.UTC));
+                } else {
+                    hold.setEndTime(startDateTime.plusDays(maxDaysOnHold).toInstant(ZoneOffset.UTC));
+                }
+
+                holdRepository.save(hold);
+                log.info(
+                    "Generated hold {}/{}: patron '{}' on book copy '{}'",
+                    number - latch.getCount() + 1,
+                    number,
+                    hold.getPatron().getFirstName() + " " + hold.getPatron().getSurname(),
+                    copy.getTitle()
+                );
+                latch.countDown();
+
+                if (hold.getIsCheckedOut()) {
+                    Checkout checkout = new Checkout();
+                    checkout.setCopy(copy);
+                    copy.setStatus(BookCopyStatus.BORROWED);
+                    bookCopyRepository.save(copy);
+
+                    checkout.setPatron(hold.getPatron());
+
+                    checkout.setStartTime(hold.getEndTime());
+
+                    LocalDateTime endDateTime = LocalDateTime.ofInstant(checkout.getStartTime(), ZoneOffset.UTC).plusDays(30);
+                    checkout.setEndTime(endDateTime.toInstant(ZoneOffset.UTC));
+
+                    checkout.setIsReturned(false);
+
+                    checkoutRepository.save(checkout);
+                    log.info(
+                        "Generated checkout: patron '{}' on book copy '{}'",
+                        checkout.getPatron().getFirstName() + " " + checkout.getPatron().getSurname(),
+                        copy.getTitle()
+                    );
+                }
+            })
+        );
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static LocalDateTime randomTime(LocalDateTime start, LocalDateTime end) {
+        long minEpoch = start.toEpochSecond(ZoneOffset.UTC) * 1000;
+        long maxEpoch = end.toEpochSecond(ZoneOffset.UTC) * 1000;
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(new Random().nextLong(minEpoch, maxEpoch)), ZoneOffset.UTC);
     }
 }

@@ -12,6 +12,7 @@ import vdt.se.nda.elibrary.domain.PatronAccount;
 import vdt.se.nda.elibrary.domain.User;
 import vdt.se.nda.elibrary.domain.enumeration.PatronStatus;
 import vdt.se.nda.elibrary.repository.PatronAccountRepository;
+import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.PatronAccountService;
 import vdt.se.nda.elibrary.service.dto.PatronAccountDTO;
 import vdt.se.nda.elibrary.service.mapper.PatronAccountMapper;
@@ -83,6 +84,12 @@ public class PatronAccountServiceImpl implements PatronAccountService {
     public Optional<PatronAccountDTO> findOne(String id) {
         log.debug("Request to get PatronAccount : {}", id);
         return patronAccountRepository.findOneWithEagerRelationships(id).map(patronAccountMapper::toDto);
+    }
+
+    @Override
+    public Optional<PatronAccountDTO> findCurrent() {
+        log.debug("Request to get current PatronAccount");
+        return SecurityUtils.getCurrentUserLogin().flatMap(patronAccountRepository::findByUserLogin).map(patronAccountMapper::toDto);
     }
 
     @Override

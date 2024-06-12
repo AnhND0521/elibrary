@@ -1,6 +1,7 @@
 package vdt.se.nda.elibrary.service.impl;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -8,8 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Hold;
+import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
+import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.HoldRepository;
 import vdt.se.nda.elibrary.service.HoldService;
+import vdt.se.nda.elibrary.service.JobSchedulerService;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
 import vdt.se.nda.elibrary.service.mapper.HoldMapper;
 
@@ -18,6 +22,7 @@ import vdt.se.nda.elibrary.service.mapper.HoldMapper;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class HoldServiceImpl implements HoldService {
 
     private final Logger log = LoggerFactory.getLogger(HoldServiceImpl.class);
@@ -26,16 +31,23 @@ public class HoldServiceImpl implements HoldService {
 
     private final HoldMapper holdMapper;
 
-    public HoldServiceImpl(HoldRepository holdRepository, HoldMapper holdMapper) {
-        this.holdRepository = holdRepository;
-        this.holdMapper = holdMapper;
-    }
+    private final BookCopyRepository bookCopyRepository;
+
+    private final JobSchedulerService jobSchedulerService;
 
     @Override
     public HoldDTO save(HoldDTO holdDTO) {
         log.debug("Request to save Hold : {}", holdDTO);
         Hold hold = holdMapper.toEntity(holdDTO);
         hold = holdRepository.save(hold);
+
+        if (!hold.getIsCheckedOut()) {
+            hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
+            bookCopyRepository.save(hold.getCopy());
+
+            jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
+        }
+
         return holdMapper.toDto(hold);
     }
 
@@ -44,6 +56,15 @@ public class HoldServiceImpl implements HoldService {
         log.debug("Request to update Hold : {}", holdDTO);
         Hold hold = holdMapper.toEntity(holdDTO);
         hold = holdRepository.save(hold);
+
+        if (!hold.getIsCheckedOut()) {
+            hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
+            bookCopyRepository.save(hold.getCopy());
+
+            jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
+            log.debug("Scheduled handle hold expiration job for hold {}", hold.getId());
+        }
+
         return holdMapper.toDto(hold);
     }
 

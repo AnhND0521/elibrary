@@ -6,7 +6,7 @@
       <img src="{{ book.imageUrl }}" width="200px" />
     </div>
     <div class="mt-md-0 mt-3 col-md d-flex flex-column align-items-start gap-3 w-auto flex-grow-1">
-      <h3>{{ book.title }}</h3>
+      <h3 class="fw-normal">{{ book.title }}</h3>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
           <span class="fw-semibold">Tác giả:</span>
@@ -33,6 +33,14 @@
         </div>
         <div class="col-lg-10 col-9">
           <span class="fw-normal">{{ copies.length }}</span>
+        </div>
+      </div>
+      <div class="row w-100">
+        <div class="col-lg-2 col-3">
+          <span class="fw-semibold">Bản sao có sẵn:</span>
+        </div>
+        <div class="col-lg-10 col-9">
+          <span class="fw-normal">{{ avalableCopies.length }}</span>
         </div>
       </div>
       <div class="row w-100">
@@ -76,7 +84,9 @@
             <td class="fw-normal">{{ copy.language ?? 'N/A' }}</td>
             <td class="fw-normal">{{ copy.status }}</td>
             <td>
-              <button class="btn btn-sm btn-primary text-white">Mượn</button>
+              <button class="btn btn-sm btn-primary text-white" [disabled]="copy.status !== status.AVAILABLE" (click)="requestHold(copy)">
+                Mượn
+              </button>
             </td>
           </tr>
         </tbody>

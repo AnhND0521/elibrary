@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPatronAccount, NewPatronAccount } from '../patron-account.model';
+import { map } from 'jquery';
 
 export type PartialUpdatePatronAccount = Partial<IPatronAccount> & Pick<IPatronAccount, 'cardNumber'>;
 
@@ -15,6 +16,7 @@ export type EntityArrayResponseType = HttpResponse<IPatronAccount[]>;
 @Injectable({ providedIn: 'root' })
 export class PatronAccountService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/patron-accounts');
+  protected selfCache$: Observable<IPatronAccount> | null = null;
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -36,6 +38,11 @@ export class PatronAccountService {
 
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IPatronAccount>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  self(): Observable<IPatronAccount> {
+    if (this.selfCache$) return this.selfCache$;
+    return (this.selfCache$ = this.http.get<IPatronAccount>(`${this.resourceUrl}/self`));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

@@ -72,7 +72,7 @@ public class PatronAccountResource {
     /**
      * {@code PUT  /patron-accounts/:cardNumber} : Updates an existing patronAccount.
      *
-     * @param cardNumber the id of the patronAccountDTO to save.
+     * @param cardNumber       the id of the patronAccountDTO to save.
      * @param patronAccountDTO the patronAccountDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated patronAccountDTO,
      * or with status {@code 400 (Bad Request)} if the patronAccountDTO is not valid,
@@ -106,7 +106,7 @@ public class PatronAccountResource {
     /**
      * {@code PATCH  /patron-accounts/:cardNumber} : Partial updates given fields of an existing patronAccount, field will ignore if it is null
      *
-     * @param cardNumber the id of the patronAccountDTO to save.
+     * @param cardNumber       the id of the patronAccountDTO to save.
      * @param patronAccountDTO the patronAccountDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated patronAccountDTO,
      * or with status {@code 400 (Bad Request)} if the patronAccountDTO is not valid,
@@ -142,7 +142,7 @@ public class PatronAccountResource {
     /**
      * {@code GET  /patron-accounts} : get all the patronAccounts.
      *
-     * @param pageable the pagination information.
+     * @param pageable  the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of patronAccounts in body.
      */
@@ -172,6 +172,18 @@ public class PatronAccountResource {
     public ResponseEntity<PatronAccountDTO> getPatronAccount(@PathVariable String id) {
         log.debug("REST request to get PatronAccount : {}", id);
         Optional<PatronAccountDTO> patronAccountDTO = patronAccountService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(patronAccountDTO);
+    }
+
+    /**
+     * {@code GET  /patron-accounts/self} : get the current patronAccount.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the patronAccountDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/patron-accounts/self")
+    public ResponseEntity<PatronAccountDTO> getSelfPatronAccount() {
+        log.debug("REST request to get current PatronAccount");
+        Optional<PatronAccountDTO> patronAccountDTO = patronAccountService.findCurrent();
         return ResponseUtil.wrapOrNotFound(patronAccountDTO);
     }
 

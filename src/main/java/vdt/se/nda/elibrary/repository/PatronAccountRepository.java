@@ -39,4 +39,6 @@ public interface PatronAccountRepository extends JpaRepository<PatronAccount, St
     Optional<PatronAccount> findOneWithToOneRelationships(@Param("id") String id);
 
     boolean existsByCardNumber(String cardNumber);
+
+    Optional<PatronAccount> findByUserLogin(String login);
 }

@@ -59,6 +59,13 @@ public interface PatronAccountService {
     Optional<PatronAccountDTO> findOne(String id);
 
     /**
+     * Get the patronAccount of the current user.
+     *
+     * @return the entity.
+     */
+    Optional<PatronAccountDTO> findCurrent();
+
+    /**
      * Delete the "id" patronAccount.
      *
      * @param id the id of the entity.

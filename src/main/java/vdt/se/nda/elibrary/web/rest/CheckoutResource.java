@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -69,7 +68,7 @@ public class CheckoutResource {
     /**
      * {@code PUT  /checkouts/:id} : Updates an existing checkout.
      *
-     * @param id the id of the checkoutDTO to save.
+     * @param id          the id of the checkoutDTO to save.
      * @param checkoutDTO the checkoutDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated checkoutDTO,
      * or with status {@code 400 (Bad Request)} if the checkoutDTO is not valid,
@@ -103,7 +102,7 @@ public class CheckoutResource {
     /**
      * {@code PATCH  /checkouts/:id} : Partial updates given fields of an existing checkout, field will ignore if it is null
      *
-     * @param id the id of the checkoutDTO to save.
+     * @param id          the id of the checkoutDTO to save.
      * @param checkoutDTO the checkoutDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated checkoutDTO,
      * or with status {@code 400 (Bad Request)} if the checkoutDTO is not valid,
@@ -139,13 +138,19 @@ public class CheckoutResource {
     /**
      * {@code GET  /checkouts} : get all the checkouts.
      *
+     * @param keyword  the keyword to find checkouts if any.
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of checkouts in body.
      */
     @GetMapping("/checkouts")
-    public ResponseEntity<List<CheckoutDTO>> getAllCheckouts(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<CheckoutDTO>> getAllCheckouts(
+        @RequestParam(name = "q", required = false, defaultValue = "") String keyword,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
         log.debug("REST request to get a page of Checkouts");
-        Page<CheckoutDTO> page = checkoutService.findAll(pageable);
+        Page<CheckoutDTO> page;
+        if (keyword == null || keyword.isEmpty()) page = checkoutService.findAll(pageable); else page =
+            checkoutService.findByKeyword(keyword, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

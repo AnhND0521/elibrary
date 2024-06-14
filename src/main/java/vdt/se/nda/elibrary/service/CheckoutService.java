@@ -42,6 +42,15 @@ public interface CheckoutService {
     Page<CheckoutDTO> findAll(Pageable pageable);
 
     /**
+     * Get checkouts by keyword matching checkout id, patron id or book copy id.
+     *
+     * @param keyword  the keyword.
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<CheckoutDTO> findByKeyword(String keyword, Pageable pageable);
+
+    /**
      * Get the "id" checkout.
      *
      * @param id the id of the entity.

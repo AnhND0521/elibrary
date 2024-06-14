@@ -2,7 +2,6 @@
   <h2 id="page-heading" data-cy="HoldHeading">
     <span jhiTranslate="eLibraryApp.hold.home.title">Holds</span>
 
-    <!-- <div class="d-flex justify-content-end"> -->
     <div class="row gap-2 mt-3 me-0">
       <div class="col grow-1 input-group">
         <input
@@ -107,7 +106,7 @@
           <td>
             <div *ngIf="!hold.isCheckedOut && isAfterCurrent(hold.endTime!)">
               <span class="me-2">Còn hạn</span>
-              <button [routerLink]="['/checkout', 'new', 'from-hold', hold.id]" *ngIf="!hold.isCheckedOut" class="btn btn-secondary btn-sm">
+              <button [routerLink]="['/checkout', 'new', 'from-hold', hold.id]" class="btn btn-secondary btn-sm">
                 <fa-icon [icon]="['fas', 'check']"></fa-icon>
                 <span class="d-none d-md-inline">Kiểm xuất</span>
               </button>

@@ -114,6 +114,12 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
+    public Page<CheckoutDTO> findByKeyword(String keyword, Pageable pageable) {
+        log.debug("Request to find checkouts by keyword: {}", keyword);
+        return checkoutRepository.findByKeyword(keyword.trim(), pageable).map(checkoutMapper::toDto);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<CheckoutDTO> findOne(Long id) {
         log.debug("Request to get Checkout : {}", id);

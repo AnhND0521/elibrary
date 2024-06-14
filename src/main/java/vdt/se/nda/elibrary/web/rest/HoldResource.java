@@ -147,7 +147,7 @@ public class HoldResource {
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get a page of Holds");
-        Page<HoldDTO> page = null;
+        Page<HoldDTO> page;
         if (keyword == null || keyword.isEmpty()) page = holdService.findAll(pageable); else page =
             holdService.findByKeyword(keyword, pageable);
 

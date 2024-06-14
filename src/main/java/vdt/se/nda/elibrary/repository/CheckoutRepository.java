@@ -1,6 +1,9 @@
 package vdt.se.nda.elibrary.repository;
 
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vdt.se.nda.elibrary.domain.Checkout;
 
@@ -9,4 +12,14 @@ import vdt.se.nda.elibrary.domain.Checkout;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CheckoutRepository extends JpaRepository<Checkout, Long> {}
+public interface CheckoutRepository extends JpaRepository<Checkout, Long> {
+    @Query(
+        "select checkout from Checkout checkout " +
+        "left join checkout.patron patron " +
+        "left join checkout.copy copy " +
+        "where cast(checkout.id as text) like concat('%', ?1, '%') " +
+        "or cast(patron.id as text) like concat('%', ?1, '%') " +
+        "or cast(copy.id as text) like concat('%', ?1, '%') "
+    )
+    Page<Checkout> findByKeyword(String keyword, Pageable pageable);
+}

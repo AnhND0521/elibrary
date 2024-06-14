@@ -2,8 +2,22 @@
   <h2 id="page-heading" data-cy="CheckoutHeading">
     <span jhiTranslate="eLibraryApp.checkout.home.title">Checkouts</span>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+    <div class="row gap-2 mt-3 me-0">
+      <div class="col grow-1 input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tìm kiếm"
+          aria-describedby="button-addon2"
+          [(ngModel)]="queryKeyword"
+          (keyup.enter)="navigateToWithComponentValues()"
+        />
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+          <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
+        </button>
+      </div>
+
+      <button class="col-auto btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="eLibraryApp.checkout.home.refreshListLabel">Refresh list</span>
       </button>
@@ -11,7 +25,7 @@
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-checkout"
+        class="col-auto btn btn-primary jh-create-entity create-checkout"
         [routerLink]="['/checkout/new']"
       >
         <fa-icon icon="plus"></fa-icon>
@@ -38,6 +52,18 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="copy.id">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.copy">Copy</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="patron.cardNumber">
+            <div class="d-flex">
+              <span jhiTranslate="eLibraryApp.checkout.patron">Patron</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="startTime">
             <div class="d-flex">
               <span jhiTranslate="eLibraryApp.checkout.startTime">Start Time</span>
@@ -52,19 +78,8 @@
           </th>
           <th scope="col" jhiSortBy="isReturned">
             <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="copy.id">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.checkout.copy">Copy</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="patron.cardNumber">
-            <div class="d-flex">
-              <span jhiTranslate="eLibraryApp.checkout.patron">Patron</span>
+              <!-- <span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span> -->
+              <span>Status</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -76,9 +91,6 @@
           <td>
             <a [routerLink]="['/checkout', checkout.id, 'view']">{{ checkout.id }}</a>
           </td>
-          <td>{{ checkout.startTime | formatMediumDatetime }}</td>
-          <td>{{ checkout.endTime | formatMediumDatetime }}</td>
-          <td>{{ checkout.isReturned }}</td>
           <td>
             <div *ngIf="checkout.copy">
               <a [routerLink]="['/book-copy', checkout.copy.id, 'view']">{{ checkout.copy.id }}</a>
@@ -88,6 +100,19 @@
             <div *ngIf="checkout.patron">
               <a [routerLink]="['/patron-account', checkout.patron.cardNumber, 'view']">{{ checkout.patron.cardNumber }}</a>
             </div>
+          </td>
+          <td>{{ checkout.startTime | formatMediumDatetime }}</td>
+          <td>{{ checkout.endTime | formatMediumDatetime }}</td>
+          <td>
+            <div *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)">
+              <span class="me-2">Còn hạn</span>
+              <button [routerLink]="['/checkout', 'new', 'from-hold', checkout.id]" class="btn btn-secondary btn-sm">
+                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                <span class="d-none d-md-inline">Đánh dấu đã trả</span>
+              </button>
+            </div>
+            <span *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)" class="me-2">Hết hạn</span>
+            <span *ngIf="checkout.isReturned" class="me-2">Đã trả sách</span>
           </td>
           <td class="text-end">
             <div class="btn-group">

@@ -1,5 +1,8 @@
 package vdt.se.nda.elibrary.repository;
 
+import com.carrotsearch.hppc.ByteArrayList;
+import java.time.Instant;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +25,7 @@ public interface CheckoutRepository extends JpaRepository<Checkout, Long> {
         "or cast(copy.id as text) like concat('%', ?1, '%') "
     )
     Page<Checkout> findByKeyword(String keyword, Pageable pageable);
+
+    @Query("select checkout from Checkout checkout where checkout.isReturned = ?1 and checkout.endTime > ?2")
+    List<Checkout> findByIsReturnedAndEndTimeAfter(boolean isReturned, Instant instant);
 }

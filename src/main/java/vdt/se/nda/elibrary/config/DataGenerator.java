@@ -235,7 +235,7 @@ public class DataGenerator {
                     userDTO.setEmail(result.get("email").asText());
                     userDTO.setImageUrl(result.get("picture").get("large").asText());
                     userDTO.setLangKey("vi");
-                    String password = passwordEncoder.encode(userDTO.getLogin());
+                    String password = userDTO.getLogin();
 
                     User user = userService.registerUser(userDTO, password);
                     userService.activateRegistration(user.getActivationKey());

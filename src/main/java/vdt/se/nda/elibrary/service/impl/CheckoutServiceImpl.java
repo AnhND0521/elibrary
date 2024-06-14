@@ -16,6 +16,7 @@ import vdt.se.nda.elibrary.repository.CheckoutRepository;
 import vdt.se.nda.elibrary.repository.HoldRepository;
 import vdt.se.nda.elibrary.repository.PatronAccountRepository;
 import vdt.se.nda.elibrary.service.CheckoutService;
+import vdt.se.nda.elibrary.service.JobSchedulerService;
 import vdt.se.nda.elibrary.service.dto.CheckoutDTO;
 import vdt.se.nda.elibrary.service.mapper.CheckoutMapper;
 
@@ -38,6 +39,8 @@ public class CheckoutServiceImpl implements CheckoutService {
     private final PatronAccountRepository patronAccountRepository;
 
     private final CheckoutMapper checkoutMapper;
+
+    private final JobSchedulerService jobSchedulerService;
 
     @Override
     public CheckoutDTO save(CheckoutDTO checkoutDTO) {
@@ -87,7 +90,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         if (!checkout.getIsReturned() && checkout.getEndTime().isAfter(Instant.now())) {
             checkout.getCopy().setStatus(BookCopyStatus.BORROWED);
             bookCopyRepository.save(checkout.getCopy());
-            //            jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
+
+            jobSchedulerService.scheduleHandleCheckoutExpirationJob(checkout);
         }
     }
 

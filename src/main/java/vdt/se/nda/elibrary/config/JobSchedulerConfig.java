@@ -4,18 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import vdt.se.nda.elibrary.service.scheduler.HandleHoldExpirationJobsRunner;
+import vdt.se.nda.elibrary.service.JobSchedulerService;
 
 @Configuration
 @RequiredArgsConstructor
 public class JobSchedulerConfig {
 
-    private final HandleHoldExpirationJobsRunner handleHoldExpirationJobsRunner;
+    private final JobSchedulerService jobSchedulerService;
 
     @Bean
     public CommandLineRunner run() {
         return args -> {
-            handleHoldExpirationJobsRunner.run();
+            jobSchedulerService.getHandleHoldExpirationJobsRunner().run();
+            jobSchedulerService.getHandleCheckoutExpirationJobsRunner().run();
         };
     }
 }

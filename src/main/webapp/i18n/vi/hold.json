@@ -2,27 +2,34 @@
   "eLibraryApp": {
     "hold": {
       "home": {
-        "title": "Holds",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Hold",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Hold",
-        "notFound": "No Holds found"
+        "title": "Quản lý đặt trước",
+        "refreshListLabel": "Tải lại",
+        "createLabel": "Thêm một mục đặt trước",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật mục đặt trước",
+        "notFound": "Không có mục đặt trước nào."
       },
-      "created": "Một Hold mới được tạo với định danh {{ param }}",
-      "updated": "Một Hold cập nhật với định danh {{ param }}",
-      "deleted": "Một Hold đã xóa với định danh {{ param }}",
+      "created": "Một mục đặt trước được tạo với định danh {{ param }}",
+      "updated": "Một mục đặt trước được cập nhật với định danh {{ param }}",
+      "deleted": "Một mục đặt trước bị xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Hold {{ id }}?"
+        "question": "Bạn có chắc muốn xóa mục đặt trước với định danh {{ id }}?"
       },
       "detail": {
-        "title": "Hold"
+        "title": "Đặt trước"
       },
       "id": "ID",
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "isCheckedOut": "Is Checked Out",
-      "copy": "Copy",
-      "patron": "Patron"
+      "startTime": "Thời gian bắt đầu",
+      "endTime": "Thời gian kết thúc",
+      "isCheckedOut": "Đã kiểm xuất",
+      "copy": "Bản sao sách",
+      "patron": "Người mượn",
+      "status": "Trạng thái",
+      "statusValues": {
+        "unexpired": "Còn hạn",
+        "expired": "Hết hạn",
+        "checkedOut": "Đã kiểm xuất"
+      },
+      "checkout": "Kiểm xuất"
     }
   }
 }

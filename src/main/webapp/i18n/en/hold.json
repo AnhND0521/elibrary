@@ -22,7 +22,14 @@
       "endTime": "End Time",
       "isCheckedOut": "Is Checked Out",
       "copy": "Copy",
-      "patron": "Patron"
+      "patron": "Patron",
+      "status": "Status",
+      "statusValues": {
+        "unexpired": "Unexpired",
+        "expired": "Expired",
+        "checkedOut": "Checked out"
+      },
+      "checkout": "Check-out"
     }
   }
 }

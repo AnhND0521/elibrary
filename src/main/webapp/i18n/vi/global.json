@@ -154,7 +154,7 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Đây là chân trang của bạn",
+  "footer": "© eLibrary 2024",
   "categories": {
     "literature": "Văn học",
     "romance": "Lãng mạn",

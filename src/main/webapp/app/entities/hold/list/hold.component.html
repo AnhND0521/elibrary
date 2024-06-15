@@ -78,8 +78,7 @@
           </th>
           <th scope="col" jhiSortBy="isCheckedOut">
             <div class="d-flex">
-              <!-- <span jhiTranslate="eLibraryApp.hold.isCheckedOut">Is Checked Out</span> -->
-              <span>Status</span>
+              <span jhiTranslate="eLibraryApp.hold.status">Status</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -105,14 +104,19 @@
           <td>{{ hold.endTime | formatMediumDatetime }}</td>
           <td>
             <div *ngIf="!hold.isCheckedOut && isAfterCurrent(hold.endTime!)">
-              <span class="me-2">Còn hạn</span>
+              <span class="me-2" jhiTranslate="eLibraryApp.hold.statusValues.unexpired">Còn hạn</span>
               <button [routerLink]="['/checkout', 'new', 'from-hold', hold.id]" class="btn btn-secondary btn-sm">
                 <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                <span class="d-none d-md-inline">Kiểm xuất</span>
+                <span class="d-none d-md-inline" jhiTranslate="eLibraryApp.hold.checkout">Kiểm xuất</span>
               </button>
             </div>
-            <span *ngIf="!hold.isCheckedOut && !isAfterCurrent(hold.endTime!)" class="me-2">Hết hạn</span>
-            <span *ngIf="hold.isCheckedOut" class="me-2">Đã kiểm xuất</span>
+            <span
+              *ngIf="!hold.isCheckedOut && !isAfterCurrent(hold.endTime!)"
+              class="me-2"
+              jhiTranslate="eLibraryApp.hold.statusValues.expired"
+              >Hết hạn</span
+            >
+            <span *ngIf="hold.isCheckedOut" class="me-2" jhiTranslate="eLibraryApp.hold.statusValues.checkedOut">Đã kiểm xuất</span>
           </td>
           <td class="text-end">
             <div class="btn-group">

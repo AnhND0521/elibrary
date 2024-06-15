@@ -50,14 +50,6 @@ public interface WaitlistItemService {
     Page<WaitlistItemDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
-     * Get all the waitlistItems of the current user.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<WaitlistItemDTO> findByCurrentUser(Pageable pageable);
-
-    /**
      * Get the "id" waitlistItem.
      *
      * @param id the id of the entity.
@@ -71,4 +63,19 @@ public interface WaitlistItemService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get all the waitlistItems of the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<WaitlistItemDTO> findByCurrentUser(Pageable pageable);
+
+    /**
+     * Get the waitlistItem of some book of the current user.
+     *
+     * @return the entity.
+     */
+    Optional<WaitlistItemDTO> findByCurrentUserByBook(Long bookId);
 }

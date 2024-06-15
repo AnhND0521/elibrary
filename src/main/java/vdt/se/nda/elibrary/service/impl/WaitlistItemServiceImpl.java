@@ -100,4 +100,12 @@ public class WaitlistItemServiceImpl implements WaitlistItemService {
             .map(login -> waitlistItemRepository.findByPatronUserLogin(login, pageable).map(waitlistItemMapper::toDto))
             .orElse(Page.empty());
     }
+
+    @Override
+    public Optional<WaitlistItemDTO> findByCurrentUserByBook(Long bookId) {
+        return SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(login -> waitlistItemRepository.findByPatronUserLoginAndBookId(login, bookId))
+            .map(waitlistItemMapper::toDto);
+    }
 }

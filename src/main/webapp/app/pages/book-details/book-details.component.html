@@ -56,8 +56,19 @@
         <button *ngIf="avalableCopies.length > 0" class="btn btn-primary col-md-3 col-10 text-white" (click)="requestHoldAny()">
           Mượn
         </button>
-        <button *ngIf="avalableCopies.length === 0" class="btn btn-secondary col-md-3 col-10 text-white" (click)="addToWaitlist()">
-          Thêm vào hàng đợi
+        <button
+          *ngIf="avalableCopies.length === 0 && !waitlistItem"
+          class="btn btn-secondary col-md-3 col-10 text-white"
+          (click)="addToWaitlist()"
+        >
+          Thêm vào danh sách chờ
+        </button>
+        <button
+          *ngIf="avalableCopies.length === 0 && waitlistItem"
+          class="btn btn-danger col-md-3 col-10 text-white"
+          (click)="removeFromWaitlist()"
+        >
+          Xóa khỏi danh sách chờ
         </button>
       </div>
     </div>

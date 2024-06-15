@@ -69,7 +69,7 @@ public class WaitlistItemResource {
     /**
      * {@code PUT  /waitlist-items/:id} : Updates an existing waitlistItem.
      *
-     * @param id the id of the waitlistItemDTO to save.
+     * @param id              the id of the waitlistItemDTO to save.
      * @param waitlistItemDTO the waitlistItemDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated waitlistItemDTO,
      * or with status {@code 400 (Bad Request)} if the waitlistItemDTO is not valid,
@@ -103,7 +103,7 @@ public class WaitlistItemResource {
     /**
      * {@code PATCH  /waitlist-items/:id} : Partial updates given fields of an existing waitlistItem, field will ignore if it is null
      *
-     * @param id the id of the waitlistItemDTO to save.
+     * @param id              the id of the waitlistItemDTO to save.
      * @param waitlistItemDTO the waitlistItemDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated waitlistItemDTO,
      * or with status {@code 400 (Bad Request)} if the waitlistItemDTO is not valid,
@@ -139,7 +139,7 @@ public class WaitlistItemResource {
     /**
      * {@code GET  /waitlist-items} : get all the waitlistItems.
      *
-     * @param pageable the pagination information.
+     * @param pageable  the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of waitlistItems in body.
      */
@@ -173,6 +173,19 @@ public class WaitlistItemResource {
         Page<WaitlistItemDTO> page = waitlistItemService.findByCurrentUser(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /waitlist-items/my/find-by-book} : get the waitlistItem of some book of the current user.
+     *
+     * @param bookId the id of the book.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the waitlistItemDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/waitlist-items/my/find-by-book")
+    public ResponseEntity<WaitlistItemDTO> getWaitlistItemByBookOfCurrentUser(@RequestParam(name = "id") Long bookId) {
+        log.debug("REST request to get WaitlistItem by Book : {}", bookId);
+        Optional<WaitlistItemDTO> waitlistItemDTO = waitlistItemService.findByCurrentUserByBook(bookId);
+        return ResponseUtil.wrapOrNotFound(waitlistItemDTO);
     }
 
     /**

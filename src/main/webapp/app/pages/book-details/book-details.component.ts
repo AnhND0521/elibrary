@@ -11,7 +11,7 @@ import dayjs from 'dayjs/esm';
 import { HoldService } from 'app/entities/hold/service/hold.service';
 import { Location } from '@angular/common';
 import { Duration } from 'dayjs/esm/plugin/duration';
-import { NewWaitlistItem } from 'app/entities/waitlist-item/waitlist-item.model';
+import { IWaitlistItem, NewWaitlistItem } from 'app/entities/waitlist-item/waitlist-item.model';
 import { WaitlistItemService } from 'app/entities/waitlist-item/service/waitlist-item.service';
 
 type TimeUnit = 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years';
@@ -38,6 +38,8 @@ export class BookDetailsComponent implements OnInit {
   holdTimeUnit: TimeUnit = 'days';
   holdDuration: Duration = dayjs.duration(this.holdTimeValue, this.holdTimeUnit);
 
+  waitlistItem: IWaitlistItem | null = null;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -53,6 +55,7 @@ export class BookDetailsComponent implements OnInit {
     this.id = +this.route.snapshot.paramMap.get('id')!;
     this.fetchBook();
     this.fetchBookCopies();
+    this.fetchWaitlistItem();
   }
 
   fetchBook() {
@@ -73,6 +76,10 @@ export class BookDetailsComponent implements OnInit {
       this.updatePage();
       this.totalItems = [this.copies.length, this.avalableCopies.length][this.mode];
     });
+  }
+
+  fetchWaitlistItem() {
+    this.bookDetailsService.findWaitlistItem(this.id).subscribe(response => (this.waitlistItem = response.body));
   }
 
   updatePage() {
@@ -142,11 +149,21 @@ export class BookDetailsComponent implements OnInit {
           patron: data,
           book: this.book,
         };
-        this.waitlistItemService.create(item).subscribe(response => window.alert('Đã thêm sách vào danh sách chờ!'));
+        this.waitlistItemService.create(item).subscribe(response => {
+          this.waitlistItem = response.body;
+          // window.alert('Đã thêm vào danh sách chờ!');
+        });
       },
       error: err => {
         window.alert('Vui lòng đăng nhập bằng tài khoản bạn đọc!');
       },
+    });
+  }
+
+  removeFromWaitlist() {
+    this.waitlistItemService.delete(this.waitlistItem!.id).subscribe(response => {
+      this.waitlistItem = null;
+      // window.alert('Đã xóa khỏi danh sách chờ!');
     });
   }
 

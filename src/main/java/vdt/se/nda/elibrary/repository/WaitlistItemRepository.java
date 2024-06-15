@@ -41,4 +41,6 @@ public interface WaitlistItemRepository extends JpaRepository<WaitlistItem, Long
     Optional<WaitlistItem> findByPatronCardNumberAndBookId(String patronCardNumber, Long bookId);
 
     Page<WaitlistItem> findByPatronUserLogin(String login, Pageable pageable);
+
+    Optional<WaitlistItem> findByPatronUserLoginAndBookId(String login, Long bookId);
 }

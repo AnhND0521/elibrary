@@ -1,5 +1,8 @@
 <div class="container">
   <h2 class="mb-4">Lịch sử</h2>
+
+  <jhi-alert></jhi-alert>
+
   <h4 class="mb-3">Sách đã đặt trước ({{ holdTotalItems }})</h4>
   <div *ngIf="holdTotalItems > 0">
     <table class="table table-hover table-striped">
@@ -27,7 +30,7 @@
           <td class="fw-normal">{{ hold.startTime | date: 'd MMM, y, h:mm a' }}</td>
           <td class="fw-normal">{{ hold.endTime | date: 'd MMM, y, h:mm a' }}</td>
           <td>
-            <button type="submit" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+            <button type="submit" class="btn btn-danger btn-sm" (click)="cancelHold(hold.id)">
               <fa-icon icon="times"></fa-icon>
               <span class="d-none d-md-inline">Hủy</span>
             </button>

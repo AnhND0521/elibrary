@@ -61,4 +61,19 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
         scheduleJob(prefixName, id, startTime, JobImpl.class, runner);
     }
+
+    @Override
+    public void cancelJob(String prefixName, Object id) {
+        try {
+            String jobName = prefixName + "-job-" + id;
+            String groupName = prefixName + "-jobs";
+            final JobKey jobKey = new JobKey(jobName, groupName);
+            if (scheduler.checkExists(jobKey)) {
+                scheduler.deleteJob(jobKey);
+                log.debug("Cancelled job {}", jobName);
+            }
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

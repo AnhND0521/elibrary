@@ -33,6 +33,7 @@ import { AuthorCatalogComponent } from './pages/author-catalog/author-catalog.co
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { HoldCancelDialogComponent } from './pages/history/hold-cancel-dialog/hold-cancel-dialog.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
     BookDetailsComponent,
     HistoryComponent,
     SidebarComponent,
+    HoldCancelDialogComponent,
   ],
   bootstrap: [MainComponent],
 })

@@ -36,6 +36,8 @@ public class HoldServiceImpl implements HoldService {
 
     private final JobSchedulerService jobSchedulerService;
 
+    private static final String HOLD_EXPIRATION = "hold-expiration";
+
     public HoldServiceImpl(
         HoldRepository holdRepository,
         HoldMapper holdMapper,
@@ -130,7 +132,15 @@ public class HoldServiceImpl implements HoldService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Hold : {}", id);
-        holdRepository.deleteById(id);
+        holdRepository
+            .findById(id)
+            .ifPresent(hold -> {
+                var bookCopy = hold.getCopy().status(BookCopyStatus.AVAILABLE);
+                bookCopyRepository.save(bookCopy);
+
+                jobSchedulerService.cancelJob(HOLD_EXPIRATION, id);
+                holdRepository.delete(hold);
+            });
     }
 
     public void handleExpiration(Hold hold) {
@@ -141,6 +151,6 @@ public class HoldServiceImpl implements HoldService {
     }
 
     private void scheduleJobOnExpiration(Hold hold) {
-        jobSchedulerService.scheduleJob("hold-expiration", hold.getId(), hold.getEndTime(), () -> handleExpiration(hold));
+        jobSchedulerService.scheduleJob(HOLD_EXPIRATION, hold.getId(), hold.getEndTime(), () -> handleExpiration(hold));
     }
 }

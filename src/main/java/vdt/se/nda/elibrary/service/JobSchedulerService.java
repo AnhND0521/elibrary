@@ -8,4 +8,5 @@ import vdt.se.nda.elibrary.domain.Hold;
 public interface JobSchedulerService {
     void scheduleJob(String prefixName, Object id, Instant startTime, Class<? extends Job> jobClazz, Object... args);
     void scheduleJob(String prefixName, Object id, Instant startTime, Runnable runnable);
+    void cancelJob(String prefixName, Object id);
 }

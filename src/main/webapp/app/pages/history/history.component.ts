@@ -4,6 +4,13 @@ import { BookCopyService } from 'app/entities/book-copy/service/book-copy.servic
 import { BookService } from 'app/entities/book/service/book.service';
 import { TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import dayjs from 'dayjs/esm';
+import { HoldService } from 'app/entities/hold/service/hold.service';
+import { CheckoutService } from 'app/entities/checkout/service/checkout.service';
+import { Alert, AlertService } from 'app/core/util/alert.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HoldCancelDialogComponent } from './hold-cancel-dialog/hold-cancel-dialog.component';
+import { filter, switchMap } from 'rxjs';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 const MAX_STRING_LENGTH = 30;
 
@@ -23,7 +30,14 @@ export class HistoryComponent implements OnInit {
   checkoutItemsPerPage: number = 10;
   checkoutTotalItems: number = 0;
 
-  constructor(protected historyService: HistoryService, protected bookCopyService: BookCopyService, protected bookService: BookService) {}
+  constructor(
+    protected historyService: HistoryService,
+    protected holdService: HoldService,
+    protected checkoutService: CheckoutService,
+    protected bookCopyService: BookCopyService,
+    protected bookService: BookService,
+    protected modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.fetchHolds();
@@ -72,6 +86,16 @@ export class HistoryComponent implements OnInit {
   handleCheckoutPageChange(page: number) {
     this.checkoutPage = page;
     this.fetchCheckouts();
+  }
+
+  cancelHold(id: number) {
+    const modalRef = this.modalService.open(HoldCancelDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.id = id;
+    modalRef.closed.subscribe(reason => {
+      if (reason === ITEM_DELETED_EVENT) {
+        this.fetchHolds();
+      }
+    });
   }
 
   isAfterCurrent(time: any) {

@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="mb-md-5 mb-3">Chi tiết sách</h2>
+  <h2 class="mb-md-5 mb-3" jhiTranslate="eLibraryApp.bookDetails.title">Chi tiết sách</h2>
   <!-- <div class="d-flex justify-content-start align-items-start gap-5"> -->
   <div class="row">
     <div class="col-md-auto me-md-5">
@@ -9,7 +9,7 @@
       <h3 class="fw-normal">{{ book.title }}</h3>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
-          <span class="fw-semibold">Tác giả:</span>
+          <span class="fw-semibold" jhiTranslate="eLibraryApp.bookDetails.fields.authors">Tác giả:</span>
         </div>
         <div class="col-lg-10 col-9">
           <a *ngFor="let author of book.authors" class="me-2" routerLink="/search" [queryParams]="{ author: author.id }">
@@ -19,17 +19,17 @@
       </div>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
-          <span class="fw-semibold">Thể loại:</span>
+          <span class="fw-semibold" jhiTranslate="eLibraryApp.bookDetails.fields.category">Thể loại:</span>
         </div>
         <div class="col-lg-10 col-9">
           <a class="me-2" routerLink="/search" [queryParams]="{ category: book.category!.id }">
-            {{ book.category!.name }}
+            {{ 'categories.' + stringUtil.toCamelCase(book.category!.name!) | translate }}
           </a>
         </div>
       </div>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
-          <span class="fw-semibold">Số bản sao:</span>
+          <span class="fw-semibold" jhiTranslate="eLibraryApp.bookDetails.fields.numberOfCopies">Số bản sao:</span>
         </div>
         <div class="col-lg-10 col-9">
           <span class="fw-normal">{{ copies.length }}</span>
@@ -37,7 +37,7 @@
       </div>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
-          <span class="fw-semibold">Bản sao có sẵn:</span>
+          <span class="fw-semibold" jhiTranslate="eLibraryApp.bookDetails.fields.numberOfAvailableCopies">Bản sao có sẵn:</span>
         </div>
         <div class="col-lg-10 col-9">
           <span class="fw-normal">{{ avalableCopies.length }}</span>
@@ -45,21 +45,37 @@
       </div>
       <div class="row w-100">
         <div class="col-lg-2 col-3">
-          <span class="fw-semibold">Trạng thái:</span>
+          <span class="fw-semibold" jhiTranslate="eLibraryApp.bookDetails.fields.status">Trạng thái:</span>
         </div>
         <div class="col-lg-10 col-9">
-          <span *ngIf="avalableCopies.length > 0" class="text-info fw-normal">Có sẵn</span>
-          <span *ngIf="avalableCopies.length === 0" class="text-danger">Không có sẵn</span>
+          <span
+            *ngIf="avalableCopies.length > 0"
+            class="text-info fw-normal"
+            jhiTranslate="eLibraryApp.bookDetails.fields.statusValues.available"
+            >Có sẵn</span
+          >
+          <span
+            *ngIf="avalableCopies.length === 0"
+            class="text-danger"
+            jhiTranslate="eLibraryApp.bookDetails.fields.statusValues.unavailable"
+            >Không có sẵn</span
+          >
         </div>
       </div>
       <div class="row w-100 mt-3" style="padding-left: 12px">
-        <button *ngIf="avalableCopies.length > 0" class="btn btn-primary col-md-3 col-10 text-white" (click)="requestHoldAny()">
+        <button
+          *ngIf="avalableCopies.length > 0"
+          class="btn btn-primary col-md-3 col-10 text-white"
+          (click)="requestHoldAny()"
+          jhiTranslate="eLibraryApp.bookDetails.actions.borrow"
+        >
           Mượn
         </button>
         <button
           *ngIf="avalableCopies.length === 0 && !waitlistItem"
           class="btn btn-secondary col-md-3 col-10 text-white"
           (click)="addToWaitlist()"
+          jhiTranslate="eLibraryApp.bookDetails.actions.addToWaitlist"
         >
           Thêm vào danh sách chờ
         </button>
@@ -67,6 +83,7 @@
           *ngIf="avalableCopies.length === 0 && waitlistItem"
           class="btn btn-danger col-md-3 col-10 text-white"
           (click)="removeFromWaitlist()"
+          jhiTranslate="eLibraryApp.bookDetails.actions.removeFromWaitlist"
         >
           Xóa khỏi danh sách chờ
         </button>
@@ -74,18 +91,22 @@
     </div>
 
     <div class="row mt-5 mb-4">
-      <h5 class="col-md-3 m-0">{{ ['Danh sách bản sao', 'Bản sao có sẵn'][mode] }} ({{ totalItems }})</h5>
-      <a class="col-auto" (click)="toggleMode()">{{ ['Xem bản sao có sẵn', 'Xem tất cả'][mode] }}</a>
+      <h5 class="col-md-3 m-0">
+        {{ ['eLibraryApp.bookDetails.allCopies', 'eLibraryApp.bookDetails.availableCopies'][mode] | translate }} ({{ totalItems }})
+      </h5>
+      <a class="col-auto" (click)="toggleMode()">{{
+        ['eLibraryApp.bookDetails.viewAvailable', 'eLibraryApp.bookDetails.viewAll'][mode] | translate
+      }}</a>
     </div>
     <div *ngIf="totalItems > 0">
       <table class="table table-hover table-striped">
         <thead class="table-dark">
           <tr>
-            <th scope="col">Tiêu đề</th>
-            <th scope="col">Năm xuất bản</th>
-            <th scope="col">Nhà xuất bản</th>
-            <th scope="col">Ngôn ngữ</th>
-            <th scope="col">Trạng thái</th>
+            <th scope="col" jhiTranslate="eLibraryApp.bookDetails.copies.title">Tiêu đề</th>
+            <th scope="col" jhiTranslate="eLibraryApp.bookDetails.copies.publishYear">Năm xuất bản</th>
+            <th scope="col" jhiTranslate="eLibraryApp.bookDetails.copies.publisher">Nhà xuất bản</th>
+            <th scope="col" jhiTranslate="eLibraryApp.bookDetails.copies.language">Ngôn ngữ</th>
+            <th scope="col" jhiTranslate="eLibraryApp.bookDetails.copies.status">Trạng thái</th>
             <th></th>
           </tr>
         </thead>
@@ -97,9 +118,16 @@
               <a routerLink="/search" [queryParams]="{ publisher: copy.publisher!.id }">{{ copy.publisher!.name }}</a>
             </td>
             <td class="fw-normal">{{ copy.language ?? 'N/A' }}</td>
-            <td class="fw-normal">{{ copy.status }}</td>
+            <td class="fw-normal">
+              {{ 'eLibraryApp.bookDetails.copies.statusValues.' + stringUtil.toCamelCase(copy.status!) | translate }}
+            </td>
             <td>
-              <button class="btn btn-sm btn-primary text-white" [disabled]="copy.status !== status.AVAILABLE" (click)="requestHold(copy)">
+              <button
+                class="btn btn-sm btn-primary text-white"
+                [disabled]="copy.status !== status.AVAILABLE"
+                (click)="requestHold(copy)"
+                jhiTranslate="eLibraryApp.bookDetails.actions.borrow"
+              >
                 Mượn
               </button>
             </td>
@@ -119,5 +147,5 @@
       </div>
     </div>
   </div>
-  <div *ngIf="totalItems === 0" class="alert alert-warning">Không có bản sao nào.</div>
+  <div *ngIf="totalItems === 0" class="alert alert-warning" jhiTranslate="eLibraryApp.bookDetails.noCopiesFound">Không có bản sao nào.</div>
 </div>

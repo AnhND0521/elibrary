@@ -1,0 +1,40 @@
+{
+  "eLibraryApp": {
+    "bookDetails": {
+      "title": "Chi tiết sách",
+      "availableCopies": "Bản sao có sẵn",
+      "allCopies": "Tất cả bản sao",
+      "viewAll": "Xem tất cả",
+      "viewAvailable": "Xem bản sao có sẵn",
+      "fields": {
+        "authors": "Tác giả:",
+        "category": "Thể loại:",
+        "numberOfCopies": "Số bản sao:",
+        "numberOfAvailableCopies": "Bản sao có sẵn:",
+        "status": "Trạng thái:",
+        "statusValues": {
+          "available": "Có sẵn",
+          "unavailable": "Không có sẵn"
+        }
+      },
+      "actions": {
+        "borrow": "Mượn",
+        "addToWaitlist": "Thêm vào danh sach chờ",
+        "removeFromWaitlist": "Xóa khỏi danh sách chờ"
+      },
+      "copies": {
+        "title": "Tiêu đề",
+        "publishYear": "Năm xuất bản",
+        "publisher": "Nhà xuất bản",
+        "language": "Ngôn ngữ",
+        "status": "Trạng thái",
+        "statusValues": {
+          "available": "Có sẵn",
+          "onHold": "Đã đặt trước",
+          "borrowed": "Đã mượn"
+        }
+      },
+      "noCopiesFound": "No copies found."
+    }
+  }
+}

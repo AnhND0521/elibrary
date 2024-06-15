@@ -13,6 +13,8 @@ import { Location } from '@angular/common';
 import { Duration } from 'dayjs/esm/plugin/duration';
 import { IWaitlistItem, NewWaitlistItem } from 'app/entities/waitlist-item/waitlist-item.model';
 import { WaitlistItemService } from 'app/entities/waitlist-item/service/waitlist-item.service';
+import { TranslateService } from '@ngx-translate/core';
+import { StringUtilService } from 'app/core/util/string-util.service';
 
 type TimeUnit = 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years';
 
@@ -48,6 +50,7 @@ export class BookDetailsComponent implements OnInit {
     protected patronAccountService: PatronAccountService,
     protected holdService: HoldService,
     protected waitlistItemService: WaitlistItemService,
+    protected stringUtil: StringUtilService,
     protected location: Location
   ) {}
 

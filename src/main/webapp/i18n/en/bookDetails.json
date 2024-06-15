@@ -1,0 +1,40 @@
+{
+  "eLibraryApp": {
+    "bookDetails": {
+      "title": "Book Details",
+      "availableCopies": "Available copies",
+      "allCopies": "All copies",
+      "viewAll": "View all",
+      "viewAvailable": "View available",
+      "fields": {
+        "authors": "Author(s):",
+        "category": "Category:",
+        "numberOfCopies": "Number of copies:",
+        "numberOfAvailableCopies": "Available copies:",
+        "status": "Status:",
+        "statusValues": {
+          "available": "Available",
+          "unavailable": "Unavailable"
+        }
+      },
+      "actions": {
+        "borrow": "Borrow",
+        "addToWaitlist": "Add to waitlist",
+        "removeFromWaitlist": "Remove from waitlist"
+      },
+      "copies": {
+        "title": "Title",
+        "publishYear": "Publish year",
+        "publisher": "Publisher",
+        "language": "Language",
+        "status": "Status",
+        "statusValues": {
+          "available": "Available",
+          "onHold": "Reserved",
+          "borrowed": "Borrowed"
+        }
+      },
+      "noCopiesFound": "No copies found."
+    }
+  }
+}

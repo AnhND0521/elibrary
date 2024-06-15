@@ -1,0 +1,19 @@
+{
+  "eLibraryApp": {
+    "waitlist": {
+      "title": "Waitlist",
+      "table": {
+        "title": "Title",
+        "authors": "Author(s)",
+        "availableCopies": "Available copies",
+        "status": "Status",
+        "statusValues": {
+          "available": "Available",
+          "unavailable": "Unavailable"
+        },
+        "remove": "Remove"
+      },
+      "empty": "Your waitlist is empty."
+    }
+  }
+}

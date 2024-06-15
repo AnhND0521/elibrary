@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="mb-4">Danh sách chờ ({{ waitlist.length }})</h2>
+  <h2 class="mb-4">{{ 'eLibraryApp.waitlist.title' | translate }} ({{ waitlist.length }})</h2>
 
   <jhi-alert></jhi-alert>
 
@@ -7,10 +7,10 @@
     <table class="table table-hover table-striped">
       <thead class="table-dark">
         <tr>
-          <th scope="col">Tiêu đề</th>
-          <th scope="col">Tác giả</th>
-          <th scope="col">Số bản sao có sẵn</th>
-          <th scope="col">Trạng thái</th>
+          <th scope="col" jhiTranslate="eLibraryApp.waitlist.table.title">Tiêu đề</th>
+          <th scope="col" jhiTranslate="eLibraryApp.waitlist.table.authors">Tác giả</th>
+          <th scope="col" jhiTranslate="eLibraryApp.waitlist.table.availableCopies">Số bản sao có sẵn</th>
+          <th scope="col" jhiTranslate="eLibraryApp.waitlist.table.status">Trạng thái</th>
           <th></th>
         </tr>
       </thead>
@@ -24,13 +24,20 @@
           </td>
           <td class="fw-normal">{{ item.book.availableCopies }}</td>
           <td class="fw-normal">
-            <span *ngIf="item.book.availableCopies > 0" class="text-info">Có sẵn</span>
-            <span *ngIf="item.book.availableCopies === 0" class="text-danger">Không có sẵn</span>
+            <span *ngIf="item.book.availableCopies > 0" class="text-info" jhiTranslate="eLibraryApp.waitlist.table.statusValues.available"
+              >Có sẵn</span
+            >
+            <span
+              *ngIf="item.book.availableCopies === 0"
+              class="text-danger"
+              jhiTranslate="eLibraryApp.waitlist.table.statusValues.unavailable"
+              >Không có sẵn</span
+            >
           </td>
           <td>
             <button type="submit" class="btn btn-danger btn-sm" (click)="remove(item.id)">
               <fa-icon icon="times"></fa-icon>
-              <span class="d-none d-md-inline">Xoá</span>
+              <span class="d-none d-md-inline" jhiTranslate="eLibraryApp.waitlist.table.remove">Xoá</span>
             </button>
           </td>
         </tr>
@@ -48,5 +55,5 @@
       ></ngb-pagination>
     </div>
   </div>
-  <div *ngIf="totalItems === 0" class="alert alert-warning">Không có sách đang chờ.</div>
+  <div *ngIf="totalItems === 0" class="alert alert-warning" jhiTranslate="eLibraryApp.waitlist.empty">Danh sách chờ trống.</div>
 </div>

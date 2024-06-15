@@ -1,0 +1,19 @@
+{
+  "eLibraryApp": {
+    "waitlist": {
+      "title": "Danh sách chờ",
+      "table": {
+        "title": "Tiêu đề",
+        "authors": "Tác giả",
+        "availableCopies": "Số bản sao có sẵn",
+        "status": "Trạng thái",
+        "statusValues": {
+          "available": "Có sẵn",
+          "unavailable": "Không có sẵn"
+        },
+        "remove": "Xóa"
+      },
+      "empty": "Danh sách chờ trống."
+    }
+  }
+}

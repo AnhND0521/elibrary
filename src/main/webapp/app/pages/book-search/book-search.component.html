@@ -1,10 +1,10 @@
 <div class="container">
-  <h2 class="mb-3">Tìm kiếm sách</h2>
+  <h2 class="mb-3" jhiTranslate="eLibraryApp.bookSearch.title">Tìm kiếm sách</h2>
   <div class="input-group mb-3 w-50">
     <input
       type="text"
       class="form-control"
-      placeholder="Tìm kiếm sách, tác giả, thể loại, nhà xuất bản..."
+      [placeholder]="'eLibraryApp.bookSearch.search' | translate"
       aria-describedby="button-addon2"
       [(ngModel)]="keyword"
       (keyup.enter)="search()"
@@ -31,7 +31,11 @@
           class="form-control"
           aria-label="Sizing example input"
           aria-describedby="inputGroup-sizing-sm"
-          placeholder="{{ 'Thêm ' + labels[filter.name].toLowerCase() }}"
+          placeholder="{{
+            ('eLibraryApp.bookSearch.filter.add' | translate) +
+              ' ' +
+              ('eLibraryApp.bookSearch.filter.' + filter.name | translate).toLowerCase()
+          }}"
           (change)="addFilterValue($event, i)"
         />
         <datalist [id]="filter.name + '-list'">

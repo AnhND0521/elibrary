@@ -3,6 +3,7 @@ import { IBookCatalogItem } from './book-catalog.model';
 import { BookCatalogService } from './book-catalog.service';
 import { IBook } from 'app/entities/book/book.model';
 import { Router } from '@angular/router';
+import { StringUtilService } from 'app/core/util/string-util.service';
 
 @Component({
   selector: 'jhi-book-catalog',
@@ -13,7 +14,7 @@ export class BookCatalogComponent implements OnInit {
   catalog: IBookCatalogItem[] = [];
   searchKeyword: string = '';
 
-  constructor(protected router: Router, protected bookCatalogService: BookCatalogService) {}
+  constructor(protected router: Router, protected bookCatalogService: BookCatalogService, protected stringUtil: StringUtilService) {}
 
   ngOnInit(): void {
     this.load();
@@ -55,11 +56,6 @@ export class BookCatalogComponent implements OnInit {
   }
 
   getCategoryKey(name: string): string {
-    name = name.replace(/[^a-zA-Z0-9]/g, ' ');
-    let words: string[] = name.split(' ');
-    let key: string = words.map(word => word[0].toUpperCase() + (word.length > 1 ? word.slice(1).toLocaleLowerCase() : '')).join('');
-    key = key[0].toLowerCase() + (key.length > 1 ? key.slice(1) : '');
-    console.log(key);
-    return key;
+    return this.stringUtil.toCamelCase(name);
   }
 }

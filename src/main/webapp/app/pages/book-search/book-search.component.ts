@@ -8,6 +8,8 @@ import { ICategory } from 'app/entities/category/category.model';
 import { IAuthor } from 'app/entities/author/author.model';
 import { ASC } from 'app/config/navigation.constants';
 import { ALL, AUTHOR, CATEGORY, PUBLISHER, getPluralForm } from './book-search.constants';
+import { TranslateService } from '@ngx-translate/core';
+import { StringUtilService } from 'app/core/util/string-util.service';
 
 type ICategoryWithMark = ICategory & { selected?: boolean };
 type IAuthorWithMark = IAuthor & { selected?: boolean };
@@ -41,10 +43,14 @@ export class BookSearchComponent implements OnInit {
   subjectId: number = 0;
   subjectName: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router, private bookSearchService: BookSearchService) {
-    this.labels[CATEGORY] = 'Thể loại';
-    this.labels[AUTHOR] = 'Tác giả';
-    this.labels[PUBLISHER] = 'Nhà xuất bản';
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private bookSearchService: BookSearchService,
+    private translate: TranslateService,
+    private stringUtil: StringUtilService
+  ) {
+    ALL.forEach(value => translate.get('eLibraryApp.bookSearch.filter.' + value).subscribe(label => (this.labels[value] = label)));
   }
 
   ngOnInit(): void {
@@ -52,12 +58,15 @@ export class BookSearchComponent implements OnInit {
       this.fetchFilterValues(i);
     });
     this.fetchSearchResults();
+    this.translate.onLangChange.subscribe(value => {
+      this.fetchFilterValues(this.filters.findIndex(f => f.name === CATEGORY));
+    });
   }
 
   fetchSearchResults() {
     this.route.queryParams.subscribe(params => {
       this.subjectType = '';
-      this.title = 'Kết quả tìm kiếm: ' + this.keyword;
+      this.translate.get('eLibraryApp.bookSearch.searchResult').subscribe(label => (this.title = label + this.keyword));
 
       // check if this page is book list of any subjects
       this.allowedSubjectTypes.forEach(subjectType => {
@@ -69,7 +78,11 @@ export class BookSearchComponent implements OnInit {
             .subscribe(response => this.extractBookList(response));
           this.bookSearchService.getSubject(subjectType, this.subjectId).subscribe(response => {
             this.subjectName = response.body!.name!;
-            this.title = this.labels[subjectType] + ': ' + this.subjectName;
+            if (this.subjectType === CATEGORY) {
+              this.translate
+                .get('categories.' + this.stringUtil.toCamelCase(this.subjectName))
+                .subscribe(categoryName => (this.title = this.labels[subjectType] + ': ' + categoryName));
+            } else this.title = this.labels[subjectType] + ': ' + this.subjectName;
           });
         }
       });
@@ -118,6 +131,14 @@ export class BookSearchComponent implements OnInit {
   fetchFilterValues(i: number) {
     this.bookSearchService.getSubjectList(this.filters[i].name, { page: 0, size: 100000, sort: ['name,' + ASC] }).subscribe(response => {
       this.filters[i].list = response.body!;
+      if (this.filters[i].name === CATEGORY) {
+        for (let j = 0; j < this.filters[i].list.length; j++) {
+          this.translate
+            .get('categories.' + this.stringUtil.toCamelCase(this.filters[i].list[j].name))
+            .subscribe(name => (this.filters[i].list[j].name = name));
+        }
+        this.filters[i].list.sort((c1, c2) => c1.name!.localeCompare(c2.name!));
+      }
       if (this.filters[i].queryIds.length > 0)
         this.filters[i].selectedValues = this.filters[i].list.filter(v => this.filters[i].queryIds.includes(v.id));
     });

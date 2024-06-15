@@ -1,0 +1,15 @@
+{
+  "eLibraryApp": {
+    "bookSearch": {
+      "title": "Tìm kiếm sách",
+      "search": "Tìm kiếm sách, tác giả, thể loại, nhà xuất bản...",
+      "filter": {
+        "category": "Thể loại",
+        "author": "Tác giả",
+        "publisher": "Nhà xuất bản",
+        "add": "Thêm"
+      },
+      "searchResult": "Kết quả tìm kiếm: "
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "eLibraryApp": {
+    "bookSearch": {
+      "title": "Search books",
+      "search": "Search by title, author, category or publisher...",
+      "filter": {
+        "category": "Category",
+        "author": "Author",
+        "publisher": "Publisher",
+        "add": "Add"
+      },
+      "searchResult": "Search result for: "
+    }
+  }
+}

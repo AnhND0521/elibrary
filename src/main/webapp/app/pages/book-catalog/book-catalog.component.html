@@ -1,10 +1,10 @@
 <div class="container">
-  <h2 class="mb-3" jhiTranslate="eLibraryApp.bookCatalog.home.title">Danh mục sách</h2>
+  <h2 class="mb-3" jhiTranslate="eLibraryApp.bookCatalog.title">Danh mục sách</h2>
   <div class="input-group mb-3 w-50">
     <input
       type="text"
       class="form-control"
-      [placeholder]="'eLibraryApp.bookCatalog.home.search' | translate"
+      [placeholder]="'eLibraryApp.bookCatalog.search' | translate"
       aria-describedby="button-addon2"
       [(ngModel)]="searchKeyword"
       (keyup.enter)="search()"
@@ -14,8 +14,8 @@
     </button>
   </div>
   <div class="d-flex justify-content-start mb-5">
-    <a routerLink="/categories" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.home.categories">Thể loại</a>
-    <a routerLink="/authors" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.home.authors">Tác giả</a>
+    <a routerLink="/categories" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.categories">Thể loại</a>
+    <a routerLink="/authors" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.authors">Tác giả</a>
   </div>
 
   <div *ngFor="let catalogItem of catalog" class="mb-5">

@@ -1,0 +1,7 @@
+<div class="bg-white h-100" [ngbCollapse]="isSidebarCollapsed">
+  <nav class="nav nav-pills flex-column align-items-stretch">
+    <a *ngFor="let link of links" class="nav-link py-3 fw-normal" routerLinkActive="active" [routerLink]="link.routerLink">{{
+      link.label
+    }}</a>
+  </nav>
+</div>

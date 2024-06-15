@@ -1,13 +1,18 @@
-<jhi-page-ribbon></jhi-page-ribbon>
+<!-- <jhi-page-ribbon></jhi-page-ribbon> -->
 
 <div>
   <router-outlet name="navbar"></router-outlet>
 </div>
 
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet></router-outlet>
+<div class="row align-items-stretch">
+  <div *ngIf="!shouldCollapseSidebar" class="col-auto card jh-card">
+    <jhi-sidebar></jhi-sidebar>
   </div>
-
-  <jhi-footer></jhi-footer>
+  <div class="col container-fluid">
+    <div class="card jh-card">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
+
+<jhi-footer></jhi-footer>

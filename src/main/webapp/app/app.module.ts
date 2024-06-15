@@ -31,6 +31,8 @@ import { BookSearchComponent } from './pages/book-search/book-search.component';
 import { CategoryCatalogComponent } from './pages/category-catalog/category-catalog.component';
 import { AuthorCatalogComponent } from './pages/author-catalog/author-catalog.component';
 import { BookDetailsComponent } from './pages/book-details/book-details.component';
+import { HistoryComponent } from './pages/history/history.component';
+import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 
 @NgModule({
   imports: [
@@ -64,6 +66,8 @@ import { BookDetailsComponent } from './pages/book-details/book-details.componen
     CategoryCatalogComponent,
     AuthorCatalogComponent,
     BookDetailsComponent,
+    HistoryComponent,
+    SidebarComponent,
   ],
   bootstrap: [MainComponent],
 })

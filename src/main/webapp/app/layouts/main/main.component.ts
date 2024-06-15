@@ -12,6 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 })
 export class MainComponent implements OnInit {
   private renderer: Renderer2;
+  shouldCollapseSidebar: boolean = true;
 
   constructor(
     private accountService: AccountService,
@@ -26,6 +27,11 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     // try to log in automatically
     this.accountService.identity().subscribe();
+
+    this.accountService.getAuthenticationState().subscribe(account => {
+      console.log(account);
+      this.shouldCollapseSidebar = account == null;
+    });
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

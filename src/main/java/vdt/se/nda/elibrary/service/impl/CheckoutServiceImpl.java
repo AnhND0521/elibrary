@@ -75,10 +75,17 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Override
     public CheckoutDTO update(CheckoutDTO checkoutDTO) {
         log.debug("Request to update Checkout : {}", checkoutDTO);
+
+        Checkout oldCheckout = checkoutRepository.findById(checkoutDTO.getId()).get();
+
         Checkout checkout = checkoutMapper.toEntity(checkoutDTO);
         populateRelationships(checkout);
+
+        if (!oldCheckout.getIsReturned() && checkout.getIsReturned()) handleReturn(checkout);
+
         checkout = checkoutRepository.save(checkout);
         updateCopyStatus(checkout);
+
         return checkoutMapper.toDto(checkout);
     }
 
@@ -103,6 +110,16 @@ public class CheckoutServiceImpl implements CheckoutService {
                 hold.setIsCheckedOut(true);
                 holdRepository.save(hold);
             });
+    }
+
+    private void handleReturn(Checkout checkout) {
+        bookCopyRepository.save(checkout.getCopy().status(BookCopyStatus.AVAILABLE));
+        var patron = checkout.getPatron();
+        if (patron.getStatus().equals(PatronStatus.BLOCKED) || !patron.getUser().isActivated()) {
+            patronAccountRepository.save(patron.status(PatronStatus.ACTIVE));
+            patron.getUser().setActivated(true);
+            userRepository.save(patron.getUser());
+        }
     }
 
     private void updateCopyStatus(Checkout checkout) {
@@ -143,7 +160,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             .getCurrentUserLogin()
             .map(login -> {
                 log.debug("Request to get all Checkouts of user: {}", login);
-                return checkoutRepository.findByPatronUserLoginOrderByEndTimeDesc(login, pageable).map(checkoutMapper::toDto);
+                return checkoutRepository.findByPatronUserLoginOrderByStartTimeDesc(login, pageable).map(checkoutMapper::toDto);
             })
             .orElse(Page.empty());
     }

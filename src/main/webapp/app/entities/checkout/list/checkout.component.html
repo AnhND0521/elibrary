@@ -107,11 +107,7 @@
             <span *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)" class="me-2">Còn hạn</span>
             <span *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)" class="me-2">Hết hạn</span>
             <span *ngIf="checkout.isReturned" class="me-2">Đã trả sách</span>
-            <button
-              *ngIf="!checkout.isReturned"
-              [routerLink]="['/checkout', 'new', 'from-hold', checkout.id]"
-              class="btn btn-secondary btn-sm"
-            >
+            <button *ngIf="!checkout.isReturned" class="btn btn-secondary btn-sm" (click)="markAsReturned(checkout)">
               <fa-icon [icon]="['fas', 'check']"></fa-icon>
               <span class="d-none d-md-inline">Đánh dấu đã trả</span>
             </button>

@@ -28,5 +28,5 @@ public interface CheckoutRepository extends JpaRepository<Checkout, Long> {
     @Query("select checkout from Checkout checkout where checkout.isReturned = ?1 and checkout.endTime > ?2")
     List<Checkout> findByIsReturnedAndEndTimeAfter(boolean isReturned, Instant instant);
 
-    Page<Checkout> findByPatronUserLoginOrderByEndTimeDesc(String login, Pageable pageable);
+    Page<Checkout> findByPatronUserLoginOrderByStartTimeDesc(String login, Pageable pageable);
 }

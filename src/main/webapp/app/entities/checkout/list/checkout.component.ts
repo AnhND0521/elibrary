@@ -143,4 +143,12 @@ export class CheckoutComponent implements OnInit {
       return [predicate + ',' + ascendingQueryParam];
     }
   }
+
+  protected markAsReturned(checkout: ICheckout) {
+    checkout.isReturned = true;
+    checkout.endTime = dayjs();
+    this.checkoutService.update(checkout).subscribe(response => {
+      this.loadFromBackendWithRouteInformations();
+    });
+  }
 }

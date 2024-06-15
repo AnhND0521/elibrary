@@ -9,7 +9,8 @@
         "publisher": "Nhà xuất bản",
         "add": "Thêm"
       },
-      "searchResult": "Kết quả tìm kiếm: "
+      "searchResult": "Kết quả tìm kiếm: ",
+      "notFound": "Không tìm thấy sách nào."
     }
   }
 }

@@ -1,0 +1,30 @@
+{
+  "eLibraryApp": {
+    "history": {
+      "title": "History",
+      "holdTitle": "Books reserved",
+      "checkoutTitle": "Books borrowed",
+      "hold": {
+        "title": "Title",
+        "publisher": "Publisher",
+        "startTime": "From",
+        "endTime": "Until",
+        "cancel": "Cancel",
+        "notFound": "No books reserved yet."
+      },
+      "checkout": {
+        "title": "Title",
+        "publisher": "Publisher",
+        "startTime": "From",
+        "endTime": "Until",
+        "status": "Status",
+        "statusValues": {
+          "unexpired": "Unexpired",
+          "expired": "Expired",
+          "returned": "Returned"
+        },
+        "notFound": "No books borrowed yet."
+      }
+    }
+  }
+}

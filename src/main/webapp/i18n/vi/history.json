@@ -1,0 +1,30 @@
+{
+  "eLibraryApp": {
+    "history": {
+      "title": "Lịch sử",
+      "holdTitle": "Sách đã đặt trước",
+      "checkoutTitle": "Sách đã mượn",
+      "hold": {
+        "title": "Tiêu đề",
+        "publisher": "Nhà xuất bản",
+        "startTime": "Thời gian đặt",
+        "endTime": "Thời hạn lấy sách",
+        "cancel": "Hủy",
+        "notFound": "Không có sách đặt trước."
+      },
+      "checkout": {
+        "title": "Tiêu đề",
+        "publisher": "Nhà xuất bản",
+        "startTime": "Thời gian mượn",
+        "endTime": "Thời gian kết thúc",
+        "status": "Trạng thái",
+        "statusValues": {
+          "unexpired": "Còn hạn",
+          "expired": "Hết hạn",
+          "returned": "Đã trả sách"
+        },
+        "notFound": "Không có sách đã mượn."
+      }
+    }
+  }
+}

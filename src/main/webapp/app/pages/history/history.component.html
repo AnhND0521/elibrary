@@ -1,17 +1,17 @@
 <div class="container">
-  <h2 class="mb-4">Lịch sử</h2>
+  <h2 class="mb-4" jhiTranslate="eLibraryApp.history.title">Lịch sử</h2>
 
   <jhi-alert></jhi-alert>
 
-  <h4 class="mb-3">Sách đã đặt trước ({{ holdTotalItems }})</h4>
+  <h4 class="mb-3">{{ 'eLibraryApp.history.holdTitle' | translate }} ({{ holdTotalItems }})</h4>
   <div *ngIf="holdTotalItems > 0">
     <table class="table table-hover table-striped">
       <thead class="table-dark">
         <tr>
-          <th scope="col">Tiêu đề</th>
-          <th scope="col">Nhà xuất bản</th>
-          <th scope="col">Thời gian đặt</th>
-          <th scope="col">Thời hạn lấy sách</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.hold.title">Tiêu đề</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.hold.publisher">Nhà xuất bản</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.hold.startTime">Thời gian đặt</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.hold.endTime">Thời hạn lấy sách</th>
           <th></th>
         </tr>
       </thead>
@@ -32,7 +32,7 @@
           <td>
             <button type="submit" class="btn btn-danger btn-sm" (click)="cancelHold(hold.id)">
               <fa-icon icon="times"></fa-icon>
-              <span class="d-none d-md-inline">Hủy</span>
+              <span class="d-none d-md-inline" jhiTranslate="eLibraryApp.history.hold.cancel">Hủy</span>
             </button>
           </td>
         </tr>
@@ -50,18 +50,20 @@
       ></ngb-pagination>
     </div>
   </div>
-  <div *ngIf="holdTotalItems === 0" class="alert alert-warning">Không có sách đã đặt trước.</div>
+  <div *ngIf="holdTotalItems === 0" class="alert alert-warning" jhiTranslate="eLibraryApp.history.hold.notFound">
+    Không có sách đã đặt trước.
+  </div>
 
-  <h4 class="mb-3">Sách đã mượn ({{ checkoutTotalItems }})</h4>
+  <h4 class="mb-3">{{ 'eLibraryApp.history.checkoutTitle' | translate }} ({{ checkoutTotalItems }})</h4>
   <div *ngIf="checkoutTotalItems > 0">
     <table class="table table-hover table-striped">
       <thead class="table-dark">
         <tr>
-          <th scope="col">Tiêu đề</th>
-          <th scope="col">Nhà xuất bản</th>
-          <th scope="col">Thời gian mượn</th>
-          <th scope="col">Thời gian kết thúc</th>
-          <th scope="col">Trạng thái</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.checkout.title">Tiêu đề</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.checkout.publisher">Nhà xuất bản</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.checkout.startTime">Thời gian mượn</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.checkout.endTime">Thời gian kết thúc</th>
+          <th scope="col" jhiTranslate="eLibraryApp.history.checkout.status">Trạng thái</th>
         </tr>
       </thead>
       <tbody>
@@ -82,9 +84,21 @@
           <td class="fw-normal">{{ checkout.startTime | date: 'd MMM, y, h:mm a' }}</td>
           <td class="fw-normal">{{ checkout.endTime | date: 'd MMM, y, h:mm a' }}</td>
           <td>
-            <span *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)" class="me-2">Còn hạn</span>
-            <span *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)" class="me-2">Hết hạn</span>
-            <span *ngIf="checkout.isReturned" class="me-2">Đã trả sách</span>
+            <span
+              *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)"
+              class="me-2"
+              jhiTranslate="eLibraryApp.history.checkout.statusValues.unexpired"
+              >Còn hạn</span
+            >
+            <span
+              *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)"
+              class="me-2"
+              jhiTranslate="eLibraryApp.history.checkout.statusValues.expired"
+              >Hết hạn</span
+            >
+            <span *ngIf="checkout.isReturned" class="me-2" jhiTranslate="eLibraryApp.history.checkout.statusValues.returned"
+              >Đã trả sách</span
+            >
           </td>
         </tr>
       </tbody>
@@ -101,5 +115,7 @@
       ></ngb-pagination>
     </div>
   </div>
-  <div *ngIf="checkoutTotalItems === 0" class="alert alert-warning">Không có sách đã mượn.</div>
+  <div *ngIf="checkoutTotalItems === 0" class="alert alert-warning" jhiTranslate="eLibraryApp.history.checkout.notFound">
+    Không có sách đã mượn.
+  </div>
 </div>

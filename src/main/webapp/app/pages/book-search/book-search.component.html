@@ -63,5 +63,7 @@
       ></ngb-pagination>
     </div>
   </div>
-  <div *ngIf="bookList.length === 0" class="alert alert-warning">Không tìm thấy sách nào.</div>
+  <div *ngIf="bookList.length === 0" class="alert alert-warning" jhiTranslate="eLibraryApp.bookSearch.notFound">
+    Không tìm thấy sách nào.
+  </div>
 </div>

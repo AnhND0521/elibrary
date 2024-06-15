@@ -9,7 +9,8 @@
         "publisher": "Publisher",
         "add": "Add"
       },
-      "searchResult": "Search result for: "
+      "searchResult": "Search result for: ",
+      "notFound": "No books found."
     }
   }
 }

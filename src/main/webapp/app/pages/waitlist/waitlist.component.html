@@ -1,0 +1,52 @@
+<div class="container">
+  <h2 class="mb-4">Danh sách chờ ({{ waitlist.length }})</h2>
+
+  <jhi-alert></jhi-alert>
+
+  <div *ngIf="totalItems > 0">
+    <table class="table table-hover table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Tiêu đề</th>
+          <th scope="col">Tác giả</th>
+          <th scope="col">Số bản sao có sẵn</th>
+          <th scope="col">Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of waitlist">
+          <td class="fw-semibold">
+            <a [routerLink]="['/book-details', item.book.id]">{{ item.book.title }}</a>
+          </td>
+          <td class="fw-normal">
+            {{ item.book.authors }}
+          </td>
+          <td class="fw-normal">{{ item.book.availableCopies }}</td>
+          <td class="fw-normal">
+            <span *ngIf="item.book.availableCopies > 0" class="text-info">Có sẵn</span>
+            <span *ngIf="item.book.availableCopies === 0" class="text-danger">Không có sẵn</span>
+          </td>
+          <td>
+            <button type="submit" class="btn btn-danger btn-sm" (click)="remove(item.id)">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline">Xoá</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="handlePageNavigation($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <div *ngIf="totalItems === 0" class="alert alert-warning">Không có sách đang chờ.</div>
+</div>

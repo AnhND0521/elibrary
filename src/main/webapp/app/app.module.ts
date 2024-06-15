@@ -34,6 +34,7 @@ import { BookDetailsComponent } from './pages/book-details/book-details.componen
 import { HistoryComponent } from './pages/history/history.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { HoldCancelDialogComponent } from './pages/history/hold-cancel-dialog/hold-cancel-dialog.component';
+import { WaitlistComponent } from './pages/waitlist/waitlist.component';
 
 @NgModule({
   imports: [
@@ -70,6 +71,7 @@ import { HoldCancelDialogComponent } from './pages/history/hold-cancel-dialog/ho
     HistoryComponent,
     SidebarComponent,
     HoldCancelDialogComponent,
+    WaitlistComponent,
   ],
   bootstrap: [MainComponent],
 })

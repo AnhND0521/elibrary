@@ -160,6 +160,22 @@ public class WaitlistItemResource {
     }
 
     /**
+     * {@code GET  /waitlist-items/my} : get all the waitlistItems of the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of waitlistItems in body.
+     */
+    @GetMapping("/waitlist-items/my")
+    public ResponseEntity<List<WaitlistItemDTO>> getWaitlistItemsOfCurrentUser(
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get a page of WaitlistItems");
+        Page<WaitlistItemDTO> page = waitlistItemService.findByCurrentUser(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /waitlist-items/:id} : get the "id" waitlistItem.
      *
      * @param id the id of the waitlistItemDTO to retrieve.

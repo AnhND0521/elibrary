@@ -5,6 +5,7 @@ import { CategoryCatalogComponent } from './category-catalog/category-catalog.co
 import { AuthorCatalogComponent } from './author-catalog/author-catalog.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
 import { HistoryComponent } from './history/history.component';
+import { WaitlistComponent } from './waitlist/waitlist.component';
 
 export const pageRoute: Routes = [
   {
@@ -30,5 +31,9 @@ export const pageRoute: Routes = [
   {
     path: 'history',
     component: HistoryComponent,
+  },
+  {
+    path: 'waitlist',
+    component: WaitlistComponent,
   },
 ];

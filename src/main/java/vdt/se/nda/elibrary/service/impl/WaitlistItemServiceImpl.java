@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.WaitlistItem;
 import vdt.se.nda.elibrary.repository.WaitlistItemRepository;
+import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.WaitlistItemService;
 import vdt.se.nda.elibrary.service.dto.WaitlistItemDTO;
 import vdt.se.nda.elibrary.service.mapper.WaitlistItemMapper;
@@ -90,5 +91,13 @@ public class WaitlistItemServiceImpl implements WaitlistItemService {
     public void delete(Long id) {
         log.debug("Request to delete WaitlistItem : {}", id);
         waitlistItemRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<WaitlistItemDTO> findByCurrentUser(Pageable pageable) {
+        return SecurityUtils
+            .getCurrentUserLogin()
+            .map(login -> waitlistItemRepository.findByPatronUserLogin(login, pageable).map(waitlistItemMapper::toDto))
+            .orElse(Page.empty());
     }
 }

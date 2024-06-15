@@ -6,7 +6,7 @@
         "refreshListLabel": "Tải lại",
         "createLabel": "Thêm một mục đặt trước",
         "createOrEditLabel": "Thêm mới hoặc cập nhật mục đặt trước",
-        "notFound": "Không có mục đặt trước nào."
+        "notFound": "Không có dữ liệu đặt trước."
       },
       "created": "Một mục đặt trước được tạo với định danh {{ param }}",
       "updated": "Một mục đặt trước được cập nhật với định danh {{ param }}",

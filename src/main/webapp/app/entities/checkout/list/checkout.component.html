@@ -78,8 +78,7 @@
           </th>
           <th scope="col" jhiSortBy="isReturned">
             <div class="d-flex">
-              <!-- <span jhiTranslate="eLibraryApp.checkout.isReturned">Is Returned</span> -->
-              <span>Status</span>
+              <span jhiTranslate="eLibraryApp.checkout.status">Status</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -104,12 +103,22 @@
           <td>{{ checkout.startTime | formatMediumDatetime }}</td>
           <td>{{ checkout.endTime | formatMediumDatetime }}</td>
           <td>
-            <span *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)" class="me-2">Còn hạn</span>
-            <span *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)" class="me-2">Hết hạn</span>
-            <span *ngIf="checkout.isReturned" class="me-2">Đã trả sách</span>
+            <span
+              *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)"
+              class="me-2"
+              jhiTranslate="eLibraryApp.checkout.statusValues.unexpired"
+              >Còn hạn</span
+            >
+            <span
+              *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)"
+              class="me-2"
+              jhiTranslate="eLibraryApp.checkout.statusValues.expired"
+              >Hết hạn</span
+            >
+            <span *ngIf="checkout.isReturned" class="me-2" jhiTranslate="eLibraryApp.checkout.statusValues.returned">Đã trả sách</span>
             <button *ngIf="!checkout.isReturned" class="btn btn-secondary btn-sm" (click)="markAsReturned(checkout)">
               <fa-icon [icon]="['fas', 'check']"></fa-icon>
-              <span class="d-none d-md-inline">Đánh dấu đã trả</span>
+              <span class="d-none d-md-inline" jhiTranslate="eLibraryApp.checkout.markAsReturned">Đánh dấu đã trả</span>
             </button>
           </td>
           <td class="text-end">

@@ -2,27 +2,34 @@
   "eLibraryApp": {
     "checkout": {
       "home": {
-        "title": "Checkouts",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Checkout",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Checkout",
-        "notFound": "No Checkouts found"
+        "title": "Quản lý mượn sách",
+        "refreshListLabel": "Tải lại",
+        "createLabel": "Thêm một bản ghi mượn sách",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật bản ghi mượn sách",
+        "notFound": "Không có dữ liệu mượn sách."
       },
-      "created": "Một Checkout mới được tạo với định danh {{ param }}",
-      "updated": "Một Checkout cập nhật với định danh {{ param }}",
-      "deleted": "Một Checkout đã xóa với định danh {{ param }}",
+      "created": "Một bản ghi mượn sách mới được tạo với định danh {{ param }}",
+      "updated": "Một bản ghi mượn sách được cập nhật với định danh {{ param }}",
+      "deleted": "Một bản ghi mượn sách đã bị xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Checkout {{ id }}?"
+        "question": "Bạn có chắc muốn xóa bản ghi mượn sách với định danh {{ id }}?"
       },
       "detail": {
-        "title": "Checkout"
+        "title": "Bản ghi mượn sách"
       },
       "id": "ID",
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "isReturned": "Is Returned",
-      "copy": "Copy",
-      "patron": "Patron"
+      "startTime": "Thời gian bắt đầu",
+      "endTime": "Thời gian kết thúc",
+      "isReturned": "Đã trả sách",
+      "copy": "Bản sao sách",
+      "patron": "Người mượn",
+      "status": "Trạng thái",
+      "statusValues": {
+        "unexpired": "Còn hạn",
+        "expired": "Hết hạn",
+        "returned": "Đã trả sách"
+      },
+      "markAsReturned": "Đánh dấu đã trả"
     }
   }
 }

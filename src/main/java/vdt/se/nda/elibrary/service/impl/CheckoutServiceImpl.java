@@ -2,7 +2,6 @@ package vdt.se.nda.elibrary.service.impl;
 
 import java.time.Instant;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,10 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Checkout;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
-import vdt.se.nda.elibrary.repository.BookCopyRepository;
-import vdt.se.nda.elibrary.repository.CheckoutRepository;
-import vdt.se.nda.elibrary.repository.HoldRepository;
-import vdt.se.nda.elibrary.repository.PatronAccountRepository;
+import vdt.se.nda.elibrary.domain.enumeration.PatronStatus;
+import vdt.se.nda.elibrary.repository.*;
 import vdt.se.nda.elibrary.service.CheckoutService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
 import vdt.se.nda.elibrary.service.dto.CheckoutDTO;
@@ -25,7 +22,6 @@ import vdt.se.nda.elibrary.service.mapper.CheckoutMapper;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final Logger log = LoggerFactory.getLogger(CheckoutServiceImpl.class);
@@ -38,9 +34,31 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private final PatronAccountRepository patronAccountRepository;
 
+    private final UserRepository userRepository;
+
     private final CheckoutMapper checkoutMapper;
 
     private final JobSchedulerService jobSchedulerService;
+
+    public CheckoutServiceImpl(
+        CheckoutRepository checkoutRepository,
+        HoldRepository holdRepository,
+        BookCopyRepository bookCopyRepository,
+        PatronAccountRepository patronAccountRepository,
+        UserRepository userRepository,
+        CheckoutMapper checkoutMapper,
+        JobSchedulerService jobSchedulerService
+    ) {
+        this.checkoutRepository = checkoutRepository;
+        this.holdRepository = holdRepository;
+        this.bookCopyRepository = bookCopyRepository;
+        this.patronAccountRepository = patronAccountRepository;
+        this.userRepository = userRepository;
+        this.checkoutMapper = checkoutMapper;
+        this.jobSchedulerService = jobSchedulerService;
+
+        checkoutRepository.findByIsReturnedAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
+    }
 
     @Override
     public CheckoutDTO save(CheckoutDTO checkoutDTO) {
@@ -91,7 +109,8 @@ public class CheckoutServiceImpl implements CheckoutService {
             checkout.getCopy().setStatus(BookCopyStatus.BORROWED);
             bookCopyRepository.save(checkout.getCopy());
 
-            jobSchedulerService.scheduleHandleCheckoutExpirationJob(checkout);
+            log.info("Scheduling job on expiration of checkout: {}", checkout);
+            scheduleJobOnExpiration(checkout);
         }
     }
 
@@ -134,5 +153,21 @@ public class CheckoutServiceImpl implements CheckoutService {
     public void delete(Long id) {
         log.debug("Request to delete Checkout : {}", id);
         checkoutRepository.deleteById(id);
+    }
+
+    private void scheduleJobOnExpiration(Checkout checkout) {
+        jobSchedulerService.scheduleJob("checkout-expiration", checkout.getId(), checkout.getEndTime(), () -> handleExpiration(checkout));
+    }
+
+    public void handleExpiration(Checkout checkout) {
+        log.debug("Checkout expired: " + checkout.getId());
+
+        var patron = checkout.getPatron().status(PatronStatus.BLOCKED);
+        patronAccountRepository.save(patron);
+
+        var user = patron.getUser();
+        user.setActivated(false);
+        userRepository.save(user);
+        // TODO: send notification mail
     }
 }

@@ -2,13 +2,13 @@ package vdt.se.nda.elibrary.service.impl;
 
 import java.time.Instant;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vdt.se.nda.elibrary.domain.BookCopy;
 import vdt.se.nda.elibrary.domain.Hold;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
@@ -23,7 +23,6 @@ import vdt.se.nda.elibrary.service.mapper.HoldMapper;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class HoldServiceImpl implements HoldService {
 
     private final Logger log = LoggerFactory.getLogger(HoldServiceImpl.class);
@@ -35,6 +34,20 @@ public class HoldServiceImpl implements HoldService {
     private final BookCopyRepository bookCopyRepository;
 
     private final JobSchedulerService jobSchedulerService;
+
+    public HoldServiceImpl(
+        HoldRepository holdRepository,
+        HoldMapper holdMapper,
+        BookCopyRepository bookCopyRepository,
+        JobSchedulerService jobSchedulerService
+    ) {
+        this.holdRepository = holdRepository;
+        this.holdMapper = holdMapper;
+        this.bookCopyRepository = bookCopyRepository;
+        this.jobSchedulerService = jobSchedulerService;
+
+        holdRepository.findByIsCheckedOutAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
+    }
 
     @Override
     public HoldDTO save(HoldDTO holdDTO) {
@@ -63,7 +76,7 @@ public class HoldServiceImpl implements HoldService {
             hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
             bookCopyRepository.save(hold.getCopy());
 
-            jobSchedulerService.scheduleHandleHoldExpirationJob(hold);
+            scheduleJobOnExpiration(hold);
         }
     }
 
@@ -106,5 +119,16 @@ public class HoldServiceImpl implements HoldService {
     public void delete(Long id) {
         log.debug("Request to delete Hold : {}", id);
         holdRepository.deleteById(id);
+    }
+
+    public void handleExpiration(Hold hold) {
+        log.debug("Hold expired: " + hold.getId());
+
+        BookCopy bookCopy = hold.getCopy().status(BookCopyStatus.AVAILABLE);
+        bookCopyRepository.save(bookCopy);
+    }
+
+    private void scheduleJobOnExpiration(Hold hold) {
+        jobSchedulerService.scheduleJob("hold-expiration", hold.getId(), hold.getEndTime(), () -> handleExpiration(hold));
     }
 }

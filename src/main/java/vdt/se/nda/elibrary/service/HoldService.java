@@ -3,6 +3,7 @@ package vdt.se.nda.elibrary.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vdt.se.nda.elibrary.domain.Hold;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
 
 /**

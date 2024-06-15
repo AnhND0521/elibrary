@@ -163,7 +163,7 @@ public class HoldResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of holds in body.
      */
     @GetMapping("/holds/my/current")
-    public ResponseEntity<List<HoldDTO>> getAllHolds(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<HoldDTO>> getHoldsOfCurrentUser(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Holds");
         Page<HoldDTO> page = holdService.findCurrent(pageable);
 

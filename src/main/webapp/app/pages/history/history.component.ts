@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { IHold } from 'app/entities/hold/hold.model';
 import { HistoryService } from './history.service';
-import { map } from 'jquery';
 import { BookCopyService } from 'app/entities/book-copy/service/book-copy.service';
 import { BookService } from 'app/entities/book/service/book.service';
 import { TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import dayjs from 'dayjs/esm';
-import { pageRoute } from '../page.route';
+
+const MAX_STRING_LENGTH = 30;
 
 @Component({
   selector: 'jhi-history',
@@ -19,10 +18,16 @@ export class HistoryComponent implements OnInit {
   holdItemsPerPage: number = 10;
   holdTotalItems: number = 0;
 
+  checkouts: any[] = [];
+  checkoutPage: number = 1;
+  checkoutItemsPerPage: number = 10;
+  checkoutTotalItems: number = 0;
+
   constructor(protected historyService: HistoryService, protected bookCopyService: BookCopyService, protected bookService: BookService) {}
 
   ngOnInit(): void {
     this.fetchHolds();
+    this.fetchCheckouts();
   }
 
   fetchHolds() {
@@ -45,5 +50,39 @@ export class HistoryComponent implements OnInit {
   handleHoldPageChange(page: number) {
     this.holdPage = page;
     this.fetchHolds();
+  }
+
+  fetchCheckouts() {
+    this.historyService.getCheckouts({ page: this.checkoutPage - 1, size: this.checkoutItemsPerPage }).subscribe(response => {
+      this.checkouts = response.body!;
+      this.checkoutTotalItems = Number(response.headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+      for (let i = 0; i < this.checkouts.length; i++) {
+        this.bookCopyService.find(this.checkouts[i].copy.id).subscribe(response => {
+          this.checkouts[i].copy = response.body!;
+          this.bookService.find(this.checkouts[i].copy.book.id).subscribe(response => {
+            const book: any = response.body!;
+            book.authors = book.authors.map((author: any) => author.name).join(', ');
+            this.checkouts[i].copy.book = book;
+          });
+        });
+      }
+    });
+  }
+
+  handleCheckoutPageChange(page: number) {
+    this.checkoutPage = page;
+    this.fetchCheckouts();
+  }
+
+  isAfterCurrent(time: any) {
+    return dayjs(time).isAfter(dayjs());
+  }
+
+  trimmable(s: string, limit: number = MAX_STRING_LENGTH): boolean {
+    return s.length > limit;
+  }
+
+  trim(s: string, limit: number = MAX_STRING_LENGTH): string {
+    return this.trimmable(s, limit) ? s.slice(0, limit) + '...' : s;
   }
 }

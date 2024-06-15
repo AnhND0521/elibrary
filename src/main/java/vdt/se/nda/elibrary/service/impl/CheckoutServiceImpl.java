@@ -12,6 +12,7 @@ import vdt.se.nda.elibrary.domain.Checkout;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.domain.enumeration.PatronStatus;
 import vdt.se.nda.elibrary.repository.*;
+import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.CheckoutService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
 import vdt.se.nda.elibrary.service.dto.CheckoutDTO;
@@ -134,6 +135,17 @@ public class CheckoutServiceImpl implements CheckoutService {
     public Page<CheckoutDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Checkouts");
         return checkoutRepository.findAll(pageable).map(checkoutMapper::toDto);
+    }
+
+    @Override
+    public Page<CheckoutDTO> findByCurrentUser(Pageable pageable) {
+        return SecurityUtils
+            .getCurrentUserLogin()
+            .map(login -> {
+                log.debug("Request to get all Checkouts of user: {}", login);
+                return checkoutRepository.findByPatronUserLoginOrderByEndTimeDesc(login, pageable).map(checkoutMapper::toDto);
+            })
+            .orElse(Page.empty());
     }
 
     @Override

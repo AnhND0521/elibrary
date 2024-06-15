@@ -23,6 +23,6 @@ export class BookDisplayComponent implements OnInit {
   }
 
   trim(s: string): string {
-    return this.trimmable(s) ? s.slice(0, 30) + '...' : s;
+    return this.trimmable(s) ? s.slice(0, MAX_STRING_LENGTH) + '...' : s;
   }
 }

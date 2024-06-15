@@ -1,6 +1,5 @@
 package vdt.se.nda.elibrary.repository;
 
-import com.carrotsearch.hppc.ByteArrayList;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -28,4 +27,6 @@ public interface CheckoutRepository extends JpaRepository<Checkout, Long> {
 
     @Query("select checkout from Checkout checkout where checkout.isReturned = ?1 and checkout.endTime > ?2")
     List<Checkout> findByIsReturnedAndEndTimeAfter(boolean isReturned, Instant instant);
+
+    Page<Checkout> findByPatronUserLoginOrderByEndTimeDesc(String login, Pageable pageable);
 }

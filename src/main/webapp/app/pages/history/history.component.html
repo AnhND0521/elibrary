@@ -6,7 +6,6 @@
       <thead class="table-dark">
         <tr>
           <th scope="col">Tiêu đề</th>
-          <th scope="col">Tác giả</th>
           <th scope="col">Nhà xuất bản</th>
           <th scope="col">Thời gian đặt</th>
           <th scope="col">Thời hạn lấy sách</th>
@@ -15,9 +14,16 @@
       </thead>
       <tbody>
         <tr *ngFor="let hold of holds">
-          <td class="fw-semibold">{{ hold.copy?.title }}</td>
-          <td class="fw-normal">{{ hold.copy?.book?.authors }}</td>
-          <td class="fw-normal">{{ hold.copy?.publisher.name }}</td>
+          <td class="fw-semibold">
+            <a [ngbTooltip]="trimmable(hold.copy?.title) ? hold.copy?.title : ''" [routerLink]="['/book-details', hold.copy?.book?.id]">{{
+              trim(hold.copy?.title)
+            }}</a>
+          </td>
+          <td class="fw-normal">
+            <span [ngbTooltip]="trimmable(hold.copy?.publisher?.name) ? hold.copy?.publisher?.name : ''">{{
+              trim(hold.copy?.publisher?.name)
+            }}</span>
+          </td>
           <td class="fw-normal">{{ hold.startTime | date: 'd MMM, y, h:mm a' }}</td>
           <td class="fw-normal">{{ hold.endTime | date: 'd MMM, y, h:mm a' }}</td>
           <td>
@@ -37,9 +43,60 @@
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="(null)"
+        (pageChange)="handleHoldPageChange($event)"
       ></ngb-pagination>
     </div>
   </div>
-  <div *ngIf="holdTotalItems === 0" class="alert alert-warning">Không có sách đặt trước.</div>
+  <div *ngIf="holdTotalItems === 0" class="alert alert-warning">Không có sách đã đặt trước.</div>
+
+  <h4 class="mb-3">Sách đã mượn ({{ checkoutTotalItems }})</h4>
+  <div *ngIf="checkoutTotalItems > 0">
+    <table class="table table-hover table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Tiêu đề</th>
+          <th scope="col">Nhà xuất bản</th>
+          <th scope="col">Thời gian mượn</th>
+          <th scope="col">Thời hạn trả sách</th>
+          <th scope="col">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let checkout of checkouts">
+          <td class="fw-semibold">
+            <a
+              [ngbTooltip]="trimmable(checkout.copy?.title) ? checkout.copy?.title : ''"
+              [routerLink]="['/book-details', checkout.copy?.book?.id]"
+            >
+              {{ trim(checkout.copy?.title) }}
+            </a>
+          </td>
+          <td class="fw-normal">
+            <span [ngbTooltip]="trimmable(checkout.copy?.publisher?.name) ? checkout.copy?.publisher?.name : ''">{{
+              trim(checkout.copy?.publisher?.name)
+            }}</span>
+          </td>
+          <td class="fw-normal">{{ checkout.startTime | date: 'd MMM, y, h:mm a' }}</td>
+          <td class="fw-normal">{{ checkout.endTime | date: 'd MMM, y, h:mm a' }}</td>
+          <td>
+            <span *ngIf="!checkout.isReturned && isAfterCurrent(checkout.endTime!)" class="me-2">Còn hạn</span>
+            <span *ngIf="!checkout.isReturned && !isAfterCurrent(checkout.endTime!)" class="me-2">Hết hạn</span>
+            <span *ngIf="checkout.isReturned" class="me-2">Đã trả sách</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="checkoutTotalItems"
+        [page]="checkoutPage"
+        [pageSize]="checkoutItemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="handleCheckoutPageChange($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <div *ngIf="checkoutTotalItems === 0" class="alert alert-warning">Không có sách đã mượn.</div>
 </div>

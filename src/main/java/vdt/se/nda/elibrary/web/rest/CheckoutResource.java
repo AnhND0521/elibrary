@@ -156,6 +156,21 @@ public class CheckoutResource {
     }
 
     /**
+     * {@code GET  /checkouts/my} : get all the checkouts of the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of checkouts in body.
+     */
+    @GetMapping("/checkouts/my")
+    public ResponseEntity<List<CheckoutDTO>> getCheckoutsOfCurrentUser(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Checkouts");
+        Page<CheckoutDTO> page = checkoutService.findByCurrentUser(pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /checkouts/:id} : get the "id" checkout.
      *
      * @param id the id of the checkoutDTO to retrieve.

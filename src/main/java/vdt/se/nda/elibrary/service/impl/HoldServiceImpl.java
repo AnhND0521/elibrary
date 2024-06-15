@@ -13,6 +13,7 @@ import vdt.se.nda.elibrary.domain.Hold;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.HoldRepository;
+import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.HoldService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
@@ -100,6 +101,17 @@ public class HoldServiceImpl implements HoldService {
     public Page<HoldDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Holds");
         return holdRepository.findAll(pageable).map(holdMapper::toDto);
+    }
+
+    @Override
+    public Page<HoldDTO> findCurrent(Pageable pageable) {
+        return SecurityUtils
+            .getCurrentUserLogin()
+            .map(login -> {
+                log.debug("Request to get current Holds of user: {}", login);
+                return holdRepository.findByPatronUserLoginAndEndTimeAfter(login, Instant.now(), pageable).map(holdMapper::toDto);
+            })
+            .orElse(Page.empty());
     }
 
     @Override

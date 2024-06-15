@@ -41,4 +41,12 @@ public interface HoldRepository extends JpaRepository<Hold, Long> {
         boolean isCheckedOut,
         Instant instant
     );
+
+    @Query(
+        "select hold from Hold hold " +
+        "left join hold.patron patron " +
+        "left join patron.user user " +
+        "where user.login = ?1 and hold.endTime > ?2"
+    )
+    Page<Hold> findByPatronUserLoginAndEndTimeAfter(String login, Instant instant, Pageable pageable);
 }

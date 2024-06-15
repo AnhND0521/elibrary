@@ -19,6 +19,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vdt.se.nda.elibrary.repository.HoldRepository;
+import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.HoldService;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
 import vdt.se.nda.elibrary.web.rest.errors.BadRequestAlertException;
@@ -150,6 +151,21 @@ public class HoldResource {
         Page<HoldDTO> page;
         if (keyword == null || keyword.isEmpty()) page = holdService.findAll(pageable); else page =
             holdService.findByKeyword(keyword, pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /holds/my/current} : get all current holds of the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of holds in body.
+     */
+    @GetMapping("/holds/my/current")
+    public ResponseEntity<List<HoldDTO>> getAllHolds(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Holds");
+        Page<HoldDTO> page = holdService.findCurrent(pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

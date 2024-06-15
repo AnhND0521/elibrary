@@ -43,6 +43,14 @@ public interface HoldService {
     Page<HoldDTO> findAll(Pageable pageable);
 
     /**
+     * Get all current holds of the current user.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<HoldDTO> findCurrent(Pageable pageable);
+
+    /**
      * Get holds by keyword matching hold id, patron id or book copy id.
      *
      * @param keyword the keyword.

@@ -1,1 +1,45 @@
-<p>history works!</p>
+<div class="container">
+  <h2 class="mb-4">Lịch sử</h2>
+  <h4 class="mb-3">Sách đã đặt trước ({{ holdTotalItems }})</h4>
+  <div *ngIf="holdTotalItems > 0">
+    <table class="table table-hover table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Tiêu đề</th>
+          <th scope="col">Tác giả</th>
+          <th scope="col">Nhà xuất bản</th>
+          <th scope="col">Thời gian đặt</th>
+          <th scope="col">Thời hạn lấy sách</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hold of holds">
+          <td class="fw-semibold">{{ hold.copy?.title }}</td>
+          <td class="fw-normal">{{ hold.copy?.book?.authors }}</td>
+          <td class="fw-normal">{{ hold.copy?.publisher.name }}</td>
+          <td class="fw-normal">{{ hold.startTime | date: 'd MMM, y, h:mm a' }}</td>
+          <td class="fw-normal">{{ hold.endTime | date: 'd MMM, y, h:mm a' }}</td>
+          <td>
+            <button type="submit" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline">Hủy</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="holdTotalItems"
+        [page]="holdPage"
+        [pageSize]="holdItemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="(null)"
+      ></ngb-pagination>
+    </div>
+  </div>
+  <div *ngIf="holdTotalItems === 0" class="alert alert-warning">Không có sách đặt trước.</div>
+</div>

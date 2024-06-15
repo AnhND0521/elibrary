@@ -53,8 +53,12 @@
         </div>
       </div>
       <div class="row w-100 mt-3" style="padding-left: 12px">
-        <button *ngIf="avalableCopies.length > 0" class="btn btn-primary col-md-3 col-10 text-white">Mượn</button>
-        <button *ngIf="avalableCopies.length === 0" class="btn btn-secondary col-md-3 col-10 text-white">Thêm vào hàng đợi</button>
+        <button *ngIf="avalableCopies.length > 0" class="btn btn-primary col-md-3 col-10 text-white" (click)="requestHoldAny()">
+          Mượn
+        </button>
+        <button *ngIf="avalableCopies.length === 0" class="btn btn-secondary col-md-3 col-10 text-white" (click)="addToWaitlist()">
+          Thêm vào hàng đợi
+        </button>
       </div>
     </div>
 

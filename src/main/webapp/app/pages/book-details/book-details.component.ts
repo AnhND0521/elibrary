@@ -11,6 +11,8 @@ import dayjs from 'dayjs/esm';
 import { HoldService } from 'app/entities/hold/service/hold.service';
 import { Location } from '@angular/common';
 import { Duration } from 'dayjs/esm/plugin/duration';
+import { NewWaitlistItem } from 'app/entities/waitlist-item/waitlist-item.model';
+import { WaitlistItemService } from 'app/entities/waitlist-item/service/waitlist-item.service';
 
 type TimeUnit = 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years';
 
@@ -43,6 +45,7 @@ export class BookDetailsComponent implements OnInit {
     protected bookDetailsService: BookDetailsService,
     protected patronAccountService: PatronAccountService,
     protected holdService: HoldService,
+    protected waitlistItemService: WaitlistItemService,
     protected location: Location
   ) {}
 
@@ -95,27 +98,56 @@ export class BookDetailsComponent implements OnInit {
     this.updatePage();
   }
 
-  requestHold(copy: IBookCopy) {
-    if (window.confirm('Bạn có xác nhận mượn cuốn sách này?')) {
-      this.patronAccountService.self().subscribe(patron => {
-        const hold: NewHold = {
-          id: null,
-          patron: patron,
-          copy: copy,
-          startTime: dayjs(),
-          endTime: dayjs().add(this.holdDuration),
-          isCheckedOut: false,
-        };
-        this.holdService.create(hold).subscribe(response => {
-          window.alert(
-            `Cuốn sách sẽ được giữ cho bạn trong vòng ${this.holdTimeValue} ${this.formatTimeUnit(
-              this.holdTimeUnit
-            )}. Vui lòng đến thư viện lấy sách trong thời gian này.`
-          );
-          this.fetchBookCopies();
-        });
+  requestHold(copy: IBookCopy, confirmMessage?: string) {
+    if (window.confirm(confirmMessage ?? 'Bạn có xác nhận mượn cuốn sách này?')) {
+      this.patronAccountService.self().subscribe({
+        next: patron => {
+          const hold: NewHold = {
+            id: null,
+            patron: patron,
+            copy: copy,
+            startTime: dayjs(),
+            endTime: dayjs().add(this.holdDuration),
+            isCheckedOut: false,
+          };
+          this.holdService.create(hold).subscribe(response => {
+            window.alert(
+              `Cuốn sách sẽ được giữ cho bạn trong vòng ${this.holdTimeValue} ${this.formatTimeUnit(
+                this.holdTimeUnit
+              )}. Vui lòng đến thư viện lấy sách trong thời gian này.`
+            );
+            this.fetchBookCopies();
+          });
+        },
+        error: err => {
+          window.alert('Vui lòng đăng nhập bằng tài khoản bạn đọc!');
+        },
       });
     }
+  }
+
+  requestHoldAny() {
+    const copy = this.avalableCopies.find(copy => copy);
+    if (copy) {
+      this.requestHold(copy, 'Bạn có chắc muốn mượn một bản sao bất kỳ của cuốn sách này?');
+    }
+  }
+
+  addToWaitlist() {
+    this.patronAccountService.self().subscribe({
+      next: data => {
+        const item: NewWaitlistItem = {
+          id: null,
+          timestamp: dayjs(),
+          patron: data,
+          book: this.book,
+        };
+        this.waitlistItemService.create(item).subscribe(response => window.alert('Đã thêm sách vào danh sách chờ!'));
+      },
+      error: err => {
+        window.alert('Vui lòng đăng nhập bằng tài khoản bạn đọc!');
+      },
+    });
   }
 
   formatTimeUnit(unit: TimeUnit) {

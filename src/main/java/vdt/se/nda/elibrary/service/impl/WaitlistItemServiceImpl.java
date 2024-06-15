@@ -34,7 +34,13 @@ public class WaitlistItemServiceImpl implements WaitlistItemService {
     @Override
     public WaitlistItemDTO save(WaitlistItemDTO waitlistItemDTO) {
         log.debug("Request to save WaitlistItem : {}", waitlistItemDTO);
-        WaitlistItem waitlistItem = waitlistItemMapper.toEntity(waitlistItemDTO);
+
+        WaitlistItem waitlistItem = waitlistItemRepository
+            .findByPatronCardNumberAndBookId(waitlistItemDTO.getPatron().getCardNumber(), waitlistItemDTO.getBook().getId())
+            .orElse(null);
+        if (waitlistItem != null) return waitlistItemMapper.toDto(waitlistItem);
+
+        waitlistItem = waitlistItemMapper.toEntity(waitlistItemDTO);
         waitlistItem = waitlistItemRepository.save(waitlistItem);
         return waitlistItemMapper.toDto(waitlistItem);
     }

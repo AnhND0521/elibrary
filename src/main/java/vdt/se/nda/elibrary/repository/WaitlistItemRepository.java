@@ -37,4 +37,6 @@ public interface WaitlistItemRepository extends JpaRepository<WaitlistItem, Long
 
     @Query("select waitlistItem from WaitlistItem waitlistItem left join fetch waitlistItem.book where waitlistItem.id =:id")
     Optional<WaitlistItem> findOneWithToOneRelationships(@Param("id") Long id);
+
+    Optional<WaitlistItem> findByPatronCardNumberAndBookId(String patronCardNumber, Long bookId);
 }

@@ -9,6 +9,8 @@
       {{ trim(book.title!) }}
     </h5>
     <p class="card-text mb-3" ngbTooltip="{{ trimmable(authorsString) ? authorsString : '' }}">{{ trim(authorsString) }}</p>
-    <a [routerLink]="['/book-details', book.id]" class="btn btn-primary mt-auto text-white">Chi tiết</a>
+    <a [routerLink]="['/book-details', book.id]" class="btn btn-primary mt-auto text-white" jhiTranslate="eLibraryApp.bookDisplay.details"
+      >Chi tiết</a
+    >
   </div>
 </div>

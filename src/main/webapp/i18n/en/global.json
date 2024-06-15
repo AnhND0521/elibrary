@@ -157,5 +157,15 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "This is your footer",
+  "categories": {
+    "literature": "Literature",
+    "romance": "Romance",
+    "fantasy": "Fantasy",
+    "thriller": "Thriller",
+    "scienceFiction": "Science Fiction",
+    "horror": "Horror",
+    "humor": "Humor",
+    "shortStories": "Short Stories"
+  }
 }

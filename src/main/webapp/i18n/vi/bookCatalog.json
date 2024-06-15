@@ -1,0 +1,13 @@
+{
+  "eLibraryApp": {
+    "bookCatalog": {
+      "home": {
+        "title": "Danh mục sách",
+        "search": "Tìm kiếm",
+        "categories": "Thể loại",
+        "authors": "Tác giả"
+      },
+      "viewAll": "Xem tất cả"
+    }
+  }
+}

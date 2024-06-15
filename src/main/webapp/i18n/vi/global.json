@@ -154,5 +154,15 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Đây là chân trang của bạn"
+  "footer": "Đây là chân trang của bạn",
+  "categories": {
+    "literature": "Văn học",
+    "romance": "Lãng mạn",
+    "fantasy": "Huyễn tưởng",
+    "thriller": "Ly kỳ",
+    "scienceFiction": "Khoa học viễn tưởng",
+    "horror": "Kinh dị",
+    "humor": "Hài hước",
+    "shortStories": "Truyện ngắn"
+  }
 }

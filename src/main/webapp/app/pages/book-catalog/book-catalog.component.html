@@ -1,10 +1,10 @@
 <div class="container">
-  <h2 class="mb-3">Danh mục sách</h2>
+  <h2 class="mb-3" jhiTranslate="eLibraryApp.bookCatalog.home.title">Danh mục sách</h2>
   <div class="input-group mb-3 w-50">
     <input
       type="text"
       class="form-control"
-      placeholder="Tìm kiếm"
+      [placeholder]="'eLibraryApp.bookCatalog.home.search' | translate"
       aria-describedby="button-addon2"
       [(ngModel)]="searchKeyword"
       (keyup.enter)="search()"
@@ -14,14 +14,18 @@
     </button>
   </div>
   <div class="d-flex justify-content-start mb-5">
-    <a routerLink="/categories" class="me-4">Thể loại</a>
-    <a routerLink="/authors" class="me-4">Tác giả</a>
+    <a routerLink="/categories" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.home.categories">Thể loại</a>
+    <a routerLink="/authors" class="me-4" jhiTranslate="eLibraryApp.bookCatalog.home.authors">Tác giả</a>
   </div>
 
   <div *ngFor="let catalogItem of catalog" class="mb-5">
     <div class="d-flex justify-content-start align-items-center mb-3">
-      <h4 class="fw-semibold mb-0 me-4">{{ catalogItem.categoryName }}</h4>
-      <a href="#">Xem tất cả</a>
+      <h4 class="fw-semibold mb-0 me-4" [jhiTranslate]="'categories.' + getCategoryKey(catalogItem.categoryName)">
+        {{ catalogItem.categoryName }}
+      </h4>
+      <a [routerLink]="'/search'" [queryParams]="{ category: catalogItem.categoryId }" jhiTranslate="eLibraryApp.bookCatalog.viewAll"
+        >Xem tất cả</a
+      >
     </div>
     <ngb-carousel class="carousel carousel-dark py-2" [showNavigationIndicators]="false">
       <ng-template *ngFor="let slide of catalogItem.content" ngbSlide>

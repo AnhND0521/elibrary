@@ -53,4 +53,13 @@ export class BookCatalogComponent implements OnInit {
   search() {
     this.router.navigateByUrl('/search?q=' + this.searchKeyword.trim());
   }
+
+  getCategoryKey(name: string): string {
+    name = name.replace(/[^a-zA-Z0-9]/g, ' ');
+    let words: string[] = name.split(' ');
+    let key: string = words.map(word => word[0].toUpperCase() + (word.length > 1 ? word.slice(1).toLocaleLowerCase() : '')).join('');
+    key = key[0].toLowerCase() + (key.length > 1 ? key.slice(1) : '');
+    console.log(key);
+    return key;
+  }
 }

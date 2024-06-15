@@ -1,0 +1,13 @@
+{
+  "eLibraryApp": {
+    "bookCatalog": {
+      "home": {
+        "title": "Book Catalog",
+        "search": "Search",
+        "categories": "Categories",
+        "authors": "Authors"
+      },
+      "viewAll": "View all"
+    }
+  }
+}

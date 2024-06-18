@@ -11,12 +11,22 @@
       <span th:text="#{email.holdConfirmation.text1}">We received your hold request on book copy:</span>
       <i th:text="${bookCopy.title}">Book title</i>
     </p>
-    <p th:text="#{email.holdConfirmation.text2}">
+    <p th:text="#{email.holdConfirmation.text2(${holdDurationDays})}">
       The book will be reserved for you in 3 days. Please check-out the book at the library in this time. If you fail to check-out on time,
       the reservation will be cancelled.
     </p>
+    <div>
+      <p><b th:text="#{email.holdConfirmation.field1}">Book title:</b> <span th:text="${bookCopy.title}"></span></p>
+      <p><b th:text="#{email.holdConfirmation.field2}">Publisher:</b> <span th:text="${publisher}"></span></p>
+      <p><b th:text="#{email.holdConfirmation.field3}">Hold start time:</b> <span th:text="${startTime}"></span></p>
+      <p><b th:text="#{email.holdConfirmation.field4}">Hold end time:</b> <span th:text="${endTime}"></span></p>
+    </div>
+    <p th:text="#{email.holdConfirmation.text3}">You can view your history of holds and checkouts here:</p>
     <p>
-      <span th:text="#{email.holdConfirmation.text3}">Regards, </span>
+      <a th:with="url=(@{|${baseUrl}/history|})" th:href="${url}" th:text="${url}">History link</a>
+    </p>
+    <p>
+      <span th:text="#{email.holdConfirmation.text4}">Regards, </span>
       <br />
       <em th:text="#{email.signature}">JHipster.</em>
     </p>

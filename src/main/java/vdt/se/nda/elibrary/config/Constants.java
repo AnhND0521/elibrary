@@ -11,5 +11,7 @@ public final class Constants {
     public static final String SYSTEM = "system";
     public static final String DEFAULT_LANGUAGE = "vi";
 
+    public static final int DEFAULT_HOLD_DURATION_DAYS = 3;
+
     private Constants() {}
 }

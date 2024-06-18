@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.BookCopy;
 import vdt.se.nda.elibrary.domain.Hold;
+import vdt.se.nda.elibrary.domain.WaitlistItem;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.HoldRepository;
+import vdt.se.nda.elibrary.repository.UserRepository;
+import vdt.se.nda.elibrary.repository.WaitlistItemRepository;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.HoldService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
+import vdt.se.nda.elibrary.service.MailService;
 import vdt.se.nda.elibrary.service.NotificationService;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
 import vdt.se.nda.elibrary.service.mapper.HoldMapper;
@@ -39,6 +43,12 @@ public class HoldServiceImpl implements HoldService {
 
     private final NotificationService notificationService;
 
+    private final MailService mailService;
+
+    private final UserRepository userRepository;
+
+    private final WaitlistItemRepository waitlistItemRepository;
+
     private static final String HOLD_EXPIRATION = "hold-expiration";
 
     public HoldServiceImpl(
@@ -46,13 +56,19 @@ public class HoldServiceImpl implements HoldService {
         HoldMapper holdMapper,
         BookCopyRepository bookCopyRepository,
         JobSchedulerService jobSchedulerService,
-        NotificationService notificationService
+        NotificationService notificationService,
+        MailService mailService,
+        UserRepository userRepository,
+        WaitlistItemRepository waitlistItemRepository
     ) {
         this.holdRepository = holdRepository;
         this.holdMapper = holdMapper;
         this.bookCopyRepository = bookCopyRepository;
         this.jobSchedulerService = jobSchedulerService;
         this.notificationService = notificationService;
+        this.mailService = mailService;
+        this.userRepository = userRepository;
+        this.waitlistItemRepository = waitlistItemRepository;
 
         holdRepository.findByIsCheckedOutAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
     }
@@ -61,9 +77,11 @@ public class HoldServiceImpl implements HoldService {
     public HoldDTO save(HoldDTO holdDTO) {
         log.debug("Request to save Hold : {}", holdDTO);
         Hold hold = holdMapper.toEntity(holdDTO);
-        hold = holdRepository.save(hold);
+        holdRepository.save(hold);
 
         updateCopyStatus(hold);
+        sendHoldConfirmation(hold);
+        removeWaitlistItem(hold);
 
         return holdMapper.toDto(hold);
     }
@@ -83,8 +101,22 @@ public class HoldServiceImpl implements HoldService {
         if (!hold.getIsCheckedOut() && hold.getEndTime().isAfter(Instant.now())) {
             hold.getCopy().setStatus(BookCopyStatus.ON_HOLD);
             bookCopyRepository.save(hold.getCopy());
-
             scheduleJobOnExpiration(hold);
+        }
+    }
+
+    private void sendHoldConfirmation(Hold hold) {
+        if (!hold.getIsCheckedOut() && hold.getEndTime().isAfter(Instant.now())) {
+            hold.getPatron().setUser(userRepository.findOneByLogin(hold.getPatron().getUser().getLogin()).get());
+            mailService.sendHoldConfirmationEmail(hold);
+        }
+    }
+
+    private void removeWaitlistItem(Hold hold) {
+        if (!hold.getIsCheckedOut() && hold.getEndTime().isAfter(Instant.now())) {
+            waitlistItemRepository
+                .findByPatronCardNumberAndBookId(hold.getPatron().getCardNumber(), hold.getCopy().getBook().getId())
+                .ifPresent(waitlistItemRepository::delete);
         }
     }
 

@@ -93,9 +93,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void notifyBookAvailable(Book book) {
         if (bookCopyRepository.countByBookIdAndStatus(book.getId(), BookCopyStatus.AVAILABLE) == 1) {
-            waitlistItemRepository
-                .findByBookId(book.getId())
-                .forEach(waitlistItem -> mailService.sendBookAvailableMail(waitlistItem.getPatron().getUser(), waitlistItem.getBook()));
+            waitlistItemRepository.findByBookId(book.getId()).forEach(mailService::sendBookAvailableMail);
         }
     }
 }

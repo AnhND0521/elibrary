@@ -1,6 +1,8 @@
 package vdt.se.nda.elibrary.service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -17,9 +19,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import tech.jhipster.config.JHipsterProperties;
-import vdt.se.nda.elibrary.domain.Book;
-import vdt.se.nda.elibrary.domain.Notification;
-import vdt.se.nda.elibrary.domain.User;
+import vdt.se.nda.elibrary.config.Constants;
+import vdt.se.nda.elibrary.domain.*;
 
 /**
  * Service for sending emails.
@@ -133,10 +134,36 @@ public class MailService {
     }
 
     @Async
-    public void sendBookAvailableMail(User user, Book book) {
+    public void sendBookAvailableMail(WaitlistItem waitlistItem) {
+        User user = waitlistItem.getPatron().getUser();
         log.debug("Sending book available notification email to '{}'", user.getEmail());
+        log.debug("User: {}", user);
+        log.debug("Lang key: {}", user.getLangKey());
+
         Map<String, Object> variables = new HashMap<>();
-        variables.put("book", book);
+        variables.put("book", waitlistItem.getBook());
         sendEmailFromTemplate(user, "mail/bookAvailableEmail", "email.bookAvailable.title", variables);
+    }
+
+    @Async
+    public void sendHoldConfirmationEmail(Hold hold) {
+        User user = hold.getPatron().getUser();
+        log.debug("Sending book available notification email to '{}'", user.getEmail());
+        log.debug("User: {}", user);
+        log.debug("Lang key: {}", user.getLangKey());
+
+        BookCopy copy = hold.getCopy();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm")
+            .withLocale(Locale.forLanguageTag(user.getLangKey()))
+            .withZone(ZoneId.systemDefault());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", copy);
+        variables.put("holdDurationDays", Constants.DEFAULT_HOLD_DURATION_DAYS);
+        variables.put("publisher", copy.getPublisher().getName());
+        variables.put("startTime", dateTimeFormatter.format(hold.getStartTime()));
+        variables.put("endTime", dateTimeFormatter.format(hold.getEndTime()));
+        sendEmailFromTemplate(user, "mail/holdConfirmationEmail", "email.holdConfirmation.title", variables);
     }
 }

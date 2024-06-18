@@ -102,4 +102,9 @@ public class NotificationServiceImpl implements NotificationService {
     public void remindToReturnBook(Checkout checkout, int daysLeft) {
         mailService.sendBookReturnReminderMail(checkout, daysLeft);
     }
+
+    @Override
+    public void notifyOverdueBookReturn(Checkout checkout) {
+        mailService.sendOverdueBookReturnNotificationMail(checkout);
+    }
 }

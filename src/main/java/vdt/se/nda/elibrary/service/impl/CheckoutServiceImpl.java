@@ -223,6 +223,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         var user = patron.getUser();
         user.setActivated(false);
         userRepository.save(user);
-        // TODO: send notification mail
+
+        notificationService.notifyOverdueBookReturn(checkout);
     }
 }

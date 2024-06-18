@@ -182,4 +182,23 @@ public class MailService {
         variables.put("daysLeft", daysLeft);
         sendEmailFromTemplate(user, "mail/bookReturnReminderEmail", "email.bookReturnReminder.title", variables);
     }
+
+    @Async
+    public void sendOverdueBookReturnNotificationMail(Checkout checkout) {
+        User user = checkout.getPatron().getUser();
+        log.debug("Sending overdue book return notification email to '{}'", user.getEmail());
+
+        BookCopy copy = checkout.getCopy();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm")
+            .withLocale(Locale.forLanguageTag(user.getLangKey()))
+            .withZone(ZoneId.systemDefault());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", copy);
+        variables.put("publisher", copy.getPublisher().getName());
+        variables.put("startTime", dateTimeFormatter.format(checkout.getStartTime()));
+        variables.put("endTime", dateTimeFormatter.format(checkout.getEndTime()));
+        sendEmailFromTemplate(user, "mail/overdueBookReturnNotificationEmail", "email.overdueBookReturnNotification.title", variables);
+    }
 }

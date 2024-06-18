@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.overdueBookReturnNotification.title}">eLibrary - Overdue book return</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.overdueBookReturnNotification.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.overdueBookReturnNotification.text1}">Your due return time for the book</span>
+      <i th:text="${bookCopy.title}">Book title</i>
+      <span th:text="#{email.overdueBookReturnNotification.text2}">
+        has passed, so your patron account is now temporarily deactivated.
+      </span>
+    </p>
+    <p th:text="#{email.overdueBookReturnNotification.text3}">
+      To re-activate your patron account, please go to the library to return the book or extend the due date.
+    </p>
+    <div>
+      <p><b th:text="#{email.overdueBookReturnNotification.field1}">Book title:</b> <span th:text="${bookCopy.title}"></span></p>
+      <p><b th:text="#{email.overdueBookReturnNotification.field2}">Publisher:</b> <span th:text="${publisher}"></span></p>
+      <p><b th:text="#{email.overdueBookReturnNotification.field3}">Check-out time:</b> <span th:text="${startTime}"></span></p>
+      <p><b th:text="#{email.overdueBookReturnNotification.field4}">Due return time:</b> <span th:text="${endTime}"></span></p>
+    </div>
+    <p>
+      <span th:text="#{email.overdueBookReturnNotification.text4}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

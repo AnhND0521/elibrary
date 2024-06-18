@@ -3,7 +3,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 interface ILink {
   routerLink: string;
-  label: string;
+  name: string;
 }
 
 @Component({
@@ -17,19 +17,19 @@ export class SidebarComponent implements OnInit {
   links: ILink[] = [
     {
       routerLink: '/catalog',
-      label: 'Danh mục sách',
+      name: 'bookCatalog',
     },
     {
       routerLink: '/search',
-      label: 'Tìm kiếm sách',
+      name: 'bookSearch',
     },
     {
       routerLink: '/history',
-      label: 'Lịch sử',
+      name: 'history',
     },
     {
       routerLink: '/waitlist',
-      label: 'Danh sách chờ',
+      name: 'waitlist',
     },
   ];
 

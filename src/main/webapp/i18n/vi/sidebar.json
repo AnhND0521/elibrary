@@ -1,0 +1,10 @@
+{
+  "eLibraryApp": {
+    "sidebar": {
+      "bookCatalog": "Danh mục sách",
+      "bookSearch": "Tìm kiếm sách",
+      "history": "Lịch sử",
+      "waitlist": "Danh sách chờ"
+    }
+  }
+}

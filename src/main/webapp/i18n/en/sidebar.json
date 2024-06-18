@@ -1,0 +1,10 @@
+{
+  "eLibraryApp": {
+    "sidebar": {
+      "bookCatalog": "Book catalog",
+      "bookSearch": "Search for books",
+      "history": "My history",
+      "waitlist": "My waitlist"
+    }
+  }
+}

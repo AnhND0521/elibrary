@@ -72,4 +72,11 @@ public interface NotificationService {
      * @param daysLeft days before the due time to remind.
      */
     void remindToReturnBook(Checkout checkout, int daysLeft);
+
+    /**
+     * Notify user that due time to return the book has passed.
+     *
+     * @param checkout the checkout that has the user and the book information.
+     */
+    void notifyOverdueBookReturn(Checkout checkout);
 }

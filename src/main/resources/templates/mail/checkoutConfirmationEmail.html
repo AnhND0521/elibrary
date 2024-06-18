@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.checkoutConfirmation.title}">eLibrary - Book check-out confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.checkoutConfirmation.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.checkoutConfirmation.text1}">We have confirmed your check-out of the book copy:</span>
+      <i th:text="${bookCopy.title}">Book title</i>
+    </p>
+    <p th:text="#{email.checkoutConfirmation.text2}">Here are the details of the check-out:</p>
+    <div>
+      <p><b th:text="#{email.checkoutConfirmation.field1}">Book title:</b> <span th:text="${bookCopy.title}"></span></p>
+      <p><b th:text="#{email.checkoutConfirmation.field2}">Publisher:</b> <span th:text="${publisher}"></span></p>
+      <p><b th:text="#{email.checkoutConfirmation.field3}">Check-out time:</b> <span th:text="${startTime}"></span></p>
+      <p><b th:text="#{email.checkoutConfirmation.field4}">Due return time:</b> <span th:text="${endTime}"></span></p>
+    </div>
+    <p th:text="#{email.checkoutConfirmation.text3}">
+      Please note that you will have to return the book before the due time above. After this time your patron account will temporarily be
+      deactivated.
+    </p>
+    <p th:text="#{email.checkoutConfirmation.text4}">You can view your history of holds and checkouts here:</p>
+    <p>
+      <a th:with="url=(@{|${baseUrl}/history|})" th:href="${url}" th:text="${url}">History link</a>
+    </p>
+    <p>
+      <span th:text="#{email.checkoutConfirmation.text5}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

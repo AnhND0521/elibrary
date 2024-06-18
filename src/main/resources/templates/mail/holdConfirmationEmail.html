@@ -8,7 +8,7 @@
   <body>
     <p th:text="#{email.holdConfirmation.greeting(${user.login})}">Dear</p>
     <p>
-      <span th:text="#{email.holdConfirmation.text1}">We received your hold request on book copy:</span>
+      <span th:text="#{email.holdConfirmation.text1}">We have received your hold request on book copy:</span>
       <i th:text="${bookCopy.title}">Book title</i>
     </p>
     <p th:text="#{email.holdConfirmation.text2(${holdDurationDays})}">

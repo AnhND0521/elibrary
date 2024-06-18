@@ -6,7 +6,7 @@ import { CheckoutComponent } from '../list/checkout.component';
 import { CheckoutDetailComponent } from '../detail/checkout-detail.component';
 import { CheckoutUpdateComponent } from '../update/checkout-update.component';
 import { CheckoutRoutingResolveService } from './checkout-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
+import { ASC, DESC } from 'app/config/navigation.constants';
 import { CheckoutFromHoldRoutingResolveService } from './checkout-from-hold-routing-resolve.service';
 
 const checkoutRoute: Routes = [
@@ -14,7 +14,7 @@ const checkoutRoute: Routes = [
     path: '',
     component: CheckoutComponent,
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: 'startTime,' + DESC,
     },
     canActivate: [UserRouteAccessService],
   },

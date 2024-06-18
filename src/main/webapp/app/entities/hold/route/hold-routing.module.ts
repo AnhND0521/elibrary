@@ -6,14 +6,14 @@ import { HoldComponent } from '../list/hold.component';
 import { HoldDetailComponent } from '../detail/hold-detail.component';
 import { HoldUpdateComponent } from '../update/hold-update.component';
 import { HoldRoutingResolveService } from './hold-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
+import { ASC, DESC } from 'app/config/navigation.constants';
 
 const holdRoute: Routes = [
   {
     path: '',
     component: HoldComponent,
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: 'startTime,' + DESC,
     },
     canActivate: [UserRouteAccessService],
   },

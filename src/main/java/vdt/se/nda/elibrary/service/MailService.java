@@ -164,6 +164,36 @@ public class MailService {
     }
 
     @Async
+    public void sendHoldExpirationMail(Hold hold) {
+        User user = hold.getPatron().getUser();
+        log.debug("Sending hold expiration email to '{}'", user.getEmail());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", hold.getCopy());
+        variables.put("book", hold.getCopy().getBook());
+        sendEmailFromTemplate(user, "mail/holdExpirationEmail", "email.holdExpiration.title", variables);
+    }
+
+    @Async
+    public void sendCheckoutConfirmationMail(Checkout checkout) {
+        User user = checkout.getPatron().getUser();
+        log.debug("Sending checkout confirmation email to '{}'", user.getEmail());
+
+        BookCopy copy = checkout.getCopy();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm")
+            .withLocale(Locale.forLanguageTag(user.getLangKey()))
+            .withZone(ZoneId.systemDefault());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", copy);
+        variables.put("publisher", copy.getPublisher().getName());
+        variables.put("startTime", dateTimeFormatter.format(checkout.getStartTime()));
+        variables.put("endTime", dateTimeFormatter.format(checkout.getEndTime()));
+        sendEmailFromTemplate(user, "mail/checkoutConfirmationEmail", "email.checkoutConfirmation.title", variables);
+    }
+
+    @Async
     public void sendBookReturnReminderMail(Checkout checkout, int daysLeft) {
         User user = checkout.getPatron().getUser();
         log.debug("Sending book return reminder email to '{}'", user.getEmail());
@@ -200,16 +230,5 @@ public class MailService {
         variables.put("startTime", dateTimeFormatter.format(checkout.getStartTime()));
         variables.put("endTime", dateTimeFormatter.format(checkout.getEndTime()));
         sendEmailFromTemplate(user, "mail/overdueBookReturnNotificationEmail", "email.overdueBookReturnNotification.title", variables);
-    }
-
-    @Async
-    public void sendHoldExpirationMail(Hold hold) {
-        User user = hold.getPatron().getUser();
-        log.debug("Sending hold expiration email to '{}'", user.getEmail());
-
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("bookCopy", hold.getCopy());
-        variables.put("book", hold.getCopy().getBook());
-        sendEmailFromTemplate(user, "mail/holdExpirationEmail", "email.holdExpiration.title", variables);
     }
 }

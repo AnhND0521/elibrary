@@ -16,6 +16,7 @@ import vdt.se.nda.elibrary.repository.*;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.CheckoutService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
+import vdt.se.nda.elibrary.service.MailService;
 import vdt.se.nda.elibrary.service.NotificationService;
 import vdt.se.nda.elibrary.service.dto.CheckoutDTO;
 import vdt.se.nda.elibrary.service.mapper.CheckoutMapper;
@@ -45,6 +46,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private final NotificationService notificationService;
 
+    private final MailService mailService;
+
     public CheckoutServiceImpl(
         CheckoutRepository checkoutRepository,
         HoldRepository holdRepository,
@@ -53,7 +56,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         UserRepository userRepository,
         CheckoutMapper checkoutMapper,
         JobSchedulerService jobSchedulerService,
-        NotificationService notificationService
+        NotificationService notificationService,
+        MailService mailService
     ) {
         this.checkoutRepository = checkoutRepository;
         this.holdRepository = holdRepository;
@@ -63,6 +67,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         this.checkoutMapper = checkoutMapper;
         this.jobSchedulerService = jobSchedulerService;
         this.notificationService = notificationService;
+        this.mailService = mailService;
 
         checkoutRepository.findByIsReturnedAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
     }
@@ -73,8 +78,10 @@ public class CheckoutServiceImpl implements CheckoutService {
         Checkout checkout = checkoutMapper.toEntity(checkoutDTO);
         populateRelationships(checkout);
         checkout = checkoutRepository.save(checkout);
+
         updateHoldStatus(checkout);
         updateCopyStatus(checkout);
+        sendCheckoutConfirmation(checkout);
         scheduleReminderJobs(checkout);
         return checkoutMapper.toDto(checkout);
     }
@@ -118,6 +125,10 @@ public class CheckoutServiceImpl implements CheckoutService {
                 hold.setIsCheckedOut(true);
                 holdRepository.save(hold);
             });
+    }
+
+    private void sendCheckoutConfirmation(Checkout checkout) {
+        if (!checkout.getIsReturned() && checkout.getEndTime().isAfter(Instant.now())) mailService.sendCheckoutConfirmationMail(checkout);
     }
 
     private void handleReturn(Checkout checkout) {

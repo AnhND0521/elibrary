@@ -201,4 +201,15 @@ public class MailService {
         variables.put("endTime", dateTimeFormatter.format(checkout.getEndTime()));
         sendEmailFromTemplate(user, "mail/overdueBookReturnNotificationEmail", "email.overdueBookReturnNotification.title", variables);
     }
+
+    @Async
+    public void sendHoldExpirationMail(Hold hold) {
+        User user = hold.getPatron().getUser();
+        log.debug("Sending hold expiration email to '{}'", user.getEmail());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", hold.getCopy());
+        variables.put("book", hold.getCopy().getBook());
+        sendEmailFromTemplate(user, "mail/holdExpirationEmail", "email.holdExpiration.title", variables);
+    }
 }

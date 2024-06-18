@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.holdExpiration.title}">eLibrary - Hold expiration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.holdExpiration.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.holdExpiration.text1}">Your hold request on this book copy has expired: </span>
+      <i th:text="${bookCopy.title}">Book title</i>
+    </p>
+    <p th:text="#{email.holdExpiration.text2}">
+      If you still desire to borrow a copy of this book, please go to this URL and place a hold one more time:
+    </p>
+    <p>
+      <a th:with="url=(@{|${baseUrl}/book-details/${book.id}|})" th:href="${url}" th:text="${url}">Book details link</a>
+    </p>
+    <p>
+      <span th:text="#{email.holdExpiration.text3}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

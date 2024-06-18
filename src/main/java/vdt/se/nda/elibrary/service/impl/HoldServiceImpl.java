@@ -186,6 +186,7 @@ public class HoldServiceImpl implements HoldService {
 
         BookCopy bookCopy = hold.getCopy().status(BookCopyStatus.AVAILABLE);
         bookCopyRepository.save(bookCopy);
+        notificationService.notifyHoldExpiration(hold);
         notificationService.notifyBookAvailable(bookCopy.getBook());
     }
 

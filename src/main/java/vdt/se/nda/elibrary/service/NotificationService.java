@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.domain.Checkout;
+import vdt.se.nda.elibrary.domain.Hold;
 import vdt.se.nda.elibrary.service.dto.NotificationDTO;
 
 /**
@@ -79,4 +80,11 @@ public interface NotificationService {
      * @param checkout the checkout that has the user and the book information.
      */
     void notifyOverdueBookReturn(Checkout checkout);
+
+    /**
+     * Notify user that a hold has expired.
+     *
+     * @param hold the hold that has expired.
+     */
+    void notifyHoldExpiration(Hold hold);
 }

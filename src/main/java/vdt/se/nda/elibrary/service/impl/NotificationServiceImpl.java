@@ -1,5 +1,6 @@
 package vdt.se.nda.elibrary.service.impl;
 
+import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.domain.Checkout;
+import vdt.se.nda.elibrary.domain.Hold;
 import vdt.se.nda.elibrary.domain.Notification;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
+import vdt.se.nda.elibrary.domain.enumeration.NotificationType;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.NotificationRepository;
 import vdt.se.nda.elibrary.repository.WaitlistItemRepository;
@@ -94,17 +97,38 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void notifyBookAvailable(Book book) {
         if (bookCopyRepository.countByBookIdAndStatus(book.getId(), BookCopyStatus.AVAILABLE) == 1) {
-            waitlistItemRepository.findByBookId(book.getId()).forEach(mailService::sendBookAvailableMail);
+            waitlistItemRepository
+                .findByBookId(book.getId())
+                .forEach(waitlistItem -> {
+                    mailService.sendBookAvailableMail(waitlistItem);
+
+                    Notification notification = new Notification();
+                    notification.setPatron(waitlistItem.getPatron());
+                    notification.setType(NotificationType.NOTIFY_BOOK_AVAILABLE);
+                    notification.setSentAt(Instant.now());
+                    notificationRepository.save(notification);
+                });
         }
     }
 
     @Override
     public void remindToReturnBook(Checkout checkout, int daysLeft) {
         mailService.sendBookReturnReminderMail(checkout, daysLeft);
+
+        Notification notification = new Notification();
+        notification.setPatron(checkout.getPatron());
+        notification.setType(NotificationType.REMIND_RETURN);
+        notification.setSentAt(Instant.now());
+        notificationRepository.save(notification);
     }
 
     @Override
     public void notifyOverdueBookReturn(Checkout checkout) {
         mailService.sendOverdueBookReturnNotificationMail(checkout);
+    }
+
+    @Override
+    public void notifyHoldExpiration(Hold hold) {
+        mailService.sendHoldExpirationMail(hold);
     }
 }

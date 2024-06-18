@@ -16,6 +16,7 @@ import vdt.se.nda.elibrary.repository.HoldRepository;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.HoldService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
+import vdt.se.nda.elibrary.service.NotificationService;
 import vdt.se.nda.elibrary.service.dto.HoldDTO;
 import vdt.se.nda.elibrary.service.mapper.HoldMapper;
 
@@ -36,18 +37,22 @@ public class HoldServiceImpl implements HoldService {
 
     private final JobSchedulerService jobSchedulerService;
 
+    private final NotificationService notificationService;
+
     private static final String HOLD_EXPIRATION = "hold-expiration";
 
     public HoldServiceImpl(
         HoldRepository holdRepository,
         HoldMapper holdMapper,
         BookCopyRepository bookCopyRepository,
-        JobSchedulerService jobSchedulerService
+        JobSchedulerService jobSchedulerService,
+        NotificationService notificationService
     ) {
         this.holdRepository = holdRepository;
         this.holdMapper = holdMapper;
         this.bookCopyRepository = bookCopyRepository;
         this.jobSchedulerService = jobSchedulerService;
+        this.notificationService = notificationService;
 
         holdRepository.findByIsCheckedOutAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
     }
@@ -140,6 +145,8 @@ public class HoldServiceImpl implements HoldService {
 
                 jobSchedulerService.cancelJob(HOLD_EXPIRATION, id);
                 holdRepository.delete(hold);
+
+                notificationService.notifyBookAvailable(bookCopy.getBook());
             });
     }
 
@@ -148,6 +155,7 @@ public class HoldServiceImpl implements HoldService {
 
         BookCopy bookCopy = hold.getCopy().status(BookCopyStatus.AVAILABLE);
         bookCopyRepository.save(bookCopy);
+        notificationService.notifyBookAvailable(bookCopy.getBook());
     }
 
     private void scheduleJobOnExpiration(Hold hold) {

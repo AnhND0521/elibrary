@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vdt.se.nda.elibrary.domain.BookCopy;
+import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 
 /**
  * Spring Data JPA repository for the BookCopy entity.
@@ -39,6 +40,8 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     Optional<BookCopy> findOneWithToOneRelationships(@Param("id") Long id);
 
     List<BookCopy> findByBookId(Long bookId);
+
+    long countByBookIdAndStatus(Long bookId, BookCopyStatus status);
 
     @Query("select copy from BookCopy copy order by rand()")
     List<BookCopy> findRandom(Pageable pageable);

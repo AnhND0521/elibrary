@@ -1,7 +1,9 @@
 package vdt.se.nda.elibrary.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import tech.jhipster.config.JHipsterProperties;
+import vdt.se.nda.elibrary.domain.Book;
+import vdt.se.nda.elibrary.domain.Notification;
 import vdt.se.nda.elibrary.domain.User;
 
 /**
@@ -93,6 +97,24 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey, Map<String, Object> variables) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        for (var key : variables.keySet()) {
+            context.setVariable(key, variables.get(key));
+        }
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -108,5 +130,13 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendBookAvailableMail(User user, Book book) {
+        log.debug("Sending book available notification email to '{}'", user.getEmail());
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("book", book);
+        sendEmailFromTemplate(user, "mail/bookAvailableEmail", "email.bookAvailable.title", variables);
     }
 }

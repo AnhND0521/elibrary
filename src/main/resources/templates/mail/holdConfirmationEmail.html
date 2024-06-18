@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.holdConfirmation.title}">eLibrary - Hold confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.holdConfirmation.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.holdConfirmation.text1}">We received your hold request on book copy:</span>
+      <i th:text="${bookCopy.title}">Book title</i>
+    </p>
+    <p th:text="#{email.holdConfirmation.text2}">
+      The book will be reserved for you in 3 days. Please check-out the book at the library in this time. If you fail to check-out on time,
+      the reservation will be cancelled.
+    </p>
+    <p>
+      <span th:text="#{email.holdConfirmation.text3}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

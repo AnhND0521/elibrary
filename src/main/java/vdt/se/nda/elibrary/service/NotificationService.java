@@ -3,6 +3,7 @@ package vdt.se.nda.elibrary.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.service.dto.NotificationDTO;
 
 /**
@@ -55,4 +56,11 @@ public interface NotificationService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * When a book becomes available, notify users who has that book on waitlist.
+     *
+     * @param book the book to notify users of its availability.
+     */
+    void notifyBookAvailable(Book book);
 }

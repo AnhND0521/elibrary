@@ -1,14 +1,20 @@
 package vdt.se.nda.elibrary.service.impl;
 
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vdt.se.nda.elibrary.domain.Book;
 import vdt.se.nda.elibrary.domain.Notification;
+import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
+import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.NotificationRepository;
+import vdt.se.nda.elibrary.repository.WaitlistItemRepository;
+import vdt.se.nda.elibrary.service.MailService;
 import vdt.se.nda.elibrary.service.NotificationService;
 import vdt.se.nda.elibrary.service.dto.NotificationDTO;
 import vdt.se.nda.elibrary.service.mapper.NotificationMapper;
@@ -18,6 +24,7 @@ import vdt.se.nda.elibrary.service.mapper.NotificationMapper;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
     private final Logger log = LoggerFactory.getLogger(NotificationServiceImpl.class);
@@ -26,10 +33,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationMapper notificationMapper;
 
-    public NotificationServiceImpl(NotificationRepository notificationRepository, NotificationMapper notificationMapper) {
-        this.notificationRepository = notificationRepository;
-        this.notificationMapper = notificationMapper;
-    }
+    private final WaitlistItemRepository waitlistItemRepository;
+
+    private final BookCopyRepository bookCopyRepository;
+
+    private final MailService mailService;
 
     @Override
     public NotificationDTO save(NotificationDTO notificationDTO) {
@@ -80,5 +88,14 @@ public class NotificationServiceImpl implements NotificationService {
     public void delete(Long id) {
         log.debug("Request to delete Notification : {}", id);
         notificationRepository.deleteById(id);
+    }
+
+    @Override
+    public void notifyBookAvailable(Book book) {
+        if (bookCopyRepository.countByBookIdAndStatus(book.getId(), BookCopyStatus.AVAILABLE) == 1) {
+            waitlistItemRepository
+                .findByBookId(book.getId())
+                .forEach(waitlistItem -> mailService.sendBookAvailableMail(waitlistItem.getPatron().getUser(), waitlistItem.getBook()));
+        }
     }
 }

@@ -15,6 +15,7 @@ import vdt.se.nda.elibrary.repository.*;
 import vdt.se.nda.elibrary.security.SecurityUtils;
 import vdt.se.nda.elibrary.service.CheckoutService;
 import vdt.se.nda.elibrary.service.JobSchedulerService;
+import vdt.se.nda.elibrary.service.NotificationService;
 import vdt.se.nda.elibrary.service.dto.CheckoutDTO;
 import vdt.se.nda.elibrary.service.mapper.CheckoutMapper;
 
@@ -41,6 +42,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private final JobSchedulerService jobSchedulerService;
 
+    private final NotificationService notificationService;
+
     public CheckoutServiceImpl(
         CheckoutRepository checkoutRepository,
         HoldRepository holdRepository,
@@ -48,7 +51,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         PatronAccountRepository patronAccountRepository,
         UserRepository userRepository,
         CheckoutMapper checkoutMapper,
-        JobSchedulerService jobSchedulerService
+        JobSchedulerService jobSchedulerService,
+        NotificationService notificationService
     ) {
         this.checkoutRepository = checkoutRepository;
         this.holdRepository = holdRepository;
@@ -57,6 +61,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         this.userRepository = userRepository;
         this.checkoutMapper = checkoutMapper;
         this.jobSchedulerService = jobSchedulerService;
+        this.notificationService = notificationService;
 
         checkoutRepository.findByIsReturnedAndEndTimeAfter(false, Instant.now()).forEach(this::scheduleJobOnExpiration);
     }
@@ -113,7 +118,9 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     private void handleReturn(Checkout checkout) {
-        bookCopyRepository.save(checkout.getCopy().status(BookCopyStatus.AVAILABLE));
+        var bookCopy = checkout.getCopy().status(BookCopyStatus.AVAILABLE);
+        bookCopyRepository.save(bookCopy);
+        notificationService.notifyBookAvailable(bookCopy.getBook());
         var patron = checkout.getPatron();
         if (patron.getStatus().equals(PatronStatus.BLOCKED) || !patron.getUser().isActivated()) {
             patronAccountRepository.save(patron.status(PatronStatus.ACTIVE));

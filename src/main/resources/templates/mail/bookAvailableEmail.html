@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.bookAvailable.title}">eLibrary desired book available</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.bookAvailable.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.bookAvailable.text1}">A book you desire in your waitlist has become available:</span>
+      <i th:text="${book.title}">Book title</i>
+    </p>
+    <p th:text="#{email.bookAvailable.text2}">Please click on the URL below if you want to reserve a copy of it:</p>
+    <p>
+      <a th:with="url=(@{|${baseUrl}/book-details/${book.id}|})" th:href="${url}" th:text="${url}">Book details link</a>
+    </p>
+    <p>
+      <span th:text="#{email.bookAvailable.text3}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

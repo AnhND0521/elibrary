@@ -49,16 +49,16 @@ export class BookSearchComponent implements OnInit {
     private bookSearchService: BookSearchService,
     private translate: TranslateService,
     private stringUtil: StringUtilService
-  ) {
-    ALL.forEach(value => translate.get('eLibraryApp.bookSearch.filter.' + value).subscribe(label => (this.labels[value] = label)));
-  }
+  ) {}
 
   ngOnInit(): void {
+    ALL.forEach(value => this.translate.get('eLibraryApp.bookSearch.filter.' + value).subscribe(label => (this.labels[value] = label)));
     this.filters.forEach((filter, i) => {
       this.fetchFilterValues(i);
     });
     this.fetchSearchResults();
     this.translate.onLangChange.subscribe(value => {
+      this.ngOnInit();
       this.fetchFilterValues(this.filters.findIndex(f => f.name === CATEGORY));
     });
   }

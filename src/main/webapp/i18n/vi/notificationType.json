@@ -2,8 +2,8 @@
   "eLibraryApp": {
     "NotificationType": {
       "null": "",
-      "REMIND_RETURN": "REMIND_RETURN",
-      "NOTIFY_BOOK_AVAILABLE": "NOTIFY_BOOK_AVAILABLE"
+      "REMIND_RETURN": "Nhắc lịch trả sách",
+      "NOTIFY_BOOK_AVAILABLE": "Thông báo sách có sẵn"
     }
   }
 }

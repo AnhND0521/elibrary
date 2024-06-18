@@ -10,7 +10,7 @@
           "required": "Bạn phải nhập tên tài khoản.",
           "minlength": "Tên tài khoản phải có ít nhất 1 ký tự.",
           "maxlength": "Tên tài khoản không được vượt quá 50 ký tự.",
-          "pattern": "Your username is invalid."
+          "pattern": "Tên tài khoản không hợp lệ."
         },
         "firstName": {
           "required": "Tên của bạn không được để trống.",

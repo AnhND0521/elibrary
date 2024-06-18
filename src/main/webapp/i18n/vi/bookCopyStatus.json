@@ -2,9 +2,9 @@
   "eLibraryApp": {
     "BookCopyStatus": {
       "null": "",
-      "AVAILABLE": "AVAILABLE",
-      "ON_HOLD": "ON_HOLD",
-      "BORROWED": "BORROWED"
+      "AVAILABLE": "Có sẵn",
+      "ON_HOLD": "Đã đặt trước",
+      "BORROWED": "Đã mượn"
     }
   }
 }

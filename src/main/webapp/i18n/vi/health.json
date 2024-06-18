@@ -13,9 +13,9 @@
     "indicator": {
       "diskSpace": "Dung lượng trống",
       "mail": "Email",
-      "livenessState": "Liveness state",
-      "readinessState": "Readiness state",
-      "ping": "Application",
+      "livenessState": "Trạng thái sống",
+      "readinessState": "Trạng thái sẵn sàng",
+      "ping": "Ứng dụng",
       "db": "Cơ sở dữ liệu"
     },
     "table": {
@@ -23,7 +23,7 @@
       "status": "Trạng thái"
     },
     "status": {
-      "UNKNOWN": "UNKNOWN",
+      "UNKNOWN": "Không xác định",
       "UP": "Đang hoạt động",
       "DOWN": "Đã tắt"
     }

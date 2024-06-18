@@ -2,23 +2,23 @@
   "eLibraryApp": {
     "publisher": {
       "home": {
-        "title": "Publishers",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Publisher",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Publisher",
-        "notFound": "No Publishers found"
+        "title": "Nhà xuất bản",
+        "refreshListLabel": "Tải lại",
+        "createLabel": "Thêm nhà xuất bản mới",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật nhà xuất bản",
+        "notFound": "Không có nhà xuất bản nào"
       },
-      "created": "Một Publisher mới được tạo với định danh {{ param }}",
-      "updated": "Một Publisher cập nhật với định danh {{ param }}",
-      "deleted": "Một Publisher đã xóa với định danh {{ param }}",
+      "created": "Một nhà xuất bản mới được tạo với định danh {{ param }}",
+      "updated": "Một nhà xuất bản được cập nhật với định danh {{ param }}",
+      "deleted": "Một nhà xuất bản được xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Publisher {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa nhà xuất bản {{ id }}?"
       },
       "detail": {
-        "title": "Publisher"
+        "title": "Nhà xuất bản"
       },
       "id": "ID",
-      "name": "Name"
+      "name": "Tên"
     }
   }
 }

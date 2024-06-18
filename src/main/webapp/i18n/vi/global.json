@@ -7,16 +7,16 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Thực thể",
-        "patronAccount": "Patron Account",
-        "book": "Book",
-        "category": "Category",
-        "author": "Author",
-        "waitlistItem": "Waitlist Item",
-        "bookCopy": "Book Copy",
-        "publisher": "Publisher",
-        "checkout": "Checkout",
-        "hold": "Hold",
-        "notification": "Notification",
+        "patronAccount": "Tài khoản bạn đọc",
+        "book": "Sách",
+        "category": "Thể loại",
+        "author": "Tác giả",
+        "waitlistItem": "Danh sách chờ",
+        "bookCopy": "Bản sao sách",
+        "publisher": "Nhà xuất bản",
+        "checkout": "Mượn trả",
+        "hold": "Đặt trước",
+        "notification": "Thông báo",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -97,7 +97,7 @@
     "ribbon": {
       "dev": "Phát triển"
     },
-    "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    "item-count": "Đang hiển thị {{first}} - {{second}} trong số {{total}} mục."
   },
   "entity": {
     "action": {
@@ -110,7 +110,7 @@
       "open": "Mở",
       "save": "Lưu",
       "view": "Xem",
-      "show": "Show {{otherEntity}}"
+      "show": "Xem {{otherEntity}}"
     },
     "detail": {
       "field": "Trường",
@@ -132,9 +132,9 @@
       "datetimelocal": "Trường này phải là định dạng thời gian."
     },
     "filters": {
-      "set": "Following filters are set",
-      "clear": "Clear filter",
-      "clearAll": "Clear all filters"
+      "set": "Những bộ lọc sau đang được áp dụng",
+      "clear": "Xóa bộ lọc",
+      "clearAll": "Xóa tất cả bộ lọc"
     }
   },
   "error": {
@@ -146,12 +146,12 @@
     "userexists": "Tên đăng nhập đã được sử dụng!",
     "emailexists": "Email đã được sử dụng!",
     "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại",
-    "idnull": "Invalid ID",
-    "idinvalid": "Invalid Id",
-    "idnotfound": "ID cannot be found",
+    "idnull": "ID không hợp lệ",
+    "idinvalid": "ID không hợp lệ",
+    "idnotfound": "ID không tìm thấy",
     "file": {
-      "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "could.not.extract": "Không thể lấy file",
+      "not.image": "Yêu cầu file hình ảnh nhưng file \"{{ fileType }}\" được cung cấp"
     }
   },
   "footer": "© eLibrary 2024",

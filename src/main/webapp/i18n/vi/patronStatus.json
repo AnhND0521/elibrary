@@ -2,8 +2,8 @@
   "eLibraryApp": {
     "PatronStatus": {
       "null": "",
-      "ACTIVE": "ACTIVE",
-      "BLOCKED": "BLOCKED"
+      "ACTIVE": "Hoạt động",
+      "BLOCKED": "Bị khóa"
     }
   }
 }

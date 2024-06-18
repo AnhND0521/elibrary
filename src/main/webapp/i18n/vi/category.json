@@ -2,24 +2,24 @@
   "eLibraryApp": {
     "category": {
       "home": {
-        "title": "Categories",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Thêm mới một Category",
-        "createOrEditLabel": "Thêm mới hoặc cập nhật Category",
-        "notFound": "No Categories found"
+        "title": "Thể loại",
+        "refreshListLabel": "Tải lại",
+        "createLabel": "Thêm thể loại mới",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật thể loại",
+        "notFound": "Không có thể loại nào"
       },
-      "created": "Một Category mới được tạo với định danh {{ param }}",
-      "updated": "Một Category cập nhật với định danh {{ param }}",
-      "deleted": "Một Category đã xóa với định danh {{ param }}",
+      "created": "Một thể loại mới được tạo với định danh {{ param }}",
+      "updated": "Một thể loại được cập nhật với định danh {{ param }}",
+      "deleted": "Một thể loại được xóa với định danh {{ param }}",
       "delete": {
-        "question": "Bạn có chắc là muốn xóa Category {{ id }}?"
+        "question": "Bạn có chắc là muốn xóa thể loại {{ id }}?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Thể loại"
       },
       "id": "ID",
-      "name": "Name",
-      "book": "Book"
+      "name": "Tên",
+      "book": "Sách"
     }
   }
 }

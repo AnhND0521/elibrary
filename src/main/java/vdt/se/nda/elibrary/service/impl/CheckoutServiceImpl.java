@@ -1,6 +1,7 @@
 package vdt.se.nda.elibrary.service.impl;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         checkout = checkoutRepository.save(checkout);
         updateHoldStatus(checkout);
         updateCopyStatus(checkout);
+        scheduleReminderJobs(checkout);
         return checkoutMapper.toDto(checkout);
     }
 
@@ -90,6 +92,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         checkout = checkoutRepository.save(checkout);
         updateCopyStatus(checkout);
+        scheduleReminderJobs(checkout);
 
         return checkoutMapper.toDto(checkout);
     }
@@ -126,6 +129,13 @@ public class CheckoutServiceImpl implements CheckoutService {
             patronAccountRepository.save(patron.status(PatronStatus.ACTIVE));
             patron.getUser().setActivated(true);
             userRepository.save(patron.getUser());
+        }
+    }
+
+    private void scheduleReminderJobs(Checkout checkout) {
+        if (!checkout.getIsReturned() && checkout.getEndTime().isAfter(Instant.now())) {
+            scheduleReminderJob(checkout, 3);
+            scheduleReminderJob(checkout, 1);
         }
     }
 
@@ -193,6 +203,15 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private void scheduleJobOnExpiration(Checkout checkout) {
         jobSchedulerService.scheduleJob("checkout-expiration", checkout.getId(), checkout.getEndTime(), () -> handleExpiration(checkout));
+    }
+
+    private void scheduleReminderJob(Checkout checkout, int daysBefore) {
+        jobSchedulerService.scheduleJob(
+            "book-return-reminder",
+            checkout.getId() + "-" + daysBefore,
+            checkout.getEndTime().minus(daysBefore, ChronoUnit.DAYS),
+            () -> notificationService.remindToReturnBook(checkout, daysBefore)
+        );
     }
 
     public void handleExpiration(Checkout checkout) {

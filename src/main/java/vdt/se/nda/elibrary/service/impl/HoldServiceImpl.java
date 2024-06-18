@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.BookCopy;
 import vdt.se.nda.elibrary.domain.Hold;
-import vdt.se.nda.elibrary.domain.WaitlistItem;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
 import vdt.se.nda.elibrary.repository.HoldRepository;
@@ -108,7 +107,7 @@ public class HoldServiceImpl implements HoldService {
     private void sendHoldConfirmation(Hold hold) {
         if (!hold.getIsCheckedOut() && hold.getEndTime().isAfter(Instant.now())) {
             hold.getPatron().setUser(userRepository.findOneByLogin(hold.getPatron().getUser().getLogin()).get());
-            mailService.sendHoldConfirmationEmail(hold);
+            mailService.sendHoldConfirmationMail(hold);
         }
     }
 

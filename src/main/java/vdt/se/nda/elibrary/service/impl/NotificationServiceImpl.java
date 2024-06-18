@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vdt.se.nda.elibrary.domain.Book;
+import vdt.se.nda.elibrary.domain.Checkout;
 import vdt.se.nda.elibrary.domain.Notification;
 import vdt.se.nda.elibrary.domain.enumeration.BookCopyStatus;
 import vdt.se.nda.elibrary.repository.BookCopyRepository;
@@ -95,5 +96,10 @@ public class NotificationServiceImpl implements NotificationService {
         if (bookCopyRepository.countByBookIdAndStatus(book.getId(), BookCopyStatus.AVAILABLE) == 1) {
             waitlistItemRepository.findByBookId(book.getId()).forEach(mailService::sendBookAvailableMail);
         }
+    }
+
+    @Override
+    public void remindToReturnBook(Checkout checkout, int daysLeft) {
+        mailService.sendBookReturnReminderMail(checkout, daysLeft);
     }
 }

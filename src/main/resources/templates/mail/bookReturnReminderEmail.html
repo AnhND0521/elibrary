@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.holdConfirmation.title}">eLibrary - Remind book return date</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+  </head>
+  <body>
+    <p th:text="#{email.bookReturnReminder.greeting(${user.login})}">Dear</p>
+    <p>
+      <span th:text="#{email.bookReturnReminder.text1(${daysLeft})}"
+        >We would like to remind that it's 7 days left until your due date to return the book:</span
+      >
+      <i th:text="${bookCopy.title}">Book title</i>
+    </p>
+    <p th:text="#{email.bookReturnReminder.text2}">
+      Please remember to return the book on time, otherwise your patron account will temporarily be deactivated.
+    </p>
+    <div>
+      <p><b th:text="#{email.bookReturnReminder.field1}">Book title:</b> <span th:text="${bookCopy.title}"></span></p>
+      <p><b th:text="#{email.bookReturnReminder.field2}">Publisher:</b> <span th:text="${publisher}"></span></p>
+      <p><b th:text="#{email.bookReturnReminder.field3}">Check-out time:</b> <span th:text="${startTime}"></span></p>
+      <p><b th:text="#{email.bookReturnReminder.field4}">Due return time:</b> <span th:text="${endTime}"></span></p>
+    </div>
+    <p th:text="#{email.bookReturnReminder.text3}">You can view your history of holds and checkouts here:</p>
+    <p>
+      <a th:with="url=(@{|${baseUrl}/history|})" th:href="${url}" th:text="${url}">History link</a>
+    </p>
+    <p>
+      <span th:text="#{email.bookReturnReminder.text4}">Regards, </span>
+      <br />
+      <em th:text="#{email.signature}">JHipster.</em>
+    </p>
+  </body>
+</html>

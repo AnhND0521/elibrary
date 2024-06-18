@@ -137,8 +137,6 @@ public class MailService {
     public void sendBookAvailableMail(WaitlistItem waitlistItem) {
         User user = waitlistItem.getPatron().getUser();
         log.debug("Sending book available notification email to '{}'", user.getEmail());
-        log.debug("User: {}", user);
-        log.debug("Lang key: {}", user.getLangKey());
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("book", waitlistItem.getBook());
@@ -146,11 +144,9 @@ public class MailService {
     }
 
     @Async
-    public void sendHoldConfirmationEmail(Hold hold) {
+    public void sendHoldConfirmationMail(Hold hold) {
         User user = hold.getPatron().getUser();
-        log.debug("Sending book available notification email to '{}'", user.getEmail());
-        log.debug("User: {}", user);
-        log.debug("Lang key: {}", user.getLangKey());
+        log.debug("Sending hold confirmation email to '{}'", user.getEmail());
 
         BookCopy copy = hold.getCopy();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter
@@ -165,5 +161,25 @@ public class MailService {
         variables.put("startTime", dateTimeFormatter.format(hold.getStartTime()));
         variables.put("endTime", dateTimeFormatter.format(hold.getEndTime()));
         sendEmailFromTemplate(user, "mail/holdConfirmationEmail", "email.holdConfirmation.title", variables);
+    }
+
+    @Async
+    public void sendBookReturnReminderMail(Checkout checkout, int daysLeft) {
+        User user = checkout.getPatron().getUser();
+        log.debug("Sending book return reminder email to '{}'", user.getEmail());
+
+        BookCopy copy = checkout.getCopy();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm")
+            .withLocale(Locale.forLanguageTag(user.getLangKey()))
+            .withZone(ZoneId.systemDefault());
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("bookCopy", copy);
+        variables.put("publisher", copy.getPublisher().getName());
+        variables.put("startTime", dateTimeFormatter.format(checkout.getStartTime()));
+        variables.put("endTime", dateTimeFormatter.format(checkout.getEndTime()));
+        variables.put("daysLeft", daysLeft);
+        sendEmailFromTemplate(user, "mail/bookReturnReminderEmail", "email.bookReturnReminder.title", variables);
     }
 }

@@ -19,7 +19,7 @@
       },
       "actions": {
         "borrow": "Mượn",
-        "addToWaitlist": "Thêm vào danh sach chờ",
+        "addToWaitlist": "Thêm vào danh sách chờ",
         "removeFromWaitlist": "Xóa khỏi danh sách chờ"
       },
       "copies": {

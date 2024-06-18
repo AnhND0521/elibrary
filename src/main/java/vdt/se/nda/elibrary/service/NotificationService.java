@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vdt.se.nda.elibrary.domain.Book;
+import vdt.se.nda.elibrary.domain.Checkout;
 import vdt.se.nda.elibrary.service.dto.NotificationDTO;
 
 /**
@@ -63,4 +64,12 @@ public interface NotificationService {
      * @param book the book to notify users of its availability.
      */
     void notifyBookAvailable(Book book);
+
+    /**
+     * Remind user to return a book which has been checked out.
+     *
+     * @param checkout the checkout that has the user and the book information.
+     * @param daysLeft days before the due time to remind.
+     */
+    void remindToReturnBook(Checkout checkout, int daysLeft);
 }

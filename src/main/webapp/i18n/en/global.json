@@ -159,6 +159,9 @@
   },
   "footer": "© eLibrary 2024",
   "categories": {
+    "catalog": "Category catalog",
+    "search": "Search categories",
+    "notFound": "No categories found.",
     "literature": "Literature",
     "romance": "Romance",
     "fantasy": "Fantasy",

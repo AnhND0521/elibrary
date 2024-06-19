@@ -1,5 +1,5 @@
 <div class="container">
-  <h2 class="mb-4">Danh mục thể loại</h2>
+  <h2 class="mb-4" [jhiTranslate]="'categories.catalog'">Danh mục thể loại</h2>
   <div id="search-input-group" class="input-group input-group-md w-50 mb-4">
     <span class="input-group-text" id="inputGroup-sizing-md"><fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon></span>
     <input
@@ -7,7 +7,7 @@
       class="form-control"
       aria-label="Sizing example input"
       aria-describedby="inputGroup-sizing-md"
-      placeholder="Tìm thể loại"
+      placeholder="{{ 'categories.search' | translate }}"
       [(ngModel)]="filterValue"
       (keyup)="filter()"
     />
@@ -21,5 +21,7 @@
       </div>
     </div>
   </ul>
-  <div *ngIf="filteredList.length === 0" class="alert alert-warning">Không tìm thấy thể loại nào.</div>
+  <div *ngIf="filteredList.length === 0" class="alert alert-warning" [jhiTranslate]="'categories.notFound'">
+    Không tìm thấy thể loại nào.
+  </div>
 </div>

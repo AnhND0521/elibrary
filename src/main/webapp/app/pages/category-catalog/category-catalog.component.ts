@@ -24,6 +24,7 @@ export class CategoryCatalogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.translate.onLangChange.subscribe(value => this.ngOnInit());
     this.categoryService
       .query({
         page: 0,

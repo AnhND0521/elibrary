@@ -156,6 +156,9 @@
   },
   "footer": "© eLibrary 2024",
   "categories": {
+    "catalog": "Danh mục thể loại",
+    "search": "Tìm thể loại",
+    "notFound": "Không tìm thấy thể loại nào.",
     "literature": "Văn học",
     "romance": "Lãng mạn",
     "fantasy": "Huyễn tưởng",
